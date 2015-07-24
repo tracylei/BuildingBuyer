@@ -25,11 +25,14 @@ class Game{
 	Controller* controller;
 	// Dice* dice;
 	static int rollUpCount;
+	bool testMode;
 public:
 	Game();
 	// ~Game();
 	//void save();
 	Player* getCurrentPlayer();
+	bool getTestMode();
+	
 	void next();
 	// int rollDice();
 	// static void reclaimTimsCups(int n);
@@ -37,11 +40,9 @@ public:
 	// static int getRollUpCount();
 	// //notify the controller that improvements were built on this property
 	// // void notifyImprove(Property* p);
-
 	void addPlayer (Player* p);
 	// void removePlayer (Player* p);
 	// bool isWon();
-
 
 
 	void init(Controller* controller);

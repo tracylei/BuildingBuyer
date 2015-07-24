@@ -59,13 +59,12 @@ void Controller::notify(Player *p, int prevPos, int curPos){
 	cout << "controller notify" << endl;
 	cout << p->getSymbol() <<prevPos <<curPos << endl;
 	
-	board->notify(p, prevPos, curPos); //why does this give segfault
+	// board->notify(p, prevPos, curPos); //why does this give segfault
 }
 
 void Controller::play(){
 	int numPlayers;
 	board = new BoardDisplay();
-	cout << board->getblah(); <<endl;
 	//need map of players name to symbol
 	
 	//read in game details

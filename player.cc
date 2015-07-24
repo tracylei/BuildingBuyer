@@ -202,16 +202,14 @@ void Player::play(){
 			if (rolled) continue;
 			else rolled = true;
 
-			if(true/*game->testingMode()*/){
+			if(game->getTestMode()){
 				int r1, r2;
 				iss >> r1 >> r2;
 				move(r1,r2);
 			}else{
 				move();
 			}
-			//if --testing mode
-			//read in dice value
-			move();
+	
 		}else if (cmd == "next"){//end turn
 			game->next();
 		// }else if (cmd == "trade"){

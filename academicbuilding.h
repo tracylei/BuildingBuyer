@@ -9,7 +9,7 @@ class AcademicBuilding : public Property{
 	//From super class Property - string bldgName; int cost; Player* ownerk;
 	int rent, imprCost;
 	int *tuition;
-	//void loadBuildingInfo(istream f);
+	//voivvd loadBuildingInfo(istream f);
 public:
 	AcademicBuilding(std::string Name, int cost, std::string block, int improvCost, int *tuition);
 	//Build n improvements

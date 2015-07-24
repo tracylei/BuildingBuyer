@@ -11,7 +11,8 @@ BoardDisplay::BoardDisplay(){
 	while(data >> name){
 		// cout << i<< name << isProperty <<endl;
 		data >> isProperty >> numImpr;
-		cells[i++] = CellDisplay(name, i, isProperty, numImpr);
+		cells[i] = CellDisplay(name, i, isProperty, numImpr);
+		++i;
 	}
 	cout << "board initialized.." << endl;
 }

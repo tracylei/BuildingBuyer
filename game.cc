@@ -22,6 +22,9 @@ Game::Game(){
 	theGrid = NULL;
 	numPlayers = 0;
 	currPlayer = 0;
+	testMode = false;
+	controller = NULL;
+	rollUpCount = 0;
 }
 
 // Game::~Game(){
@@ -37,6 +40,10 @@ Game::Game(){
 Player* Game::getCurrentPlayer(){
 	return players.at(currPlayer);
 }
+
+bool Game::getTestMode(){
+	return testMode;
+} 
 
 void Game::next(){
 	currPlayer=(currPlayer+1)%numPlayers;
