@@ -12,10 +12,6 @@ Property::Property(string name, int cost): Cell(name), cost(cost){
 	mortgaged = false;
 }
 
-// string Property::getName(){
-// 	return name;
-// }
-
 int Property::getImpr(){
 	return numImpr;
 }
@@ -27,13 +23,14 @@ int Property::getImpr(){
 // 		owner = buyer;
 // }
 
-// void Property::setOwner(Player* newOwner){
-// 	owner=newOwner;
-// }
+void Property::setOwner(Owner* newOwner){
+ 	owner=newOwner;
+}
 
-// Owner* Property::getOwner(){
-// 	return owner;
-// }
+Owner* Property::getOwner(){
+	cout<<owner->getName()<<endl;
+	return owner;
+}
 
 // int Property::mortgage(){
 // 	mortgaged = true;

@@ -13,7 +13,6 @@
 #include <map>
 
 class BoardDisplay {
-	string blah;
 	CellDisplay cells[40];
 
 public:

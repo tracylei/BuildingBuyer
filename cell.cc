@@ -8,3 +8,8 @@ Cell::Cell(string name):name(name){
 void Cell::setGame(Game* game){
 	this->game = game;
 }
+
+string Cell::getName(){
+	return name;
+}
+

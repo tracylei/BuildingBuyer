@@ -22,7 +22,7 @@ public:
 	Controller();
 	~Controller();
 	BoardDisplay *getBoard();
-
+	void refreshBoard ();
 	void notify(Player *, int prevPos, int curPos);
 	void play();	
 	// void loadGame(const std::string);

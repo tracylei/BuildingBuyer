@@ -1,2 +1,3 @@
-game.o: game.cc game.h controller.h boarddisplay.h celldisplay.h player.h \
-  cell.h gym.h property.h academicbuilding.h residence.h nonproperty.h
+game.o: game.cc game.h bank.h owner.h dice.h controller.h boarddisplay.h \
+  celldisplay.h player.h cell.h property.h gym.h academicbuilding.h \
+  residence.h nonproperty.h

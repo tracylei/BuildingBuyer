@@ -1,7 +1,8 @@
 #ifndef __PLAYER_H_
 #define __PLAYER_H_
-
+#include "dice.h"
 #include "game.h"
+#include "owner.h"
 // #include "property.h"
 
 #include <iostream>
@@ -14,24 +15,24 @@ using namespace std;
 // class Game;
 // class Property;
 
-class Player{
+class Player : public Owner{
 	Game *game;
-	char symbol;
 	string name;
+	char symbol;
 	int cash, curPosition, timCups;
 	// vector<Property*> properties;
 	bool inJail;
 
 public:
 	Player();
-	Player(string name, char symbol, int position, int cash, int timsCups); //for loading from file
+	Player(Game* game, string name, char symbol, int position, int cash, int timsCups); //for loading from file
 
 	string getName(); //returns name of player
 	char getSymbol();
 	int getCash();
 	int getPos();
 	int isInJail();
-	void addCash(int x);
+	void addCash(int x); //inherited
 	// vector<Property*> getProperties();
 
 
@@ -42,7 +43,7 @@ public:
 	void move(int r1, int r2);
 	void goToJail();
 	
-	bool pay(int); //return true is payment successful, else false
+	bool pay(int, Player*); //return true is payment successful, else false
 	void declareBankrupt();
 	void displayAssets();
 	

@@ -7,11 +7,13 @@
 class Game;
 
 class Cell{
-	std::string name;
 	Game* game;
+protected:
+	std::string name;
 public:
 	Cell(std::string);
 	void setGame(Game *game);
+	string getName();
 };
 
 #endif

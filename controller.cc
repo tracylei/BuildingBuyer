@@ -56,9 +56,17 @@ BoardDisplay* Controller::getBoard(){
 
 //notify board to add new player
 void Controller::notify(Player *p, int prevPos, int curPos){
+#if DEBUG
 	cout << "controller notify" << endl;
 	cout << p->getSymbol() <<prevPos <<curPos << endl;
+#endif
 	board->notify(p, prevPos, curPos); //why does this give segfault
+}
+
+
+//Called by notify board to print
+void Controller::refreshBoard(){
+	board->print();
 }
 
 void Controller::play(){
@@ -68,7 +76,7 @@ void Controller::play(){
 	
 	//read in game details
 
-	cout << "How many players are playing? (players 2-8)";
+	cout << "How many players are playing? (players 2-8) ";
 	cin >> numPlayers;
 
 	game->init(this);
@@ -80,22 +88,29 @@ void Controller::play(){
 		string name;
 
 		//create player
-		cout << "Player " << i << " please select your game piece." << endl;
-		for (map<char,string>::iterator it = symbols.begin(); it != symbols.end(); it++){
-			cout << it->first << " ";
-		}
-		cout << endl;
-		cin >> symbol;
-
+		cout<< "Player "<< i << ", what is your first name?"<<endl;
+		cin>>name;
+		
+		while (true){
+			cout << name<<", please select your game piece." << endl;
+			for (map<char,string>::iterator it = symbols.begin(); it != symbols.end(); it++){
+				cout << it->first << " ";
+			}
+			cout<<endl;
+			cin>>symbol;
 		//check if symbol availablespot
-		if (symbols.count(symbol) > 0){
-			game->addPlayer(new Player(name, symbol, 0, 1500, 0));
-			symbols.erase(symbol);
-			i++;
-		}else{
-			cout << "That symbol is unavailable. Try Again." << endl;
+			if (symbols.count(symbol) > 0){
+				game->addPlayer(new Player(game, name, symbol, 0, 1500, 0));
+				symbols.erase(symbol);
+				i++;
+				break;
+			}else{
+				cout << "That symbol is unavailable. Try Again." << endl;
+			}
 		}
 	} 
 
 	board->print();
+
+	game->play();
 }

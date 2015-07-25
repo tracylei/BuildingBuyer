@@ -3,11 +3,13 @@
 
 using namespace std;
 
-Player::Player():game(NULL), cash(1500){}
+Player::Player(): Owner(1500),game(NULL){}
 // Player(char symbol, string name, int cash=1500, Properties* properties):symbol(symbol), name(name), cash(cash), properties(properties){}
-Player::Player(string name, char symbol, int curPosition, int cash, int timCups): name(name), symbol(symbol), curPosition(curPosition)
-, cash(cash), timCups(timCups){
+Player::Player(Game* game, string name, char symbol, int curPosition, int cash, int timCups): Owner(cash), game(game), name(name), symbol(symbol), curPosition(curPosition)
+, timCups(timCups){
+#if DEBUG
 	cout << symbol << curPosition << " " <<cash << endl;
+#endif
 };
 
 string Player::getName(){
@@ -33,9 +35,21 @@ void Player::addCash(int x){
 // 	return properties;
 // }
 
-bool Player::pay(int amt){
-	if (amt > cash) return false;
-	return true;
+bool Player::pay(int amt, Player* creditor){
+	if (amt > cash) {
+		//INCOMPLETE add in bankruptcy
+		// cout<<"You are short $"<<amt-cash<<". Would you like to attempt a trade, 
+		// mortgage buildings, sell ipmrovements, or declare bankruptcy?"	<<endl;
+		// string cmd;
+		// cin>>cmd;
+		// if (cmd=="bankrupt")
+		return false;
+	}
+	else {
+		cash-=amt;
+		creditor->addCash(amt);
+		return true;
+	}
 }
 
 void Player::goToJail(){
@@ -45,17 +59,15 @@ void Player::goToJail(){
 
 void Player::move(){
 	int prevPosition = curPosition;
-	//TODO
-	//Dice not implemented yet..
-	// curPosition = (curPosition + dice->roll()) % 39;
+	curPosition = (curPosition + game->rollDice()) % 39;
 	//notify board of move
-	// game->board->notify(this, prevPosition, curPosition); // wrong need to change notify game-> game notify controller-> controller notify boarddisplay
+	game->notify(this, prevPosition, curPosition); 
 }
 
 void Player::move(int r1, int r2){
 	int prevPosition = curPosition;
 	curPosition = (curPosition + r1 + r2) % 39;
-	game->notify(this, prevPosition, curPosition); //wrong need to change this. notify game-> game notify controller-> controller notify boarddisplay
+	game->notify(this, prevPosition, curPosition); 
 }
 
 // void Player::displayAssets(){
@@ -185,33 +197,36 @@ void Player::move(int r1, int r2){
 // }
 
 void Player::play(){
-	string input;
 
-	cout << getName() << "turn" << endl;
+
+	cout << getName() << "'s turn. Please enter your commands." << endl;
 	//player commands..
 
-	while(true){
-		string cmd;
-		bool rolled = false;
+	bool rolled = false;
 
-		getline(cin,input);
+	string input;
+	string cmd;
+	while(getline(cin,input)){
 		istringstream iss(input);
 		iss >> cmd;
-
 		if (cmd == "roll"){
-			if (rolled) continue;
-			else rolled = true;
-
-			if(game->getTestMode()){
-				int r1, r2;
-				iss >> r1 >> r2;
-				move(r1,r2);
-			}else{
-				move();
+			if (!rolled) {
+				//DEBUG
+				cout<<getName()<<" rolls the dice"<<endl;
+				rolled=true;
+				if(game->getTestMode()){
+					int r1, r2;
+					iss >> r1 >> r2;
+					move(r1,r2);
+				}else{
+					move();
+				}
+				game->refreshBoard();
 			}
-	
+		//What if asks to roll twice
 		}else if (cmd == "next"){//end turn
-			game->next();
+			game->endTurn();
+
 		// }else if (cmd == "trade"){
 		// 	string player, give, want;
 		// 	Player *p;
@@ -250,6 +265,7 @@ void Player::play(){
 		// 	}
 		}else if (cmd == "bankrupt"){
 			//TODO
+			cout<<"You can only declare bankruptcy when you owe someone more than you can pay."<<endl;
 		}else if (cmd == "assets"){
 			// displayAssets();
 		}else if(cmd == "save"){

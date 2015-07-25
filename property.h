@@ -5,7 +5,7 @@
 #include <string>
 
 class Property : public Cell{
-	// Owner* owner;
+	Owner* owner;
 	int cost, numImpr;
 	bool mortgaged;
 	string block;
@@ -14,11 +14,10 @@ class Property : public Cell{
 public:
 	Property(string name, string block, int cost);
 	Property(string name, int cost);
-	string getName();
 	int getImpr();
 	// //Returns false if purchase was unsuccessful
-	// void setOwner(Player* newOwner);
-	// Owner* getOwner(); //Not sure if this is needed yet...
+	void setOwner(Owner* newOwner);
+	Owner* getOwner(); 
 	// virtual void chargeFee(Player* p)=0;
 	// //void auction(input stream);
 	// void buy(Player* buyer);

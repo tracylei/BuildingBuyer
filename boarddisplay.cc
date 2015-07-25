@@ -7,7 +7,6 @@ BoardDisplay::BoardDisplay(){
 	string name;
 	int i = 0;
 	int isProperty, numImpr;
-	blah = "test";
 	while(data >> name){
 		// cout << i<< name << isProperty <<endl;
 		data >> isProperty >> numImpr;
@@ -18,9 +17,11 @@ BoardDisplay::BoardDisplay(){
 }
 
 void BoardDisplay::notify(Player *p, int oldPos, int newPos){//need old and new cells
+#if TESTING
 	cout<<"set"<<endl;
-	//remove player from previous cell
 	cout << "set player.." << oldPos << newPos<< endl;
+#endif
+	//remove player from previous cell
 	if(oldPos != newPos){
 		 cells[oldPos].removePlayer(p->getSymbol());
 	}
