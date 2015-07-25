@@ -1,4 +1,3 @@
-#include "game.h"
 #include "controller.h"
 #include "player.h"
 
@@ -40,6 +39,7 @@ Game::Game(){
 //	delete bank;
 // }
 
+<<<<<<< HEAD
 Bank* Game::getBank(){
 	return bank;
 }
@@ -54,6 +54,27 @@ Player* Game::getCurrentPlayer(){
 
 void Game::reclaimTimCups(int n){
 		rollUpCount -=n;
+=======
+Player* Game::getPlayer(string s){
+
+	for(vector<Player*>::iterator it=players.begin(); it != players.end(); ++it){
+		if ((**it).getName() == s) {
+			cout << "found player" << endl;
+			return *it;}
+	}
+	return NULL;
+}
+
+Property* Game::getProperty(string propName){
+	for (int i = 0; i < 40; ++i){
+		if(theGrid[i]->getName() == propName) return static_cast<Property*>(theGrid[i]);
+	}
+	return NULL;
+}
+
+void Game::play(){
+	players[currPlayer]->play();
+>>>>>>> 4356b80691a7f0e3439b247fdc2236c788c41869
 }
 
 bool Game::getTestMode(){
@@ -201,12 +222,13 @@ void Game::init(Controller* controller){
 				for (int j = 0; j < 4; j++){
 						file>>rentFees[j];
 					}
-				theGrid[i] = new Residence (cellName, purchaseCost, rentFees);
+				theGrid[i] = new Residence (cellName, rentFees);
 			}else{ //Gym
-				theGrid[i] = new Gym (cellName, purchaseCost);
+				theGrid[i] = new Gym (cellName);
 			}
 			static_cast<Property*>(theGrid[i])->setOwner(bank);
 		}
+		theGrid[i]->setIndex(i);
 		i++;
 	}	
 }

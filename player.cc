@@ -31,6 +31,7 @@ int Player::getPos(){
 	return curPosition;
 }
 
+<<<<<<< HEAD
 int Player::getTimCups(){
 	return timCups;
 }
@@ -47,14 +48,24 @@ void Player::setJailRolls(int roll1, int roll2){
 	jailRoll1 = roll1;
 	jailRoll2 = roll2;
 	turnsInJail++;
+=======
+vector<Property*> Player::getProperties(){
+	return properties;
+>>>>>>> 4356b80691a7f0e3439b247fdc2236c788c41869
 }
 
 void Player::addCash(int x){
 	cash += x;
 }
-// vector<Property*> Player::getProperties(){
-// 	return properties;
-// }
+
+void Player::addProperty(Property *p){
+	for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
+		if ((**it).getName() == p->getName()) return;
+	}
+	properties.push_back(p);
+	cout << p->getName() << " added to player " << name << endl;
+}
+
 
 bool Player::pay(int amt, Player* creditor){
 	if (amt > cash) {
@@ -99,15 +110,15 @@ void Player::move(int r1, int r2){
 	game->notify(this, prevPosition, curPosition); 
 }
 
-// void Player::displayAssets(){
-// 	cout << "Player " << name << "'s' assets." <<endl;
-// 	cout << "Cash: " << cash << endl;
-// 	cout << "Properties: ";
+void Player::displayAssets(){
+	cout << "Player " << name << "'s' assets." <<endl;
+	cout << "Cash: " << cash << endl;
+	cout << "Properties: ";
 
-// 	for(vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-// 		cout << it->name << " ";
-// 	} 	
-// }
+	for(vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
+		cout << (**it).getName() << " ";
+	} 	
+}
 
 // bool Player::acceptTrade(Player *p, string give, string want){
 // 	int amout;

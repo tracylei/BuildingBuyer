@@ -7,7 +7,7 @@ extern const int RESIDENCE_COST;
 class Residence : public Property{
 	int* rent;
 public:
-	Residence(string bldgName, int cost, int* rent);
+	Residence(std::string bldgName, int* rent);
 	// void chargeFee();
 
 };

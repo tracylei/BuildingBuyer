@@ -2,18 +2,20 @@
 #define _PROPERTY_H_
 
 #include "cell.h"
+#include "owner.h"
+
 #include <string>
 
 class Property : public Cell{
 	Owner* owner;
 	int cost, numImpr;
 	bool mortgaged;
-	string block;
+	std::string block;
 
 	//From super class - string name;
 public:
-	Property(string name, string block, int cost);
-	Property(string name, int cost);
+	Property(std::string name, std::string block, int cost);
+	Property(std::string name, int cost);
 	int getImpr();
 	// //Returns false if purchase was unsuccessful
 	void setOwner(Owner* newOwner);

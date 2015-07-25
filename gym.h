@@ -7,7 +7,7 @@ extern const int GYM_COST;
 
 class Gym : public Property{
 public:
-	Gym(std::string, int);
+	Gym(std::string);
 };
 
 #endif
