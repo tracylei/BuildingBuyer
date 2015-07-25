@@ -1,7 +1,7 @@
 #include "dice.h"
 
 int Dice::roll(){
-	srand(2041);
+	srand(time(NULL));
 	return rand() % 6 + 1;
 }
 
