@@ -6,6 +6,7 @@
 
 class Dice{
 public:
+	Dice();
 	int roll();
 	int SLCAction();
 	int NHAction(); //generates a random NH event, returns the action
