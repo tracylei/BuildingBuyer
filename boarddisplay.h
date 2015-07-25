@@ -21,7 +21,6 @@ public:
 	//map of property and if ownable
 	void notify(Player*, int, int); // updates players movements,
 	// void notify(Property*); // updates improvements on building
-	std::string getblah();
 	std::string printPlayers(int);
 	std::string printImpr(int);
 	void print();

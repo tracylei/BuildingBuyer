@@ -87,6 +87,10 @@ void Game::addPlayer(Player* p){
 // 	return (numPlayers == 1);
 // }
 
+//A Player calls this to notify the controller of its move
+void Game::notify(Player* p, int prevPos, int curPos){
+	controller->notify(p, prevPos, curPos);
+}
 void Game::init(Controller* controller){
 	cout << "Game initializing.." << endl;
 	

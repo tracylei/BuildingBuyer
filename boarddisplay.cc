@@ -33,9 +33,6 @@ void BoardDisplay::notify(Player *p, int oldPos, int newPos){//need old and new 
 // 	//cells[p->id].addImpr(); 
 // }
 
-string BoardDisplay::getblah(){
-	return blah;
-}
 
 string BoardDisplay::printPlayers(int cell){
 	ostringstream os;

@@ -44,7 +44,8 @@ public:
 	// void removePlayer (Player* p);
 	// bool isWon();
 
-
+	//Called by the player to notify the controller of its change in position
+	void notify(Player* p, int prevPos, int curPos);
 	void init(Controller* controller);
 };
 

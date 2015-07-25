@@ -1,5 +1,5 @@
 #include "player.h"
-
+#include "controller.h"
 
 using namespace std;
 
@@ -55,7 +55,7 @@ void Player::move(){
 void Player::move(int r1, int r2){
 	int prevPosition = curPosition;
 	curPosition = (curPosition + r1 + r2) % 39;
-	game->board->notify(this, prevPosition, curPosition); //wrong need to change this. notify game-> game notify controller-> controller notify boarddisplay
+	game->notify(this, prevPosition, curPosition); //wrong need to change this. notify game-> game notify controller-> controller notify boarddisplay
 }
 
 // void Player::displayAssets(){
