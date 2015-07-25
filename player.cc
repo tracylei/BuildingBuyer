@@ -62,21 +62,17 @@ bool Player::pay(int amt, Player* creditor){
 	}
 }
 
-void Player::goToJail(){
+void Player::goToJail(int prevPosition){
 	curPosition = 10;
 	inJail = true;
-}
-
-void Player::move(){
-	int prevPosition = curPosition;
-	curPosition = (curPosition + game->rollDice()) % 39;
-	//notify board of move
 	game->notify(this, prevPosition, curPosition); 
 }
+
 
 void Player::move(int r1, int r2){
 	int prevPosition = curPosition;
 	curPosition = (curPosition + r1 + r2) % 39;
+	theGrid[i]->
 	game->notify(this, prevPosition, curPosition); 
 }
 
@@ -221,21 +217,56 @@ void Player::play(){
 		iss >> cmd;
 		if (cmd == "roll"){
 			if (!rolled) {
-				//DEBUG
+#if DEBUG
 				cout<<getName()<<" rolls the dice"<<endl;
+#endif		
 				rolled=true;
 				if(game->getTestMode()){
 					int r1, r2;
 					iss >> r1 >> r2;
 					move(r1,r2);
 				}else{
-					move();
+					int roll1 = game->rollDice();
+					int roll2 = game->rollDice();
+					cout<<"You rolled a "<<roll1<<" and a "<<roll2<<endl;
+					int numRolls = 1;
+					while (roll1 == roll2){
+						if (numRolls == 3){
+							goToJail(curPosition);
+							game->refreshBoard();
+							cout<<"You've rolled 3 doubles in a row. You've been moved to the DC Tim's Line because you stayed up all night programming and NEED caffeine."<<endl;
+							break;
+						}
+						else{
+							cout<<"You've rolled a double. Please roll again."<<endl;
+							string s;
+							cin>>s;
+							while (s!="roll"){
+								cout<<"You need to roll again before using another command. Please issue the roll command again."<<endl;
+								cin>>s;
+							}
+							roll1 = game->rollDice();
+							roll2 = game->rollDice();
+							cout<<"You rolled a "<<roll1<<" and a "<<roll2<<endl;
+							numRolls++;
+						}
+					}
+					if (!inJail){
+						move (roll1, roll2);
+						game->refreshBoard();
+						cout<<"You rolled a "<<roll1<<" and a "<<roll2<<endl;
+					}
 				}
-				game->refreshBoard();
+			}
+			else {
+					cout<<"You cannot roll again on this turn. Please choose another command."<<endl;
 			}
 		//What if asks to roll twice
 		}else if (cmd == "next"){//end turn
-			game->endTurn();
+			if (!rolled)
+				cout<<"You can still roll on this turn. Please roll the dice or choose another command."<<endl;
+			else
+				game->endTurn();
 
 		// }else if (cmd == "trade"){
 		// 	string player, give, want;

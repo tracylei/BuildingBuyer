@@ -42,7 +42,7 @@ public:
 	// void next();
 	void move();
 	void move(int r1, int r2);
-	void goToJail();
+	void goToJail(int prevPos);
 	
 	bool pay(int, Player*); //return true is payment successful, else false
 	void declareBankrupt();

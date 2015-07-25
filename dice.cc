@@ -1,7 +1,11 @@
 #include "dice.h"
 
-int Dice::roll(){
+
+Dice::Dice(){
 	srand(time(NULL));
+}
+
+int Dice::roll(){
 	return rand() % 6 + 1;
 }
 
