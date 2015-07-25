@@ -1,14 +1,13 @@
 #include "property.h"
+#include <iostream>
 
 using namespace std;
 
 Property::Property(string name, string block, int cost): Cell(name), cost(cost), block(block){
-	// owner = new Bank();
 	mortgaged = false;
 }
 
 Property::Property(string name, int cost): Cell(name), cost(cost){
-	// owner = new Bank();
 	mortgaged = false;
 }
 

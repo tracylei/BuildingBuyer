@@ -14,9 +14,7 @@ Controller::Controller(){
 	symbols['$'] = "Money";
 	symbols['L'] = "Laptop";
 	symbols['T'] = "Pink tie";
-	// for (map<char,string>::iterator it = symbols.begin(); it != symbols.end(); it++){
-	// 		cout << it->first << " ";
-	// }
+	
 }
 
 Controller::~Controller(){
@@ -27,32 +25,6 @@ Controller::~Controller(){
 BoardDisplay* Controller::getBoard(){
 	return board;
 }
-// void Controller::loadGame(const string fname){
-// 	//open and read game data
-// 	ifstream data(fname.c_str());
-
-// 	string pName, property, owner;
-// 	int numPlayers, timCups, money, position, improvements;
-// 	char symbol;
-
-// 	//initialize players
-// 	data >> numPlayers;
-// 	for (int i = 0; i < numPlayers; ++i){
-// 		data >> pName >> symbol >> timCups >> money >> position;
-		
-// 		Player *p = new Player(pName, symbol, money, position, timCups);
-// 		game->players.push_back(p);
-		
-// 		board->notify(p,position,position);
-// 	}
-
-// 	//initialize game cells
-// 	while (data >> property){
-// 		data >> symbol >> owner >> improvements;
-// 		//TODO
-// 		//add property to player
-// 	}
-// }
 
 //notify board to add new player
 void Controller::notify(Player *p, int prevPos, int curPos){
@@ -68,6 +40,47 @@ void Controller::notify(Player *p, int prevPos, int curPos){
 void Controller::refreshBoard(){
 	board->print();
 }
+
+void Controller::loadGame(const string fname){
+	string pName, property, owner;
+	int numPlayers, timCups, cash, position, improvements;
+	char symbol;
+	
+	board = new BoardDisplay();
+	game->init(this);
+	
+	//open and read game data
+	ifstream data(fname.c_str());
+
+	//initialize players
+	data >> numPlayers;
+	//double check position.. I think its the players order.
+	for (int i = 0; i < numPlayers; ++i){
+		data >> pName >> symbol >> timCups >> cash >> position;
+		Player *p = new Player(game, pName, symbol, position, cash, timCups);
+		game->addPlayer(p);
+		notify(p,0,position);
+	}
+
+	// add property to player
+	while (data >> property){
+		data >> owner >> improvements;
+		// cout << property << " " <<owner << " " << improvements << endl;
+
+		//find property and set player as owner
+		Player *pl = game->getPlayer(owner);
+		// cout << "player gotten" << pl->getSymbol() << pl->getCash()<< endl;
+		Property *p = game->getProperty(property);
+		pl->addProperty(p);
+		// cout << "n: " << p->getName() << " "<< p->getID() << endl;
+		board->notify(p->getID(), improvements); // notify board of any improvements
+	
+	}
+
+	board->print();
+	game->play();
+}
+
 
 void Controller::play(){
 	int numPlayers;

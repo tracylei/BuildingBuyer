@@ -3,7 +3,7 @@
 #include "dice.h"
 #include "game.h"
 #include "owner.h"
-// #include "property.h"
+#include "property.h"
 
 #include <iostream>
 #include <string>
@@ -19,8 +19,8 @@ class Player : public Owner{
 	Game *game;
 	string name;
 	char symbol;
-	int cash, curPosition, timCups;
-	// vector<Property*> properties;
+	int curPosition, timCups;
+	vector<Property*> properties;
 	bool inJail;
 
 public:
@@ -32,9 +32,10 @@ public:
 	int getCash();
 	int getPos();
 	int isInJail();
-	void addCash(int x); //inherited
-	// vector<Property*> getProperties();
+	vector<Property*> getProperties();
 
+	void addCash(int x); //inherited
+	void addProperty(Property*);
 
 	void play();
 	void roll();

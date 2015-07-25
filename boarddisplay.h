@@ -19,7 +19,7 @@ public:
 	BoardDisplay();
 	//map of property and if ownable
 	void notify(Player*, int, int); // updates players movements,
-	// void notify(Property*); // updates improvements on building
+	void notify(int, int); // updates improvements on building
 	std::string printPlayers(int);
 	std::string printImpr(int);
 	void print();

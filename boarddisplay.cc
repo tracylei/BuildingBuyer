@@ -29,10 +29,11 @@ void BoardDisplay::notify(Player *p, int oldPos, int newPos){//need old and new 
 	//update number of players on the cell
 }
 
-// void notify(Property *p){ //need property id
-
-// 	//cells[p->id].addImpr(); 
-// }
+void BoardDisplay::notify(int id, int n){ //need property id
+	for (;n > 0; --n){
+		cells[id].addImpr(); 
+	}
+}
 
 
 string BoardDisplay::printPlayers(int cell){
@@ -46,7 +47,7 @@ string BoardDisplay::printPlayers(int cell){
 
 string BoardDisplay::printImpr(int n){
 	ostringstream os;
-	if (n == 5) {os << "WAP";}
+	if (n >=5) {os << "WAP";}
 	else{
 		for (int i = 0; i < n; ++i){
 			os << 'I';

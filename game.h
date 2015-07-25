@@ -4,6 +4,7 @@
 
 #include "bank.h"
 #include "dice.h"
+#include "cell.h"
 
 #include <vector>
 
@@ -14,7 +15,7 @@ const int GRID_SIZE = 40;
 
 class Player;
 class Controller;
-class Cell;
+class Property;
 
 class Game{
 	Cell** theGrid;
@@ -33,6 +34,9 @@ public:
 	// ~Game();
 	//void save();
 	Player* getCurrentPlayer();
+	Player* getPlayer(string s);
+	Property* getProperty(string name);
+
 	bool getTestMode();
 	void play();
 	void endTurn();

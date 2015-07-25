@@ -1,7 +1,7 @@
 #include <iostream>
 #include "academicbuilding.h"
 
-AcademicBuilding::AcademicBuilding(string name, int cost, string block, int improvCost, int *tuition):
+AcademicBuilding::AcademicBuilding(std::string name, int cost, std::string block, int improvCost, int *tuition):
 								Property(name, block, cost),imprCost(improvCost),tuition(tuition){
 								}
 

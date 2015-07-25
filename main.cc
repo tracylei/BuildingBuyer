@@ -18,9 +18,9 @@ int main(int argc, char const *argv[]){
 
 	if(argc == 1){
 		c.play();
-	}else if(argv[1] == "-load"){
-		// c.loadGame(argv[2]);
-	}else if(argv[1] == "-testing"){
+	}else if(string(argv[1]) == "-load"){
+		c.loadGame(argv[2]);
+	}else if(string(argv[1]) == "-testing"){
 		//do something
 	}
 	
