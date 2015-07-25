@@ -24,7 +24,10 @@ public:
 	BoardDisplay *getBoard();
 	void refreshBoard ();
 	void notify(Player *, int prevPos, int curPos);
-	void play();	
+	void init();
+	void play(bool);
+	void playInJail();
+	void rollInJail(int, int);	
 	// void loadGame(const std::string);
 	// void init(); //calls game init 
 };

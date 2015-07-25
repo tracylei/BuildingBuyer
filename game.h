@@ -27,7 +27,8 @@ class Game{
 	static int rollUpCount;
 	bool testMode;
 	Bank* bank;
-	Dice* dice;
+	Dice* die1;
+	Dice* die2;
 public:
 	Game();
 	// ~Game();
@@ -36,9 +37,11 @@ public:
 	bool getTestMode();
 	void play();
 	void endTurn();
-	int rollDice();
+	int rollDie1();
+	int rollDie2();
+	Bank* getBank();
 	void refreshBoard();
-	// static void reclaimTimsCups(int n);
+	static void reclaimTimCups(int n);
 	// static void incrRollUpCount();
 	// static int getRollUpCount();
 	// //notify the controller that improvements were built on this property

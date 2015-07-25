@@ -19,10 +19,12 @@ class Player : public Owner{
 	Game *game;
 	string name;
 	char symbol;
-	int cash, curPosition, timCups;
+	int curPosition, timCups;
 	// vector<Property*> properties;
 	bool inJail;
-
+	int turnsInJail;
+	int jailRoll1;
+	int jailRoll2;
 public:
 	Player();
 	Player(Game* game, string name, char symbol, int position, int cash, int timsCups); //for loading from file
@@ -31,17 +33,21 @@ public:
 	char getSymbol();
 	int getCash();
 	int getPos();
-	int isInJail();
+	int getTimCups();
+	void useTimCup();
+	int getTurnsInJail();
+	void setJailRolls(int roll1, int roll2);
+	bool isInJail();
 	void addCash(int x); //inherited
 	// vector<Property*> getProperties();
-
 
 	void play();
 	void roll();
 	// void next();
 	void move();
 	void move(int r1, int r2);
-	void goToJail(int prevPos);
+	void goToJail();
+	void leaveJail();
 	
 	bool pay(int, Player*); //return true is payment successful, else false
 	void declareBankrupt();

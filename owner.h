@@ -3,6 +3,7 @@
 #include <string>
 
 class Owner{
+protected:
 	int cash;
 public:
 	Owner(int);

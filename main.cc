@@ -17,7 +17,7 @@ int main(int argc, char const *argv[]){
 	Controller c;
 
 	if(argc == 1){
-		c.play();
+		c.init();
 	}else if(argv[1] == "-load"){
 		// c.loadGame(argv[2]);
 	}else if(argv[1] == "-testing"){

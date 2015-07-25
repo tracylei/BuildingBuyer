@@ -21,11 +21,12 @@ Game::Game(){
 	theGrid = NULL;
 	numPlayers = 0;
 	currPlayer = 0;
-	testMode = false;
+	testMode = true;
 	controller = NULL;
 	rollUpCount = 0;
 	bank = new Bank;
-	dice = new Dice;
+	die1 = new Dice;
+	die2 = new Dice;
 }
 
 // Game::~Game(){
@@ -39,45 +40,71 @@ Game::Game(){
 //	delete bank;
 // }
 
-void Game::play(){
-	players[currPlayer]->play();
+Bank* Game::getBank(){
+	return bank;
+}
+Player* Game::getCurrentPlayer(){
+	return players[currPlayer];
+}
+
+// void Game::play(){
+// 	players[currPlayer]->play();
+// }
+
+
+void Game::reclaimTimCups(int n){
+		rollUpCount -=n;
 }
 
 bool Game::getTestMode(){
 	return testMode;
 } 
 
+void Game::refreshBoard(){
+	controller->refreshBoard();
+}
+
 void Game::endTurn(){
-#if DEBUG
+//#if DEBUG
 	cout<<"Turn Ended Successfully"<<endl;
-#endif
+//#endif
+
+
 	currPlayer++;
 	cout<<"number of players: "<<numPlayers<<endl;
 	currPlayer %= numPlayers;
+
+
 #if DEBUG
 	cout<<"Player "<<currPlayer+1<<"'s turn is next."<<endl;
 #endif
+
+
 	controller->refreshBoard();
 	if (!isWon()){
 		#if DEBUG
 		//TESTING
 		cout<<"is not won"<<endl;
 		#endif
-		play();
+		if (players[currPlayer]->isInJail())
+			controller->playInJail();
+		else
+			controller->play(false);
 	}
 }
 
-void Game::refreshBoard(){
-	controller->refreshBoard();
+
+int Game::rollDie1(){
+	return die1->roll();
 }
 
-int Game::rollDice(){
-	return dice->roll();
+
+int Game::rollDie2(){
+	return die2->roll();
 }
 
-// static void Game::reclaimTimsCups(int n){
-// 	rollUpCount -=n;
-// }
+
+
  
 // static void Game::incrRollUpCount(){
 // 	rollUpCount++;

@@ -6,6 +6,8 @@ Dice::Dice(){
 }
 
 int Dice::roll(){
+	//return rand() % 6 + 1;
+
 	return rand() % 6 + 1;
 }
 

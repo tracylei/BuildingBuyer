@@ -3,10 +3,13 @@
 
 using namespace std;
 
-Player::Player(): Owner(1500),game(NULL){}
+// Player::Player(): Owner(1500),game(NULL){}
 // Player(char symbol, string name, int cash=1500, Properties* properties):symbol(symbol), name(name), cash(cash), properties(properties){}
 Player::Player(Game* game, string name, char symbol, int curPosition, int cash, int timCups): Owner(cash), game(game), name(name), symbol(symbol), curPosition(curPosition)
 , timCups(timCups){
+	turnsInJail = 0;
+	jailRoll1 = 0;
+	jailRoll2 = 0;
 #if DEBUG
 	cout << symbol << curPosition << " " <<cash << endl;
 #endif
@@ -26,6 +29,24 @@ int Player::getCash(){
 
 int Player::getPos(){
 	return curPosition;
+}
+
+int Player::getTimCups(){
+	return timCups;
+}
+
+void Player::useTimCup(){
+	timCups--;
+}
+
+int Player::getTurnsInJail(){
+	return turnsInJail;
+}
+
+void Player::setJailRolls(int roll1, int roll2){
+	jailRoll1 = roll1;
+	jailRoll2 = roll2;
+	turnsInJail++;
 }
 
 void Player::addCash(int x){
@@ -52,17 +73,29 @@ bool Player::pay(int amt, Player* creditor){
 	}
 }
 
-void Player::goToJail(int prevPosition){
+void Player::goToJail(){
+	game->notify(this, curPosition, 10); 
 	curPosition = 10;
 	inJail = true;
-	game->notify(this, prevPosition, curPosition); 
+	turnsInJail = 0;
+}
+
+void Player::leaveJail(){
+	move(jailRoll1, jailRoll2);
+	game->refreshBoard();
+	cout<<"Congratulations on leaving the Tim's line. Based on the sum of your dice rolls from your last attempt to leave, you moved ";
+	cout<<jailRoll1+jailRoll2<<" cells."<<endl;
+	inJail = false;
+}
+
+bool Player::isInJail(){
+	return inJail;
 }
 
 
 void Player::move(int r1, int r2){
 	int prevPosition = curPosition;
 	curPosition = (curPosition + r1 + r2) % 39;
-	theGrid[i]->
 	game->notify(this, prevPosition, curPosition); 
 }
 
@@ -192,115 +225,5 @@ void Player::move(int r1, int r2){
 // 	}
 // }
 
-void Player::play(){
 
 
-	cout << getName() << "'s turn. Please enter your commands." << endl;
-	//player commands..
-
-	bool rolled = false;
-
-	string input;
-	string cmd;
-	while(getline(cin,input)){
-		istringstream iss(input);
-		iss >> cmd;
-		if (cmd == "roll"){
-			if (!rolled) {
-#if DEBUG
-				cout<<getName()<<" rolls the dice"<<endl;
-#endif		
-				rolled=true;
-				if(game->getTestMode()){
-					int r1, r2;
-					iss >> r1 >> r2;
-					move(r1,r2);
-				}else{
-					int roll1 = game->rollDice();
-					int roll2 = game->rollDice();
-					cout<<"You rolled a "<<roll1<<" and a "<<roll2<<endl;
-					int numRolls = 1;
-					while (roll1 == roll2){
-						if (numRolls == 3){
-							goToJail(curPosition);
-							game->refreshBoard();
-							cout<<"You've rolled 3 doubles in a row. You've been moved to the DC Tim's Line because you stayed up all night programming and NEED caffeine."<<endl;
-							break;
-						}
-						else{
-							cout<<"You've rolled a double. Please roll again."<<endl;
-							string s;
-							cin>>s;
-							while (s!="roll"){
-								cout<<"You need to roll again before using another command. Please issue the roll command again."<<endl;
-								cin>>s;
-							}
-							roll1 = game->rollDice();
-							roll2 = game->rollDice();
-							cout<<"You rolled a "<<roll1<<" and a "<<roll2<<endl;
-							numRolls++;
-						}
-					}
-					if (!inJail){
-						move (roll1, roll2);
-						game->refreshBoard();
-						cout<<"You rolled a "<<roll1<<" and a "<<roll2<<endl;
-					}
-				}
-			}
-			else {
-					cout<<"You cannot roll again on this turn. Please choose another command."<<endl;
-			}
-		//What if asks to roll twice
-		}else if (cmd == "next"){//end turn
-			if (!rolled)
-				cout<<"You can still roll on this turn. Please roll the dice or choose another command."<<endl;
-			else
-				game->endTurn();
-
-		// }else if (cmd == "trade"){
-		// 	string player, give, want;
-		// 	Player *p;
-
-		// 	iss >> player >> give >> want;
-
-		// 	//find player.
-		// 	// p = game->getPlayers().find(name); //not correct syntax
-		// 	trade(p, give, want);
-		// }else if (cmd == "improve"){
-		// 	string propName, action;
-		// 	iss >> propName >> action;
-
-		// 	if (action == "buy"){
-		// 		for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-		// 			if (it->getName() == propName) it->buyImprove();
-		// 		}
-		// 	}else if (action == "sell"){
-		// 		for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-		// 			if (it->getName() == propName) it->sellImprove();
-		// 		}
-		// 	}
-
-		// }else if (cmd == "mortgage"){
-		// 	string propName;
-		// 	Property *p;
-		// 	for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-		// 			if (it->getName() == propName) mortgage(it);
-		// 	}
-		// 	// mortgage(p);
-		// }else if (cmd == "unmortgage"){
-		// 	string propName;
-		// 	Property *p;
-		// 	for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-		// 		if (it->getName() == propName) unmortgage(it);
-		// 	}
-		}else if (cmd == "bankrupt"){
-			//TODO
-			cout<<"You can only declare bankruptcy when you owe someone more than you can pay."<<endl;
-		}else if (cmd == "assets"){
-			// displayAssets();
-		}else if(cmd == "save"){
-			//TODO
-		}
-	}
-}
