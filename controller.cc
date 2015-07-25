@@ -58,8 +58,7 @@ BoardDisplay* Controller::getBoard(){
 void Controller::notify(Player *p, int prevPos, int curPos){
 	cout << "controller notify" << endl;
 	cout << p->getSymbol() <<prevPos <<curPos << endl;
-	
-	// board->notify(p, prevPos, curPos); //why does this give segfault
+	board->notify(p, prevPos, curPos); //why does this give segfault
 }
 
 void Controller::play(){
@@ -71,7 +70,9 @@ void Controller::play(){
 
 	cout << "How many players are playing? (players 2-8)";
 	cin >> numPlayers;
-	
+
+	game->init(this);
+
 	int i = 1;
 	while(i <= numPlayers){
 
@@ -95,8 +96,6 @@ void Controller::play(){
 			cout << "That symbol is unavailable. Try Again." << endl;
 		}
 	} 
-
-	game->init(this);
 
 	board->print();
 }

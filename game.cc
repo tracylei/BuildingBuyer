@@ -124,15 +124,18 @@ void Game::init(Controller* controller){
 				int improvCost;
 				file>>improvCost;
 
-				// cout << cellName << " " << purchaseCost << " " << block << " " << improvCost << " ";
+				 //cout << cellName << " " << purchaseCost << " " << block << " " << improvCost << " "<<endl;
 
 				//Read in tuition
-				int tuition[5];
+				int tuition [5];
+				
 				for (int j = 0; j <= MAX_IMPROVEMENTS; j++){
+					
 					string tut;
 					int tuitionCost;
 
 					file>>tuitionCost;
+
 					// cout << tuitionCost << " ";
 					tuition[j] = tuitionCost;
 				}
@@ -141,7 +144,7 @@ void Game::init(Controller* controller){
 			}else if (s=="2"){ // Residence
 				int rentFees [4];
 				for (int j = 0; j < 4; j++){
-						file>>rentFees[i];
+						file>>rentFees[j];
 					}
 				theGrid[i] = new Residence (cellName, purchaseCost, rentFees);
 			
