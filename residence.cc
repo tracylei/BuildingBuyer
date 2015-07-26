@@ -14,6 +14,7 @@ void Residence::doAction(Player* p){
 	}
 }
 
+
 int Residence::getValue(){
 	return cost;
 }

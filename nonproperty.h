@@ -11,6 +11,7 @@ public:
 	void doAction(Player* p);
 	void slcAction (Player* p);
 	void needlesAction (Player* p);
+
 };
 
 #endif

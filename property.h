@@ -28,7 +28,8 @@ public:
 	Owner* getOwner(); 
 	// //void auction(input stream);
 	void buy(Player* buyer);
-	//virtual void doAction(Player* p)=0;
+	virtual void doAction(Player* p)=0;
+
 };
 
 #endif

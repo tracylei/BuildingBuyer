@@ -258,7 +258,7 @@ void Controller::play(bool rolled){
 		istringstream iss(input);
 		iss >> cmd;
 		if (cmd == "roll"){
-#if DEBUG
+#if DEBUG	
 			cout<<"Read in roll..."<<endl;
 #endif
 			if (!rolled) {
@@ -361,24 +361,24 @@ void Controller::play(bool rolled){
 		// 		}
 		// 	}
 
-		// }else if (cmd == "mortgage"){
-		// 	string propName;
-		// 	Property *p;
-		// 	for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-		// 			if (it->getName() == propName) mortgage(it);
-		// 	}
-		// 	// mortgage(p);
-		// }else if (cmd == "unmortgage"){
-		// 	string propName;
-		// 	Property *p;
-		// 	for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-		// 		if (it->getName() == propName) unmortgage(it);
-		// 	}
+		}else if (cmd == "mortgage"){
+			string propName;
+			Property *p;
+			for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
+					if (it->getName() == propName) mortgage(it);
+			}
+			// mortgage(p);
+		}else if (cmd == "unmortgage"){
+			string propName;
+			Property *p;
+			for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
+				if (it->getName() == propName) unmortgage(it);
+			}
 		}else if (cmd == "bankrupt"){
 			//TODO
 			cout<<"You can only declare bankruptcy when you owe someone more than you can pay."<<endl;
 		}else if (cmd == "assets"){
-			// displayAssets();
+			game->getCurrentPlayer()->displayAssets();
 		}else if(cmd == "save"){
 			//TODO
 		}else{

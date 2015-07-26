@@ -8,7 +8,7 @@ using namespace std;
 
 
 
-NonProperty::NonProperty(std::string name): Cell(name){
+NonProperty::NonProperty(std::string name): Cell(name, false){
 }
 
 void NonProperty::doAction(Player* p){
@@ -27,7 +27,7 @@ void NonProperty::doAction(Player* p){
 		cout<<"YOU JUST GOT ATTACKED BY A FLOCK OF GEESE! RUN!!!!"<<endl;
 	}else if(name == "TUITION"){
 		cout<<"It's that time of year again. Would you like to pay $300 in tuition (using the \"tuition\" command),";
-		cout<<" or pay 10%% of your net worth (using the \"worth\" command)?"<<endl; 
+		cout<<" or pay 10% of your net worth (using the \"worth\" command)?"<<endl; 
 		int worth = p->getNetWorth();
 		cout<<"Your net worth is $"<<worth<<"."<<endl;
 

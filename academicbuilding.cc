@@ -6,6 +6,7 @@ AcademicBuilding::AcademicBuilding(std::string name, int cost, std::string block
 	// for (int i = 0; i <= MAX_IMPROVEMENTS; i++){
 	// 		cout << tuition[i] << " ";
 	// }
+
 }
 
 //Build n improvements

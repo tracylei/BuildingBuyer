@@ -36,3 +36,4 @@ void Gym::doAction(Player* p){
 int Gym::getValue(){
 	return cost;
 }
+
