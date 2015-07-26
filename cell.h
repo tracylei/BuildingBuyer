@@ -4,6 +4,9 @@
 #include <string>
 
 class Game;
+class Player;
+
+
 
 class Cell{
 protected:

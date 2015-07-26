@@ -27,7 +27,12 @@ void Gym::doAction(Player* p){
 			roll2=game->rollDie2();
 		}
 		cout<<"You've rolled a "<<roll1<<" and a "<<roll2<<" so you will have to pay "<<2*(roll1+roll2)<<"."<<endl;
-		return 2*(roll+roll2);
+		p->pay(2*(roll1+roll2), owner);
 	}
 
+}
+
+
+int Gym::getValue(){
+	return cost;
 }

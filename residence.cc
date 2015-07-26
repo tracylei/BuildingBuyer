@@ -6,9 +6,16 @@ Residence::Residence(string bldgName, int *rentFee): Property(bldgName, 200),ren
 	//Note index corresponds to number of residences owned
 }
 
-int Residence::getRent(){
-	cout<<"You will be charged $"<<rent[p->getNumRezOwned()];
-	cout<<" in rent by "<<owner->getName()<<", the owner of "<<name<<"."<<endl;		
-	return rent[owner->getNumRezOwned()];
+void Residence::doAction(Player* p){
+	if (owner->getName()!="bank"){
+		cout<<"You will be charged $"<<rent[p->getNumRezOwned()];
+		cout<<" in rent by "<<owner->getName()<<", the owner of "<<name<<"."<<endl;		
+		p->pay(rent[static_cast<Player*>(owner)->getNumRezOwned()], owner);
+	}
 }
+
+int Residence::getValue(){
+	return cost;
+}
+
 

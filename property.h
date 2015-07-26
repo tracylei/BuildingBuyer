@@ -17,6 +17,8 @@ public:
 	Property(std::string name, std::string block, int cost);
 	Property(std::string name, int cost);
 	int getImpr();
+	virtual int getValue()=0;
+	
 	int getCost();
 	bool isMortgaged();
 
@@ -26,7 +28,7 @@ public:
 	Owner* getOwner(); 
 	// //void auction(input stream);
 	void buy(Player* buyer);
-	virtual void doAction()=0;
+	//virtual void doAction(Player* p)=0;
 };
 
 #endif

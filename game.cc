@@ -81,6 +81,11 @@ bool Game::getTestMode(){
 	return testMode;
 } 
 
+int Game::getTimCupCount(){
+	return rollUpCount;
+}
+
+
 void Game::refreshBoard(){
 	controller->refreshBoard();
 }

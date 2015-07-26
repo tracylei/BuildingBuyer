@@ -10,7 +10,7 @@ public:
 	int roll();
 	int SLCAction();
 	int NHAction(); //generates a random NH event, returns the action
-
+	bool giveTimCup();
 };
 
 #endif

@@ -8,7 +8,8 @@ class Residence : public Property{
 	int* rent;
 public:
 	Residence(std::string bldgName, int* rent);
-	int getRent();
+	void doAction(Player* p);
+	int getValue();
 };
 
 #endif

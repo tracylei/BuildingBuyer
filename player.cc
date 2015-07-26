@@ -39,6 +39,10 @@ void Player::useTimCup(){
 	timCups--;
 }
 
+void Player::incrTimCups(){
+	timCups++;
+}
+
 int Player::getTurnsInJail(){
 	return turnsInJail;
 }
@@ -52,6 +56,28 @@ void Player::setJailRolls(int roll1, int roll2){
 vector<Property*> Player::getProperties(){
 	return properties;
 }
+
+int Player::getNumRezOwned(){
+	int rezOwned = 0;
+	for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
+		if ((**it).getName() == "MKV" || (**it).getName() == "REV" || 
+			(**it).getName() == "V1" || (**it).getName() == "UWP") 
+			rezOwned++;
+	}
+	return rezOwned;
+}
+
+int Player::getNetWorth(){
+	int worth = cash;
+	for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
+		worth += (**it).getValue();
+	}
+	return worth;
+}
+
+
+
+
 
 void Player::addCash(int x){
 	cash += x;

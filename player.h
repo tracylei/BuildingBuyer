@@ -36,10 +36,13 @@ public:
 	int getCash();
 	int getPos();
 	int getTimCups();
+	void incrTimCups();
+
 	int getTurnsInJail();
 	bool isInJail();
 	vector<Property*> getProperties();
-	//int getNumRezOwned();
+	int getNumRezOwned();
+	int getNetWorth();
 
 	void addCash(int x); //inherited
 	void addProperty(Property*);

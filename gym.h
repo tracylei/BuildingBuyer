@@ -9,6 +9,7 @@ class Gym : public Property{
 public:
 	Gym(std::string);
 	void doAction(Player* p);
+	int getValue();
 };
 
 #endif
