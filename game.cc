@@ -60,7 +60,6 @@ Player* Game::getPlayer(string s){
 
 	for(vector<Player*>::iterator it=players.begin(); it != players.end(); ++it){
 		if ((**it).getName() == s) {
-			cout << "found player" << endl;
 			return *it;}
 	}
 	return NULL;
