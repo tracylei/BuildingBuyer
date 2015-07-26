@@ -6,17 +6,17 @@
 class Game;
 
 class Cell{
-	Game* game;
-	int index;
 protected:
 	std::string name;
+	Game* game;
+	int index;
 public:
 	Cell(std::string);
 	void setGame(Game *game);
 	void setIndex(int);
 	std::string getName();
 	int getID();
-
+	virtual void doAction(Player* p) = 0;
 };
 
 #endif

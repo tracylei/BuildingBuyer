@@ -12,12 +12,12 @@ Property::Property(string name, int cost): Cell(name), cost(cost){
 }
 
 int Property::getImpr(){
-	return numImpr;
+	return numImprov;
 }
 
 
 Owner* Property::getOwner(){
-	cout<<owner->getName()<<endl;
+	//cout<<owner->getName()<<endl;
 	return owner;
 }
 int Property::getCost(){
@@ -38,11 +38,11 @@ void Property::setMortgaged(bool v){
 //Buyer buys this property, assumes pay method will take care of
 //bankruptcy etc.
 void Property::buy(Player* buyer){
-	cout << "Would you like to buy " << getName() << " for " << cost << " ?(y/n)" << endl;
+	cout << "Would you like to buy " << getName() << " for " << cost << "?(y/n)" << endl;
 	
 	while(true){
 		string resp;
-		cin >> resp;
+		getline(cin, resp);
 
 		if (resp == "y"){
 			if(buyer->pay(cost, static_cast<Player*>(owner))){

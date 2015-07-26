@@ -8,7 +8,7 @@ class NonProperty : public Cell{
 	//name field from super class
 public:
 	NonProperty(std::string name);
-	// doAction();
+	virtual doAction() = 0;
 };
 
 #endif

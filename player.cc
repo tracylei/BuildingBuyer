@@ -66,7 +66,7 @@ void Player::addProperty(Property *p){
 }
 
 
-bool Player::pay(int amt, Player* creditor){
+bool Player::pay(int amt, Owner* creditor){
 	if (amt > cash) {
 		//INCOMPLETE add in bankruptcy
 		// cout<<"You are short $"<<amt-cash<<". Would you like to attempt a trade, 

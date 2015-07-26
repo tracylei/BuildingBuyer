@@ -7,11 +7,11 @@
 #include <string>
 
 class Property : public Cell{
+protected:
 	Owner* owner;
-	int cost, numImpr;
+	int cost, numImprov;
 	bool mortgaged;
 	std::string block;
-
 	//From super class - string name;
 public:
 	Property(std::string name, std::string block, int cost);
@@ -24,9 +24,9 @@ public:
 	// //Returns false if purchase was unsuccessful
 	void setOwner(Owner* newOwner);
 	Owner* getOwner(); 
-	// virtual void chargeFee(Player* p)=0;
 	// //void auction(input stream);
 	void buy(Player* buyer);
+	virtual void doAction()=0;
 };
 
 #endif

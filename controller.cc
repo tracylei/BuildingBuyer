@@ -91,8 +91,11 @@ void Controller::init(){
 	
 	//read in game details
 
-	cout << "How many players are playing? (players 2-8) ";
-	cin >> numPlayers;
+	cout << "How many players are playing? (players 2-8)" << endl;
+	string strPlayers;
+	getline(cin,strPlayers);
+	istringstream iss(strPlayers);
+	iss >> numPlayers;
 
 	game->init(this);
 
@@ -104,7 +107,7 @@ void Controller::init(){
 
 		//create player
 		cout<< "Player "<< i << ", what is your first name?"<<endl;
-		cin>>name;
+		getline(cin, name);
 		
 		while (true){
 			cout << name<<", please select your game piece." << endl;
@@ -112,7 +115,7 @@ void Controller::init(){
 				cout << it->first << " ";
 			}
 			cout<<endl;
-			cin>>symbol;
+			getline(cin,symbol);
 		//check if symbol availablespot
 			if (symbol.length()==1&&symbols.count(symbol[0]) > 0){
 				game->addPlayer(new Player(game, name, symbol[0], 0, 1500, 0));
@@ -292,6 +295,8 @@ void Controller::play(bool rolled){
 							string input;
 							string cmd;
 							getline(cin,input);
+
+							cout<<"input is:"<<input<<endl;
 							istringstream iss(input);
 							iss >> cmd;
 							while (cmd!="roll"){
@@ -305,6 +310,8 @@ void Controller::play(bool rolled){
 								iss >> r1 >> r2;
 								roll1 = r1;
 								roll2 = r2;
+								cout <<"r1 is: "<<r1<<endl;
+								cout <<"r2 is: "<<r2<<endl;
 							}else{
 								roll1 = game->rollDie1();
 								roll2 = game->rollDie2();

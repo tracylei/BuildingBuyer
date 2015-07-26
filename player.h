@@ -35,11 +35,11 @@ public:
 	char getSymbol();
 	int getCash();
 	int getPos();
-
 	int getTimCups();
 	int getTurnsInJail();
 	bool isInJail();
 	vector<Property*> getProperties();
+	//int getNumRezOwned();
 
 	void addCash(int x); //inherited
 	void addProperty(Property*);
@@ -56,7 +56,7 @@ public:
 	void goToJail();
 	void leaveJail();
 	
-	bool pay(int, Player*); //return true is payment successful, else false
+	bool pay(int, Owner*); //return true is payment successful, else false
 	void declareBankrupt();
 	void displayAssets();
 	

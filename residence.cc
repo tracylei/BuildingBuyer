@@ -6,7 +6,9 @@ Residence::Residence(string bldgName, int *rentFee): Property(bldgName, 200),ren
 	//Note index corresponds to number of residences owned
 }
 
-// void Residence::chargeFee(Player* p){
-// 	p->pay(rent[p->getNumRezOwned()]);
-// }
+int Residence::getRent(){
+	cout<<"You will be charged $"<<rent[p->getNumRezOwned()];
+	cout<<" in rent by "<<owner->getName()<<", the owner of "<<name<<"."<<endl;		
+	return rent[owner->getNumRezOwned()];
+}
 

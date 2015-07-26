@@ -14,7 +14,7 @@ public:
 	AcademicBuilding(std::string Name, int cost, std::string block, int improvCost, int *tuition);
 	//Build n improvements
 	void improve(int n);
-	// void chargeFee(Player* p);
+	void doAction();
 };
 
 #endif

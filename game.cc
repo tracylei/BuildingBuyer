@@ -216,15 +216,12 @@ void Game::init(Controller* controller){
 				int tuition [5];
 				
 				for (int j = 0; j <= MAX_IMPROVEMENTS; j++){
-					
 					string tut;
 					int tuitionCost;
-
 					file>>tuitionCost;
-
-					// cout << tuitionCost << " ";
 					tuition[j] = tuitionCost;
 				}
+
 				theGrid[i] = new AcademicBuilding(cellName, purchaseCost, block, improvCost, tuition);
 
 			}else if (s=="2"){ // Residence
@@ -239,6 +236,7 @@ void Game::init(Controller* controller){
 			static_cast<Property*>(theGrid[i])->setOwner(bank);
 		}
 		theGrid[i]->setIndex(i);
+		theGrid[i]->setGame(this);
 		i++;
 	}	
 }
