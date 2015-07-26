@@ -72,8 +72,8 @@ void Player::goToJail(int prevPosition){
 void Player::move(int r1, int r2){
 	int prevPosition = curPosition;
 	curPosition = (curPosition + r1 + r2) % 39;
-	theGrid[i]->
 	game->notify(this, prevPosition, curPosition); 
+	game->notifyCell(curPosition);
 }
 
 void Player::displayAssets(){
@@ -178,29 +178,28 @@ void Player::displayAssets(){
 // 	}
 // }
 
-// void Player::buy(Property *p){
-// 	if(cash >= p->cost){
-// 		cash -= p->cost;
-// 		p->owner = this;
-// 		properties.push_back(p);
-// 	}
-// }
 
-// void Player::mortgage(Property *p){
+void Player::mortgage(Property *p){
 
-// 	if (!p->mortgaged && p->numImpr == 0 && properties.count(p->getName()) > 1){
-// 		p->mortgaged == true;
-// 		player.cash += p->cost / 2;
-// 	}else{
-	// 	cout << "This property cannot be mortgaged!" << endl;
-	// }
-// }
+	if (!p->isMortgaged() && p->getImpr() == 0 && p->getOwner()->getName() == name){
+		p->mortgaged = true;
+		cash += p->getCost() / 2;
+	}else{
+		cout << "This property cannot be mortgaged!" << endl;
+	}
+}
 
-// void Player::unmortgage(Property *p){
-// 	if (p->mortgaged){//&& p->owner.name? == player.name
-		
-// 	}
-// }
+void Player::unmortgage(Property *p){
+	if (p->mortgaged && p->getOwner()->getName() == name){//&& p->owner.name? == player.name
+		int amt = p->cost * 1.1;
+		if(amt > cash){
+			cout << "Not enough fund to unmortgage this property!" << endl;
+		}else{
+			p->mortgaged = false;
+			cash -= amt;
+		}
+	}
+}
 
 void Player::play(){
 

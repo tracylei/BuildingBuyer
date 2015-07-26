@@ -40,6 +40,7 @@ public:
 	void play();
 	void roll();
 	// void next();
+	
 	void move();
 	void move(int r1, int r2);
 	void goToJail(int prevPos);
@@ -51,9 +52,8 @@ public:
 	bool trade(Player*, string, string);
 	bool acceptTrade(Player*, string, string);
 
- //    void buy(Property*);
-	// void mortgage(Property*);
-	// void unmortgage(Property*);
+	void mortgage(Property*);
+	void unmortgage(Property*);
 
 
 };

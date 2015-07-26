@@ -54,7 +54,7 @@ void Controller::loadGame(const string fname){
 
 	//initialize players
 	data >> numPlayers;
-	//double check position.. I think its the players order.
+
 	for (int i = 0; i < numPlayers; ++i){
 		data >> pName >> symbol >> timCups >> cash >> position;
 		Player *p = new Player(game, pName, symbol, position, cash, timCups);
