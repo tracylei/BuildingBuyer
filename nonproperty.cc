@@ -1,4 +1,4 @@
 #include "nonproperty.h"
 
-NonProperty::NonProperty(std::string name): Cell(name){
+NonProperty::NonProperty(std::string name): Cell(name, false){
 }

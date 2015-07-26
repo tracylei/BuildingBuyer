@@ -361,24 +361,38 @@ void Controller::play(bool rolled){
 		// 		}
 		// 	}
 
-		// }else if (cmd == "mortgage"){
-		// 	string propName;
-		// 	Property *p;
-		// 	for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-		// 			if (it->getName() == propName) mortgage(it);
-		// 	}
-		// 	// mortgage(p);
-		// }else if (cmd == "unmortgage"){
-		// 	string propName;
-		// 	Property *p;
-		// 	for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-		// 		if (it->getName() == propName) unmortgage(it);
-		// 	}
+		}else if (cmd == "mortgage"){
+			string propName;
+			iss >> propName;
+
+			for(unsigned int n = 0; n < game->getCurrentPlayer()->getProperties().size(); n++){
+
+				Property *temp = game->getCurrentPlayer()->getProperties().at(n);
+				if (temp->getName() == propName){
+					game->getCurrentPlayer()->mortgage(temp);
+					break;
+				}
+			}
+			
+		}else if (cmd == "unmortgage"){
+			string propName;
+			iss >> propName;
+
+			for(unsigned int n = 0; n < game->getCurrentPlayer()->getProperties().size(); n++){
+
+				Property *temp = game->getCurrentPlayer()->getProperties().at(n);
+				if (temp->getName() == propName){
+					game->getCurrentPlayer()->unmortgage(temp);
+					break;
+				}
+			}
+
+
 		}else if (cmd == "bankrupt"){
 			//TODO
 			cout<<"You can only declare bankruptcy when you owe someone more than you can pay."<<endl;
 		}else if (cmd == "assets"){
-			// displayAssets();
+			game->getCurrentPlayer()->displayAssets();
 		}else if(cmd == "save"){
 			//TODO
 		}else{

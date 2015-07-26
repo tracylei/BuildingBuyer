@@ -111,17 +111,19 @@ void Player::move(int r1, int r2){
 }
 
 void Player::displayAssets(){
-	cout << "Player " << name << "'s' assets." <<endl;
+	cout << "Player " << name << "'s assets." <<endl;
 	cout << "Cash: " << cash << endl;
-	cout << "Properties: ";
+	cout << "Properties: "; 
 
 	for(vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
 		cout << (**it).getName() << " ";
 	} 	
+	cout << endl;
 }
+			else{
 
 // bool Player::acceptTrade(Player *p, string give, string want){
-// 	int amout;
+// 	int amount;
 // 	Property *prop;
 
 // 	if (istringstream(give) >> amount){ //trade money for property
@@ -131,8 +133,8 @@ void Player::displayAssets(){
 // 		}
 
 // 		//find property (want) from player p
-// 		for (vector<Properties*> iterator it = p->getProperties().begin(); it != p->getProperties().end(); it++){
-// 			if(it->getName() == want && it->getImpr() == 0) {prop = it;}
+// 		for (vector<Property*>::iterator it = p->getProperties().begin(); it != p->getProperties().end(); it++){
+// 			if((**it).getName() == want && (**it).getImpr() == 0) {prop = *it;}
 // 			else {
 // 				cout << "Trade Failed. Property has improvements" << endl;
 // 				return 0;
@@ -144,14 +146,14 @@ void Player::displayAssets(){
 // 		p->properties.erase(prop);
 
 // 	}else if (istringstream(want) >> amount){ //trade property for money
-// 		if(amount > p.getCash()) {
+// 		if(amount > p->getCash()) {
 // 			cout << "Not enough cash to process trade" << endl;
 // 			return 0;
 // 		}
 
 // 		//find property (give) from this player 
-// 		for (vector<Properties*> iterator it = this->getProperties().begin(); it != this->getProperties().end(); it++){
-// 			if(it->getName() == give && it->getImpr() == 0) {prop = it;}
+// 		for (vector<Property*>::iterator it = this->getProperties().begin(); it != this->getProperties().end(); it++){
+// 			if((**it).getName() == give && (**it).getImpr() == 0) {prop = *it;}
 // 			else{
 // 				cout << "Trade Failed. Property has improvements" << endl;
 // 				return 0;
@@ -164,17 +166,16 @@ void Player::displayAssets(){
 // 	}else{ //trade property for property
 // 		Property* propGive, propWant;
 
-// 		for (vector<Properties*> iterator it = p->getProperties().begin(); it != p->getProperties().end(); it++){
-// 			if(it->getName() == want && it->getImpr() == 0) {prop = it;}
+// 		for (vector<Property*>::iterator it = p->getProperties().begin(); it != p->getProperties().end(); it++){
+// 			if((**it).getName() == want && (**it).getImpr() == 0) {prop = *it;}
 // 			else {
 // 				cout << "Trade Failed. Property has improvements" << endl;
 // 				return 0;
 // 			}
 // 		}
 
-// 		for (vector<Properties*> iterator it = this->getProperties().begin(); it != this->getProperties().end(); it++){
-// 			if(it->getName() == give && it->getImpr() == 0) {prop = it;}
-// 			else{
+// 		for (vector<Property*>::iterator it = this->getProperties().begin(); it != this->getProperties().end(); it++){
+// 			if((**it).getName() == give && (**it).getImpr() == 0) {prop = *it;}
 // 				cout << "Trade Failed. Property has improvements" << endl;
 // 				return 0;
 // 			}
@@ -214,10 +215,10 @@ void Player::displayAssets(){
 
 
 void Player::mortgage(Property *p){
-
 	if (!p->isMortgaged() && p->getImpr() == 0 && p->getOwner()->getName() == name){
 		p->setMortgaged(true);
 		cash += p->getCost() / 2;
+		cout << p->getName() << " has been mortgaged!" << endl;
 	}else{
 		cout << "This property cannot be mortgaged!" << endl;
 	}
@@ -231,6 +232,7 @@ void Player::unmortgage(Property *p){
 		}else{
 			p->setMortgaged(false);
 			cash -= amt;
+			cout << p->getName() << " has been unmortgaged!" << endl;
 		}
 	}
 }

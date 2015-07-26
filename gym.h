@@ -8,7 +8,7 @@ extern const int GYM_COST;
 class Gym : public Property{
 public:
 	Gym(std::string);
-	void doAction(Player* p);
+	// void doAction(Player* p);
 };
 
 #endif

@@ -3,9 +3,7 @@
 
 AcademicBuilding::AcademicBuilding(std::string name, int cost, std::string block, int improvCost, int *tuition):
 								Property(name, block, cost),imprCost(improvCost),tuition(tuition){
-	for (int i = 0; i <= MAX_IMPROVEMENTS; i++){
-			cout << tuition[i] << " ";
-	}
+	
 }
 
 //Build n improvements
@@ -22,9 +20,9 @@ AcademicBuilding::AcademicBuilding(std::string name, int cost, std::string block
 
 
 
-void AcademicBuilding::doAction(Player* p){
-	cout<<"You will be charged $"<<tuition<<" in tuition by "<<owner->getName()<<", the owner of "<<name<<"."<<endl;
-	p->pay(tuition[numImprov], owner);
-}
+// void AcademicBuilding::doAction(Player* p){
+// 	cout<<"You will be charged $"<<tuition<<" in tuition by "<<owner->getName()<<", the owner of "<<name<<"."<<endl;
+// 	p->pay(tuition[numImprov], owner);
+// }
 
 

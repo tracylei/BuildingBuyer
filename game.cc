@@ -166,10 +166,16 @@ void Game::notify(Player* p, int prevPos, int curPos){
 
 void Game::notifyCell(int curPos){
 	Property *prop = static_cast<Property*>(theGrid[curPos]);
-	cout << prop->getOwner()->getName() << endl;
-	
-	if(prop->getOwner()->getName() == "bank" ){ //seg fault for non-property
-		prop->buy(players[currPlayer]);
+	if (!prop->isBuyable()) {
+		// prop->doAction();
+		return;
+	}else{
+		if(prop->getOwner()->getName() == "bank" ){ //seg fault for non-property
+			prop->buy(players[currPlayer]);
+		}else{
+			// prop->doAction();
+			cout << "landing on " << prop->getOwner()->getName() <<" need to pay rent" <<endl;
+		}
 	}
 }
 
@@ -191,7 +197,7 @@ void Game::init(Controller* controller){
 		//3 is gym
 		string cellName;
 		file >> cellName;
-		//INCOMPLETE NON-PROPERTY
+
 		if (s == "0"){
 			theGrid[i] = new NonProperty(cellName);
 

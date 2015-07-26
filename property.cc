@@ -3,11 +3,11 @@
 
 using namespace std;
 
-Property::Property(string name, string block, int cost): Cell(name), cost(cost), block(block){
+Property::Property(string name, string block, int cost): Cell(name, true), cost(cost), block(block){
 	mortgaged = false;
 }
 
-Property::Property(string name, int cost): Cell(name), cost(cost){
+Property::Property(string name, int cost): Cell(name, true), cost(cost){
 	mortgaged = false;
 }
 
@@ -35,6 +35,7 @@ void Property::setOwner(Owner* newOwner){
 void Property::setMortgaged(bool v){
 	mortgaged = v;
 }
+
 //Buyer buys this property, assumes pay method will take care of
 //bankruptcy etc.
 void Property::buy(Player* buyer){
