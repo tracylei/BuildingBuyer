@@ -224,16 +224,14 @@ void Game::init(Controller* controller){
 				 //cout << cellName << " " << purchaseCost << " " << block << " " << improvCost << " "<<endl;
 
 				//Read in tuition
-				int tuition [5];
+				theGrid[i] = new AcademicBuilding(cellName, purchaseCost, block, improvCost);
 				
 				for (int j = 0; j <= MAX_IMPROVEMENTS; j++){
 					string tut;
 					int tuitionCost;
 					file>>tuitionCost;
-					tuition[j] = tuitionCost;
+					static_cast<AcademicBuilding*>(theGrid[i])->setTuition(j, tuitionCost);
 				}
-
-				theGrid[i] = new AcademicBuilding(cellName, purchaseCost, block, improvCost, tuition);
 
 			}else if (s=="2"){ // Residence
 				int rentFees [4];

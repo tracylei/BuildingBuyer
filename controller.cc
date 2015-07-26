@@ -1,5 +1,5 @@
 #include "controller.h"
-
+#include <fstream>
 using namespace std;
 
 Controller::Controller(){
@@ -288,7 +288,6 @@ void Controller::play(bool rolled){
 						}
 						else{
 							game->getCurrentPlayer()->move(roll1, roll2);
-							board->print();
 							cout<<"Yay, a double!"<<endl;
 							cout<<"You rolled a "<<roll1<<" and a "<<roll2<<". Please roll again."<<endl;
 
@@ -323,8 +322,6 @@ void Controller::play(bool rolled){
 					//Process dice rolls into movs
 					if (!game->getCurrentPlayer()->isInJail()){
 						game->getCurrentPlayer()->move (roll1, roll2);
-						board->print();
-						cout<<"You rolled a "<<roll1<<" and a "<<roll2<<"."<<endl;
 					}
 				
 			}
@@ -352,35 +349,53 @@ void Controller::play(bool rolled){
 		// 	iss >> propName >> action;
 
 		// 	if (action == "buy"){
-		// 		for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-		// 			if (it->getName() == propName) it->buyImprove();
-		// 		}
+		// 		// for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
+		// 		// 	if (it->getName() == propName) it->buyImprove();
+		// 		// }
 		// 	}else if (action == "sell"){
-		// 		for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-		// 			if (it->getName() == propName) it->sellImprove();
+		// 		int numProp = game->getCurrentPlayer()->getProperties().size();
+		// 		bool owned = false;
+		// 		string block;
+		// 		for (unsigned int i = 0; i < numProp; i++){
+		// 			if (game->getCurrentPlayer()->getProperties()[i]->getName() == propName){
+		// 				owned=true;
+		// 				block=game->getCurrentPlayer()->getProperties()[i]->getBlock();
+		// 			}
+		// 		}
+		// 		if (!owned){
+		// 			cout<<"Sorry, you can only sell improvements on properties that you own."<<endl;
+		// 		}
+		// 		else{
+		// 			//Check if monopoly owned
 		// 		}
 		// 	}
 
 		}else if (cmd == "mortgage"){
 			string propName;
-			Property *p;
-			for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-					if (it->getName() == propName) mortgage(it);
+			iss >> propName;
+			for(unsigned int n = 0; n < game->getCurrentPlayer()->getProperties().size(); n++){
+			Property *temp = game->getCurrentPlayer()->getProperties().at(n);
+				if (temp->getName() == propName){ 
+						game->getCurrentPlayer()->mortgage(temp);	 
+						break;
+				}
 			}
-			// mortgage(p);
 		}else if (cmd == "unmortgage"){
 			string propName;
-			Property *p;
-			for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-				if (it->getName() == propName) unmortgage(it);
+			iss >> propName; 
+			for(unsigned int n = 0; n < game->getCurrentPlayer()->getProperties().size(); n++){ 
+				Property *temp = game->getCurrentPlayer()->getProperties().at(n);
+				if (temp->getName() == propName){
+					game->getCurrentPlayer()->unmortgage(temp);
+					break;
+				}
 			}
 		}else if (cmd == "bankrupt"){
-			//TODO
 			cout<<"You can only declare bankruptcy when you owe someone more than you can pay."<<endl;
 		}else if (cmd == "assets"){
 			game->getCurrentPlayer()->displayAssets();
 		}else if(cmd == "save"){
-			//TODO
+			
 		}else{
 			cout<<"Your command could not be recognized. Please enter another command."<<endl;
 		}

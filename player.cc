@@ -131,10 +131,29 @@ bool Player::isInJail(){
 
 void Player::move(int r1, int r2){
 	int prevPosition = curPosition;
-	curPosition = (curPosition + r1 + r2) % 39;
+	if ((curPosition + r1 + r2)<=39)
+		curPosition += r1 + r2;
+	else
+		curPosition = (curPosition + r1 + r2) % 39 - 1;
 	game->notify(this, prevPosition, curPosition); 
+	game->refreshBoard();
+	cout<<"You rolled a "<<r1<<" and a "<<r2<<"."<<endl;
 	game->notifyCell(curPosition);
 }
+
+void Player::slcMove (int move){
+	int prevPosition = curPosition;
+	if (move > -3){
+		curPosition += move;
+	}
+	else{
+		curPosition = 39;
+	}
+	game->notify(this, prevPosition, curPosition); 
+	game->refreshBoard();
+	game->notifyCell(curPosition);
+}
+
 
 void Player::displayAssets(){
 	cout << "Player " << name << "'s assets." <<endl;
@@ -262,6 +281,9 @@ void Player::unmortgage(Property *p){
 		}
 	}
 }
+
+
+
 
 
 

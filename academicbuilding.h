@@ -11,7 +11,8 @@ class AcademicBuilding : public Property{
 	int *tuition;
 	//voivvd loadBuildingInfo(istream f);
 public:
-	AcademicBuilding(std::string Name, int cost, std::string block, int improvCost, int *tuition);
+	AcademicBuilding(std::string Name, int cost, std::string block, int improvCost);
+	void setTuition (int index, int tutCost);
 	//Build n improvements
 	void improve(int n);
 	void doAction(Player* p);

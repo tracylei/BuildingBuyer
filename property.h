@@ -17,6 +17,7 @@ public:
 	Property(std::string name, std::string block, int cost);
 	Property(std::string name, int cost);
 	int getImpr();
+	string getBlock();
 	virtual int getValue()=0;
 	
 	int getCost();

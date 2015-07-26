@@ -54,8 +54,9 @@ public:
 	void roll();
 	// void next();
 	
-	void move();
+
 	void move(int r1, int r2);
+	void slcMove(int move);
 	void goToJail();
 	void leaveJail();
 	
