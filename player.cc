@@ -166,98 +166,128 @@ void Player::displayAssets(){
 	cout << endl;
 }
 	
+void Player::erase(Property *p){
+	for (vector<Property*>::iterator it = this->properties.begin(); it != this->properties.end(); it++){
 
-// bool Player::acceptTrade(Player *p, string give, string want){
-// 	int amount;
-// 	Property *prop;
+			if((**it).getName() == p->getName()) {
+				cout << p->getName() << "remove " << (**it).getName()<< endl;
+				it = properties.erase(it);
+				break;
+			}
+	}
 
-// 	if (istringstream(give) >> amount){ //trade money for property
-// 		if(amount > cash) {
-// 			cout << "Not enough cash to process trade" << endl;
-// 			return 0;
-// 		}
+}
 
-// 		//find property (want) from player p
-// 		for (vector<Property*>::iterator it = p->getProperties().begin(); it != p->getProperties().end(); it++){
-// 			if((**it).getName() == want && (**it).getImpr() == 0) {prop = *it;}
-// 			else {
-// 				cout << "Trade Failed. Property has improvements" << endl;
-// 				return 0;
-// 			}
-// 		}
+bool Player::acceptTrade(Player *pl, string give, string want){
+	int amount;
+	Property *prop;
 
-// 		cash -= amount;
-// 		this->properties.push_back(prop);
-// 		p->properties.erase(prop);
+	if (istringstream(give) >> amount){ //trade money for property
+		if(amount > cash) {
+			cout << "Not enough cash to process trade" << endl;
+			return 0;
+		}
+		cout << "cur:" << this->getName() << " trading " << pl->getName() << pl->getPos()<< endl;
+		//find property (want) from player p
 
-// 	}else if (istringstream(want) >> amount){ //trade property for money
-// 		if(amount > p->getCash()) {
-// 			cout << "Not enough cash to process trade" << endl;
-// 			return 0;
-// 		}
 
-// 		//find property (give) from this player 
-// 		for (vector<Property*>::iterator it = this->getProperties().begin(); it != this->getProperties().end(); it++){
-// 			if((**it).getName() == give && (**it).getImpr() == 0) {prop = *it;}
-// 			else{
-// 				cout << "Trade Failed. Property has improvements" << endl;
-// 				return 0;
-// 			}
-// 		}
+		for (unsigned int n = 0; n < pl->getProperties().size(); ++n){
 
-// 		p->properties.push_back(prop);
-// 		this->properties.erase(prop);
-// 		cash += amount;
-// 	}else{ //trade property for property
-// 		Property* propGive, propWant;
+			prop = pl->getProperties().at(n);
 
-// 		for (vector<Property*>::iterator it = p->getProperties().begin(); it != p->getProperties().end(); it++){
-// 			if((**it).getName() == want && (**it).getImpr() == 0) {prop = *it;}
-// 			else {
-// 				cout << "Trade Failed. Property has improvements" << endl;
-// 				return 0;
-// 			}
-// 		}
+			if(prop->getName() == want && prop->getImpr() == 0){
+				cash -= amount;
+				this->properties.push_back(prop);
+				pl->erase(prop);
+				cout << "Trade completed." << endl;
+				return 1;
+			}else{
+				cout << "Trade Failed. Property has improvements" << endl;
+				return 0;
+			}
+		}
 
-// 		for (vector<Property*>::iterator it = this->getProperties().begin(); it != this->getProperties().end(); it++){
-// 			if((**it).getName() == give && (**it).getImpr() == 0) {prop = *it;}
-// 				cout << "Trade Failed. Property has improvements" << endl;
-// 				return 0;
-// 			}
-// 		}
+	}else if (istringstream(want) >> amount){ //trade property for money
+		if(amount > pl->getCash()) {
+			cout << "Not enough cash to process trade" << endl;
+			return 0;
+		}
 
-// 		p->properties.push_back(propGive);
-// 		this->properties.erase(propWant);
+		for (unsigned int n = 0; n < getProperties().size(); ++n){
 
-// 		this->properties.push_back(propWant);
-// 		p->properties.erase(propGive);
-// 		return 1;
-// 	}
-// }
+			prop = getProperties().at(n);
 
-// bool Player::trade(Player* p, string give, string want){
+			if(prop->getName() == give && prop->getImpr() == 0){
+				cash += amount;
+				pl->properties.push_back(prop);
+				erase(prop);
+				cout << "Trade completed." << endl;
+				return 1;
+			}else{
+				cout << "Trade Failed. Property has improvements" << endl;
+				return 0;
+			}
+		}
+	}else{ //trade property for property
+		Property* propGive;
+		Property* propWant;
 
-// 	cout << p->getName() << " wants to trade " + give + " for " + want;
+		for (unsigned int n = 0; n < pl->getProperties().size(); ++n){
 
-// 	while(true){
-// 		string response;
+			propWant = pl->getProperties().at(n);
 
-// 		cout << "Accept the trade? (y/n)" << endl;
-// 		cin >> response;
+			if(propWant->getName() == want && propWant->getImpr() == 0){
+				cash -= amount;
+				properties.push_back(propWant);
+				pl->erase(propWant);
 
-// 		if (response == "y"){
-// 			acceptTrade(p, give, want);
-// 			cout << "Trade completed." << endl;
-// 			return true;
-// 		}else if (response == "n"){
-// 			cout << p->getName() + " has rejected your trade." << endl;
-// 			return false;
-// 		}else{
-// 			cout << "Answer only y or n" << endl;
-// 		}
-// 	}
-// }
+			}else{
+				cout << "Trade Failed. Property has improvements" << endl;
+				return 0;
+			}
+		}
 
+		for (unsigned int n = 0; n < getProperties().size(); ++n){
+
+			propGive = getProperties().at(n);
+
+			if(propGive->getName() == give && propGive->getImpr() == 0){
+				cash += amount;
+				pl->properties.push_back(propGive);
+				erase(propGive);
+
+			}else{
+				cout << "Trade Failed. Property has improvements" << endl;
+				return 0;
+			}
+		}
+				cout << "Trade completed." << endl;
+				return 1;
+	}
+	return 0;
+}
+
+void Player::trade(Player* pl, string give, string want){
+
+	cout << getName() << " wants to trade " << pl->getName() << " " + give + " for " + want;
+
+	while(true){
+		string response;
+
+		cout << "Accept the trade? (y/n)" << endl;
+		cin >> response;
+
+		if (response == "y"){
+			acceptTrade(pl, give, want);
+			break;
+		}else if (response == "n"){
+			cout << pl->getName() + " has rejected your trade." << endl;
+			break;
+		}else{
+			cout << "Answer only y or n" << endl;
+		}
+	}
+}
 
 void Player::mortgage(Property *p){
 	if (!p->isMortgaged() && p->getImpr() == 0 && p->getOwner()->getName() == name){

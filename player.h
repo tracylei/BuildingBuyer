@@ -64,8 +64,9 @@ public:
 	void declareBankrupt();
 	void displayAssets();
 	
-	bool trade(Player*, string, string);
+	void trade(Player*, string, string);
 	bool acceptTrade(Player*, string, string);
+	void erase(Property*);
 
 	void mortgage(Property*);
 	void unmortgage(Property*);

@@ -258,7 +258,7 @@ void Controller::play(bool rolled){
 		istringstream iss(input);
 		iss >> cmd;
 		if (cmd == "roll"){
-#if DEBUG	
+#if DEBUG
 			cout<<"Read in roll..."<<endl;
 #endif
 			if (!rolled) {
@@ -335,15 +335,15 @@ void Controller::play(bool rolled){
 			else
 				game->endTurn();
 
-		// }else if (cmd == "trade"){
-		// 	string player, give, want;
-		// 	Player *p;
+		}else if (cmd == "trade"){
+			string player, give, want;
+			Player *p;
 
-		// 	iss >> player >> give >> want;
+			iss >> player >> give >> want;
 
-		// 	//find player.
-		// 	// p = game->getPlayers().find(name); //not correct syntax
-		// 	trade(p, give, want);
+			//find player.
+			p = game->getPlayer(player); 
+			game->getCurrentPlayer()->trade(p, give, want);
 		// }else if (cmd == "improve"){
 		// 	string propName, action;
 		// 	iss >> propName >> action;
@@ -373,6 +373,7 @@ void Controller::play(bool rolled){
 		}else if (cmd == "mortgage"){
 			string propName;
 			iss >> propName;
+
 			for(unsigned int n = 0; n < game->getCurrentPlayer()->getProperties().size(); n++){
 			Property *temp = game->getCurrentPlayer()->getProperties().at(n);
 				if (temp->getName() == propName){ 
@@ -384,6 +385,7 @@ void Controller::play(bool rolled){
 			string propName;
 			iss >> propName; 
 			for(unsigned int n = 0; n < game->getCurrentPlayer()->getProperties().size(); n++){ 
+
 				Property *temp = game->getCurrentPlayer()->getProperties().at(n);
 				if (temp->getName() == propName){
 					game->getCurrentPlayer()->unmortgage(temp);
