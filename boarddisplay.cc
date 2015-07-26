@@ -240,8 +240,3 @@ void BoardDisplay::print(){
 
 
 }
-
-// int main(int argc, char const *argv[]){
-// 	BoardDisplay board;
-// 	board.print();
-// }

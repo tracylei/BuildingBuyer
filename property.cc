@@ -15,23 +15,44 @@ int Property::getImpr(){
 	return numImpr;
 }
 
-// //Buyer buys this property, assumes pay method will take care of
-// //bankruptcy etc.
-// void Property::buy(Player* buyer){
-// 	if (buyer->pay(cost));
-// 		owner = buyer;
-// }
-
-void Property::setOwner(Owner* newOwner){
- 	owner=newOwner;
-}
 
 Owner* Property::getOwner(){
 	cout<<owner->getName()<<endl;
 	return owner;
 }
+int Property::getCost(){
+	return cost;
+}
 
-// int Property::mortgage(){
-// 	mortgaged = true;
-// 	return cost/2;
-// }
+bool Property::isMortgaged(){
+	return mortgaged;
+}
+
+void Property::setOwner(Owner* newOwner){
+ 	owner=newOwner;
+}
+
+void Property::setMortgaged(bool v){
+	mortgaged = v;
+}
+//Buyer buys this property, assumes pay method will take care of
+//bankruptcy etc.
+void Property::buy(Player* buyer){
+	cout << "Would you like to buy " << getName() << " for " << cost << " ?(y/n)" << endl;
+	
+	while(true){
+		string resp;
+		cin >> resp;
+
+		if (resp == "y"){
+			if(buyer->pay(cost, static_cast<Player*>(owner))){
+				owner = buyer;
+				buyer->addProperty(this);
+				break;
+			}
+		}else if(resp == "n"){
+			break;
+			//call auction
+		}
+	}
+}

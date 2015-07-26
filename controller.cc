@@ -36,9 +36,7 @@ void Controller::notify(Player *p, int prevPos, int curPos){
 }
 
 
-<<<<<<< HEAD
-void Controller::init(){
-=======
+
 //Called by notify board to print
 void Controller::refreshBoard(){
 	board->print();
@@ -57,7 +55,7 @@ void Controller::loadGame(const string fname){
 
 	//initialize players
 	data >> numPlayers;
-	//double check position.. I think its the players order.
+
 	for (int i = 0; i < numPlayers; ++i){
 		data >> pName >> symbol >> timCups >> cash >> position;
 		Player *p = new Player(game, pName, symbol, position, cash, timCups);
@@ -81,12 +79,12 @@ void Controller::loadGame(const string fname){
 	}
 
 	board->print();
-	game->play();
+	play(false);
 }
 
 
-void Controller::play(){
->>>>>>> 4356b80691a7f0e3439b247fdc2236c788c41869
+void Controller::init(){
+
 	int numPlayers;
 	board = new BoardDisplay();
 	//need map of players name to symbol
@@ -240,13 +238,6 @@ void Controller::playInJail(){
 			game->getCurrentPlayer()->leaveJail();
 	}
 }
-
-
-
-void Controller::refreshBoard(){
-	board->print();
-}
-
 
 void Controller::play(bool rolled){
 	cout << game->getCurrentPlayer()->getName() << "'s turn. Please enter your commands." << endl;

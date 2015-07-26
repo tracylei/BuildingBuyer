@@ -3,7 +3,7 @@
 
 #include "cell.h"
 #include "owner.h"
-
+#include "player.h"
 #include <string>
 
 class Property : public Cell{
@@ -17,13 +17,16 @@ public:
 	Property(std::string name, std::string block, int cost);
 	Property(std::string name, int cost);
 	int getImpr();
+	int getCost();
+	bool isMortgaged();
+
+	void setMortgaged(bool);
 	// //Returns false if purchase was unsuccessful
 	void setOwner(Owner* newOwner);
 	Owner* getOwner(); 
 	// virtual void chargeFee(Player* p)=0;
 	// //void auction(input stream);
-	// void buy(Player* buyer);
-	// int mortgage(Player* p);
+	void buy(Player* buyer);
 };
 
 #endif

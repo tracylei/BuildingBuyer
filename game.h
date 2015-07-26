@@ -56,6 +56,7 @@ public:
 
 	//Called by the player to notify the controller of its change in position
 	void notify(Player* p, int prevPos, int curPos);
+	void notifyCell(int);
 	void init(Controller* controller);
 };
 

@@ -39,7 +39,7 @@ Game::Game(){
 //	delete bank;
 // }
 
-<<<<<<< HEAD
+
 Bank* Game::getBank(){
 	return bank;
 }
@@ -54,7 +54,8 @@ Player* Game::getCurrentPlayer(){
 
 void Game::reclaimTimCups(int n){
 		rollUpCount -=n;
-=======
+}
+
 Player* Game::getPlayer(string s){
 
 	for(vector<Player*>::iterator it=players.begin(); it != players.end(); ++it){
@@ -72,10 +73,9 @@ Property* Game::getProperty(string propName){
 	return NULL;
 }
 
-void Game::play(){
-	players[currPlayer]->play();
->>>>>>> 4356b80691a7f0e3439b247fdc2236c788c41869
-}
+// void Game::play(){
+// 	players[currPlayer]->play();
+// }
 
 bool Game::getTestMode(){
 	return testMode;
@@ -153,16 +153,26 @@ void Game::addPlayer(Player* p){
 // 	}
 // }
 
-
 bool Game::isWon(){
 	return (numPlayers == 1);
 }
 
-
 //A Player calls this to notify the controller of its move
 void Game::notify(Player* p, int prevPos, int curPos){
 	controller->notify(p, prevPos, curPos);
+
+	//notfiy theGrid[curPos] that a player has arrived
 }
+
+void Game::notifyCell(int curPos){
+	Property *prop = static_cast<Property*>(theGrid[curPos]);
+	cout << prop->getOwner()->getName() << endl;
+	
+	if(prop->getOwner()->getName() == "bank" ){ //seg fault for non-property
+		prop->buy(players[currPlayer]);
+	}
+}
+
 void Game::init(Controller* controller){
 	cout << "Game initializing.." << endl;
 	

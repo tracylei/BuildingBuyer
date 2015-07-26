@@ -20,11 +20,9 @@ class Player : public Owner{
 	string name;
 	char symbol;
 	int curPosition, timCups;
-<<<<<<< HEAD
-	// vector<Property*> properties;
-=======
+
 	vector<Property*> properties;
->>>>>>> 4356b80691a7f0e3439b247fdc2236c788c41869
+
 	bool inJail;
 	int turnsInJail;
 	int jailRoll1;
@@ -37,26 +35,22 @@ public:
 	char getSymbol();
 	int getCash();
 	int getPos();
-<<<<<<< HEAD
-	int getTimCups();
-	void useTimCup();
-	int getTurnsInJail();
-	void setJailRolls(int roll1, int roll2);
-	bool isInJail();
-	void addCash(int x); //inherited
-	// vector<Property*> getProperties();
 
-=======
-	int isInJail();
+	int getTimCups();
+	int getTurnsInJail();
+	bool isInJail();
 	vector<Property*> getProperties();
 
 	void addCash(int x); //inherited
 	void addProperty(Property*);
+	void useTimCup();
+	void setJailRolls(int roll1, int roll2);
 
->>>>>>> 4356b80691a7f0e3439b247fdc2236c788c41869
+
 	void play();
 	void roll();
 	// void next();
+	
 	void move();
 	void move(int r1, int r2);
 	void goToJail();
@@ -69,9 +63,8 @@ public:
 	bool trade(Player*, string, string);
 	bool acceptTrade(Player*, string, string);
 
- //    void buy(Property*);
-	// void mortgage(Property*);
-	// void unmortgage(Property*);
+	void mortgage(Property*);
+	void unmortgage(Property*);
 
 
 };
