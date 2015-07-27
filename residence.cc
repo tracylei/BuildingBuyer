@@ -7,7 +7,7 @@ Residence::Residence(string bldgName, int *rentFee): Property(bldgName, 200),ren
 }
 
 void Residence::doAction(Player* p){
-	if (owner->getName()!="bank"){
+	if (owner->getName()!= "bank" && owner->getName()!=p->getName()){
 		cout<<"You will be charged $"<<rent[p->getNumRezOwned()];
 		cout<<" in rent by "<<owner->getName()<<", the owner of "<<name<<"."<<endl;		
 		p->pay(rent[static_cast<Player*>(owner)->getNumRezOwned()], owner);

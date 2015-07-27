@@ -16,17 +16,17 @@ protected:
 public:
 	Property(std::string name, std::string block, int cost);
 	Property(std::string name, int cost);
-	int getImpr();
 	virtual int getValue()=0;
-	
+
+	int getImpr();
+	string getBlock();
 	int getCost();
 	bool isMortgaged();
 
 	void setMortgaged(bool);
-	// //Returns false if purchase was unsuccessful
 	void setOwner(Owner* newOwner);
 	Owner* getOwner(); 
-	// //void auction(input stream);
+
 	void buy(Player* buyer);
 	void buy(Player* buyer, int bid); //for buying auctioned properties
 	virtual void doAction(Player* p)=0;

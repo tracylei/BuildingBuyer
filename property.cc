@@ -15,7 +15,6 @@ int Property::getImpr(){
 	return numImprov;
 }
 
-
 Owner* Property::getOwner(){
 	//cout<<owner->getName()<<endl;
 	return owner;
@@ -23,6 +22,11 @@ Owner* Property::getOwner(){
 int Property::getCost(){
 	return cost;
 }
+
+string Property::getBlock(){
+	return block;
+}
+
 
 bool Property::isMortgaged(){
 	return mortgaged;
@@ -95,3 +99,4 @@ void Property::buy(Player* buyer, int bid){
 		buyer->addProperty(this);
 	}
 }
+

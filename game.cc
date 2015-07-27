@@ -188,6 +188,8 @@ void Game::notifyCell(int curPos){
 				}else if(resp == "n"){
 					prop->auction(numPlayers, players, players[currPlayer]->getName()); //num players, not including current player
 					break;
+				}else{
+					cout <<"Please only enter \"y\" for yes and \"n\" for no."<<endl;
 				}
 			}
 		}else{
@@ -237,16 +239,14 @@ void Game::init(Controller* controller){
 				 //cout << cellName << " " << purchaseCost << " " << block << " " << improvCost << " "<<endl;
 
 				//Read in tuition
-				int tuition [5];
+				theGrid[i] = new AcademicBuilding(cellName, purchaseCost, block, improvCost);
 				
 				for (int j = 0; j <= MAX_IMPROVEMENTS; j++){
 					string tut;
 					int tuitionCost;
 					file>>tuitionCost;
-					tuition[j] = tuitionCost;
+					static_cast<AcademicBuilding*>(theGrid[i])->setTuition(j, tuitionCost);
 				}
-
-				theGrid[i] = new AcademicBuilding(cellName, purchaseCost, block, improvCost, tuition);
 
 			}else if (s=="2"){ // Residence
 				int rentFees [4];
@@ -263,4 +263,39 @@ void Game::init(Controller* controller){
 		theGrid[i]->setGame(this);
 		i++;
 	}	
+}
+
+void Game::save(){
+	ofstream file;
+	file.open("save.txt");
+	file << numPlayers << endl;
+
+	for(vector<Player*>::iterator it = players.begin(); it != players.end(); ++it){
+		file << (**it).getName() << " " << (**it).getSymbol() << " " << (**it).getTimCups();
+		file << " " << (**it).getCash() << " " << (**it).getPos();
+
+		if((**it).getPos() == 10){
+			if((**it).isInJail()){
+				file << " 1 " << (**it).getTurnsInJail() << endl;
+			}else{
+				file << " 0 " << endl;
+			}
+
+		}else{
+			file << endl;
+		}
+
+	}
+
+	//loop through properties.
+	for(int i = 0; i < GRID_SIZE; ++i){
+		//ignore non properties.
+		if(theGrid[i]->isBuyable()){
+			file << theGrid[i]->getName() << " ";
+			file << static_cast<Property*>(theGrid[i])->getOwner()->getName() << " ";
+			file << static_cast<Property*>(theGrid[i])->getImpr() << endl;
+		}
+	}
+	cout << "file saved." << endl;
+
 }

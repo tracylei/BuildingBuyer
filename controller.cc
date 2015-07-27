@@ -1,5 +1,5 @@
 #include "controller.h"
-
+#include <fstream>
 using namespace std;
 
 Controller::Controller(){
@@ -58,22 +58,40 @@ void Controller::loadGame(const string fname){
 
 	for (int i = 0; i < numPlayers; ++i){
 		data >> pName >> symbol >> timCups >> cash >> position;
+		
 		Player *p = new Player(game, pName, symbol, position, cash, timCups);
+
+		
 		game->addPlayer(p);
 		notify(p,0,position);
+
+		//play is on DC Tim's line
+		if(position == 10){
+			int inJail, jailTurn;
+			cin >> inJail;
+
+			if(inJail){
+				cin >> jailTurn; //TODO, update turns in jail
+				p->goToJail();
+			}
+		}
 	}
 
 	// add property to player
 	while (data >> property){
 		data >> owner >> improvements;
 		// cout << property << " " <<owner << " " << improvements << endl;
+		
 
 		//find property and set player as owner
 		Player *pl = game->getPlayer(owner);
-		// cout << "player gotten" << pl->getSymbol() << pl->getCash()<< endl;
 		Property *p = game->getProperty(property);
+
+		if(improvements == -1){ //property is mortgaged
+			p->setMortgaged(true);
+		}
+
 		pl->addProperty(p);
-		// cout << "n: " << p->getName() << " "<< p->getID() << endl;
 		board->notify(p->getID(), improvements); // notify board of any improvements
 	
 	}
@@ -288,7 +306,6 @@ void Controller::play(bool rolled){
 						}
 						else{
 							game->getCurrentPlayer()->move(roll1, roll2);
-							board->print();
 							cout<<"Yay, a double!"<<endl;
 							cout<<"You rolled a "<<roll1<<" and a "<<roll2<<". Please roll again."<<endl;
 
@@ -323,8 +340,6 @@ void Controller::play(bool rolled){
 					//Process dice rolls into movs
 					if (!game->getCurrentPlayer()->isInJail()){
 						game->getCurrentPlayer()->move (roll1, roll2);
-						board->print();
-						cout<<"You rolled a "<<roll1<<" and a "<<roll2<<"."<<endl;
 					}
 				
 			}
@@ -352,12 +367,24 @@ void Controller::play(bool rolled){
 		// 	iss >> propName >> action;
 
 		// 	if (action == "buy"){
-		// 		for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-		// 			if (it->getName() == propName) it->buyImprove();
-		// 		}
+		// 		// for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
+		// 		// 	if (it->getName() == propName) it->buyImprove();
+		// 		// }
 		// 	}else if (action == "sell"){
-		// 		for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-		// 			if (it->getName() == propName) it->sellImprove();
+		// 		int numProp = game->getCurrentPlayer()->getProperties().size();
+		// 		bool owned = false;
+		// 		string block;
+		// 		for (unsigned int i = 0; i < numProp; i++){
+		// 			if (game->getCurrentPlayer()->getProperties()[i]->getName() == propName){
+		// 				owned=true;
+		// 				block=game->getCurrentPlayer()->getProperties()[i]->getBlock();
+		// 			}
+		// 		}
+		// 		if (!owned){
+		// 			cout<<"Sorry, you can only sell improvements on properties that you own."<<endl;
+		// 		}
+		// 		else{
+		// 			//Check if monopoly owned
 		// 		}
 		// 	}
 
@@ -366,19 +393,16 @@ void Controller::play(bool rolled){
 			iss >> propName;
 
 			for(unsigned int n = 0; n < game->getCurrentPlayer()->getProperties().size(); n++){
-
-				Property *temp = game->getCurrentPlayer()->getProperties().at(n);
-				if (temp->getName() == propName){
-					game->getCurrentPlayer()->mortgage(temp);
-					break;
+			Property *temp = game->getCurrentPlayer()->getProperties().at(n);
+				if (temp->getName() == propName){ 
+						game->getCurrentPlayer()->mortgage(temp);	 
+						break;
 				}
 			}
-			
 		}else if (cmd == "unmortgage"){
 			string propName;
-			iss >> propName;
-
-			for(unsigned int n = 0; n < game->getCurrentPlayer()->getProperties().size(); n++){
+			iss >> propName; 
+			for(unsigned int n = 0; n < game->getCurrentPlayer()->getProperties().size(); n++){ 
 
 				Property *temp = game->getCurrentPlayer()->getProperties().at(n);
 				if (temp->getName() == propName){
@@ -387,12 +411,11 @@ void Controller::play(bool rolled){
 				}
 			}
 		}else if (cmd == "bankrupt"){
-			//TODO
 			cout<<"You can only declare bankruptcy when you owe someone more than you can pay."<<endl;
 		}else if (cmd == "assets"){
 			game->getCurrentPlayer()->displayAssets();
 		}else if(cmd == "save"){
-			//TODO
+			game->save();
 		}else{
 			cout<<"Your command could not be recognized. Please enter another command."<<endl;
 		}

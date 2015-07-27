@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include "game.h"
+#include <unistd.h>
+
 
 using namespace std;
 
@@ -44,9 +46,9 @@ void NonProperty::doAction(Player* p){
 				cout<<"After paying, you have $"<<p->getCash()<<"."<<endl;
 		}
 		else{
-			cout<<"Since you chose to pay 10%% of your net worth, $"<<worth<<" will be deducted from your bank account."<<endl;
+			cout<<"Since you chose to pay 10% of your net worth, $"<<worth<<" will be deducted from your bank account."<<endl;
 			cout<<"You currently have $"<<p->getCash()<<"."<<endl;
-			if (p->pay(worth, game->getBank()))
+			if (p->pay(worth*.1, game->getBank()))
 				cout<<"After paying, you have $"<<p->getCash()<<"."<<endl;
 		}
 	}
@@ -105,13 +107,36 @@ void NonProperty::needlesAction(Player* p){
 void NonProperty::slcAction(Player* p){
 	int action = game->die1->SLCAction();
 	if (action == 23){
-		cout<<"The Tim's line at SLC was too long for your liking so you (have been) moved to the DC Tim's Line."<<endl;
 		p->goToJail();
+		cout<<"The Tim's line at SLC was too long for your liking so you (have been) moved to the DC Tim's Line."<<endl;
 	}
 	else if(action == 24){
 		cout<<"You got a text saying your OSAP loan was deposited to your account! Quick! Go collect it!"<<endl;
-		p->move(2,0);
+		p->move(-2,0);
 	}
+	else {
+
+		cout<<"You will be teleported ";
+		if (action == -1)
+			cout<<"back 1 cell";
+		else if (action == 1)
+			cout<<"forward 1 cell";
+		else if (action > 1)
+			cout<<"forward "<<action<<" cells";
+		else
+			cout<<"back "<<-action<<" cells";
+
+		cout<<" from SLC in 3 seconds."<<endl;
+		usleep(1000000);
+		cout<<"3..."<<endl;
+		usleep(1000000);
+		cout<<"2.."<<endl;
+		usleep(1000000);
+		cout<<"1."<<endl;
+		usleep(1000000);
+		p->slcMove(action);
+	}
+
 }
 
 
