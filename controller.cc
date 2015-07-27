@@ -58,26 +58,46 @@ void Controller::loadGame(const string fname){
 
 	for (int i = 0; i < numPlayers; ++i){
 		data >> pName >> symbol >> timCups >> cash >> position;
+		
 		Player *p = new Player(game, pName, symbol, position, cash, timCups);
+
+		
 		game->addPlayer(p);
 		notify(p,0,position);
+
+		//play is on DC Tim's line
+		if(position == 10){
+			int inJail, jailTurn;
+			cin >> inJail;
+
+			if(inJail){
+				cin >> jailTurn; //TODO, update turns in jail
+				p->goToJail();
+			}
+		}
 	}
 
 	// add property to player
 	while (data >> property){
 		data >> owner >> improvements;
 		// cout << property << " " <<owner << " " << improvements << endl;
+		
 
 		//find property and set player as owner
 		Player *pl = game->getPlayer(owner);
-		// cout << "player gotten" << pl->getSymbol() << pl->getCash()<< endl;
 		Property *p = game->getProperty(property);
+
+		if(improvements == -1){ //property is mortgaged
+			p->setMortgaged(true);
+		}
+
 		pl->addProperty(p);
 		// cout << "n: " << p->getName() << " "<< p->getID() << endl;
 		if (p->isAcademic()){
 			board->notify(p->getID(), improvements); // notify board of any improvements
 			static_cast<AcademicBuilding*>(p)->setImprove(improvements);
 		}
+
 	}
 
 	board->print();
@@ -472,6 +492,7 @@ void Controller::play(bool rolled){
 			}
 			ofs.close();
 			cout<<"Your progress in this game has been saved to "<<fileName<<".";
+
 		}else{
 			cout<<"Your command could not be recognized. Please enter another command."<<endl;
 		}

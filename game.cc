@@ -28,25 +28,31 @@ Game::Game(){
 	die2 = new Dice;
 }
 
-// Game::~Game(){
-// 	for (int i = 0; i < GRID_SIZE; i++){
-// 		delete Cell[i];
-// 	}
-// 	for (int i = 0; i<numPlayers; i++){
-// 		delete players[i];
-// 	}
-// 	delete dice;
-//	delete bank;
-// }
+Game::~Game(){
+	for (int i = 0; i < GRID_SIZE; i++){
+		delete Cell[i];
+	}
+	for (int i = 0; i<numPlayers; i++){
+		delete players.at(i);
+	}
+	delete die1;
+	delete die2;
+	delete bank;
+}
 
 
 Bank* Game::getBank(){
 	return bank;
 }
+
+
 Player* Game::getCurrentPlayer(){
 	return players[currPlayer];
 }
 
+int Game::getNumPlayers(){
+	return numPlayers;
+}
 // void Game::play(){
 // 	players[currPlayer]->play();
 // }
@@ -140,9 +146,6 @@ int Game::rollDie1(){
 int Game::rollDie2(){
 	return die2->roll();
 }
-
-
-
  
 // static void Game::incrRollUpCount(){
 // 	rollUpCount++;
@@ -187,8 +190,22 @@ void Game::notifyCell(int curPos){
 		prop->doAction(players[currPlayer]);
 		return;
 	}else{
-		if(prop->getOwner()->getName() == "bank" ){ //seg fault for non-property
-			prop->buy(players[currPlayer]);
+		if(prop->getOwner()->getName() == "BANK" ){ //seg fault for non-property
+			cout << "Would you like to buy " << prop->getName() << " for " << prop->getCost() << "?(y/n)" << endl;
+			while(true){
+				string resp;
+				getline(cin, resp);
+
+				if (resp == "y"){
+					prop->buy(players[currPlayer]);
+					break;
+				}else if(resp == "n"){
+					prop->auction(numPlayers, players, players[currPlayer]->getName()); //num players, not including current player
+					break;
+				}else{
+					cout <<"Please only enter \"y\" for yes and \"n\" for no."<<endl;
+				}
+			}
 		}else{
 			prop->doAction(players[currPlayer]);
 		}
@@ -268,4 +285,39 @@ void Game::init(Controller* controller){
 		theGrid[i]->setGame(this);
 		i++;
 	}	
+}
+
+void Game::save(){
+	ofstream file;
+	file.open("save.txt");
+	file << numPlayers << endl;
+
+	for(vector<Player*>::iterator it = players.begin(); it != players.end(); ++it){
+		file << (**it).getName() << " " << (**it).getSymbol() << " " << (**it).getTimCups();
+		file << " " << (**it).getCash() << " " << (**it).getPos();
+
+		if((**it).getPos() == 10){
+			if((**it).isInJail()){
+				file << " 1 " << (**it).getTurnsInJail() << endl;
+			}else{
+				file << " 0 " << endl;
+			}
+
+		}else{
+			file << endl;
+		}
+
+	}
+
+	//loop through properties.
+	for(int i = 0; i < GRID_SIZE; ++i){
+		//ignore non properties.
+		if(theGrid[i]->isBuyable()){
+			file << theGrid[i]->getName() << " ";
+			file << static_cast<Property*>(theGrid[i])->getOwner()->getName() << " ";
+			file << static_cast<Property*>(theGrid[i])->getImpr() << endl;
+		}
+	}
+	cout << "file saved." << endl;
+
 }

@@ -40,6 +40,7 @@ public:
 	Property* getProperty(string name);
 	Cell* getTheGrid(int i);
 
+	int getNumPlayers();
 	bool getTestMode();
 	void play();
 	void endTurn();
@@ -65,6 +66,8 @@ public:
 	//Called by a property to notify the game to notify the controller that an improvement was built/sold
 	void notifyImprove(int, int numImprov);
 	void init(Controller* controller);
+
+	void save();
 };
 
 

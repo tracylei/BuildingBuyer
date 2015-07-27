@@ -56,6 +56,7 @@ void AcademicBuilding::doAction(Player* p){
 		cout<<"."<<endl;
 		cout.flush();
 		usleep(1000000);
+
 		cout<<"You had $"<<p->getCash()<<" before paying, ";
 		if (p->pay(tuit, owner))
 			cout<<"now you have $" <<p->getCash()<<"."<<endl;
