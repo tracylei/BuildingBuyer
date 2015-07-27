@@ -1,7 +1,7 @@
 #include "cell.h"
 #include "game.h"
 
-Cell::Cell(string name, bool buyable):name(name), buyable(buyable){
+Cell::Cell(string name, bool buyable, bool academic):name(name), buyable(buyable), academic(academic){
 	game = NULL;
 };
 
@@ -24,3 +24,8 @@ int Cell::getID(){
 bool Cell::isBuyable(){
 	return buyable;
 }
+
+bool Cell::isAcademic(){
+	return academic;
+}
+

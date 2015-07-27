@@ -23,6 +23,7 @@ public:
 	void setPlayer(char);
 	void removePlayer(char);
 	void addImpr();
+	void sellImpr();
 };
 
 #endif

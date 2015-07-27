@@ -52,8 +52,16 @@ Player* Game::getCurrentPlayer(){
 // }
 
 
+Cell* Game::getTheGrid(int i){
+	return theGrid[i];
+}
+
 void Game::reclaimTimCups(int n){
 		rollUpCount -=n;
+}
+
+Player* Game::getPlayer(int p){
+	return players[p];
 }
 
 Player* Game::getPlayer(string s){
@@ -70,6 +78,11 @@ Property* Game::getProperty(string propName){
 		if(theGrid[i]->getName() == propName) return static_cast<Property*>(theGrid[i]);
 	}
 	return NULL;
+}
+
+
+int Game::getNumPlayers(){
+	return numPlayers;
 }
 
 // void Game::play(){
@@ -178,10 +191,15 @@ void Game::notifyCell(int curPos){
 			prop->buy(players[currPlayer]);
 		}else{
 			prop->doAction(players[currPlayer]);
-			cout << "landing on " << prop->getOwner()->getName() <<" need to pay rent" <<endl;
 		}
 	}
 }
+
+
+void Game::notifyImprove (int index, int numImprov){
+	controller->notifyImprove(index,numImprov);
+}
+
 
 void Game::init(Controller* controller){
 	cout << "Game initializing.." << endl;
@@ -203,7 +221,8 @@ void Game::init(Controller* controller){
 		file >> cellName;
 
 		if (s == "0"){
-			theGrid[i] = new NonProperty(cellName);
+			NonProperty* np = new NonProperty(cellName);
+			theGrid[i] = np;
 
 		}else {	//Ownable Property
 			
@@ -223,13 +242,13 @@ void Game::init(Controller* controller){
 				 //cout << cellName << " " << purchaseCost << " " << block << " " << improvCost << " "<<endl;
 
 				//Read in tuition
-				theGrid[i] = new AcademicBuilding(cellName, purchaseCost, block, improvCost);
-				
+				AcademicBuilding* ab = new AcademicBuilding(cellName, purchaseCost, block, improvCost);
+				theGrid[i] = ab;
 				for (int j = 0; j <= MAX_IMPROVEMENTS; j++){
 					string tut;
 					int tuitionCost;
 					file>>tuitionCost;
-					static_cast<AcademicBuilding*>(theGrid[i])->setTuition(j, tuitionCost);
+					ab->setTuition(j, tuitionCost);
 				}
 
 			}else if (s=="2"){ // Residence
@@ -237,9 +256,11 @@ void Game::init(Controller* controller){
 				for (int j = 0; j < 4; j++){
 						file>>rentFees[j];
 					}
-				theGrid[i] = new Residence (cellName, rentFees);
+				Residence* r = new Residence (cellName, rentFees);
+				theGrid[i] = r;
 			}else{ //Gym
-				theGrid[i] = new Gym (cellName);
+				Gym* g = new Gym (cellName);
+				theGrid[i] = g;
 			}
 			static_cast<Property*>(theGrid[i])->setOwner(bank);
 		}

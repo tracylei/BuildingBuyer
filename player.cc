@@ -1,4 +1,5 @@
 #include "player.h"
+#include "academicbuilding.h"
 #include "controller.h"
 
 using namespace std;
@@ -76,7 +77,9 @@ int Player::getNetWorth(){
 }
 
 
-
+int Player::getCurPos(){
+	return curPosition;
+}
 
 
 void Player::addCash(int x){
@@ -84,13 +87,63 @@ void Player::addCash(int x){
 }
 
 void Player::addProperty(Property *p){
+
 	for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
 		if ((**it).getName() == p->getName()) return;
 	}
+	p->setOwner(this);
 	properties.push_back(p);
-	cout << p->getName() << " added to player " << name << endl;
+	addMonopoly(p->getBlock());
+	cout << p->getName() << " added to player " << name <<"'s list of properties owned."<< endl;
 }
 
+
+void Player::removeProperty(Property* p){
+	int size = monopolies.size();
+	int index=-1;
+	for (int i=0; i<size; i++){
+		if(monopolies.at(i) == p->getBlock()){
+			index = i;
+		}
+	}
+	if (index>=0)
+		monopolies.erase(monopolies.begin()+index);
+	removeMonopoly(p->getBlock());
+}
+void Player::addMonopoly(string block){
+	for (int i = 0; i<40; i++){
+		Cell* c = game->getTheGrid(i);
+		if (c->isAcademic()){
+			AcademicBuilding* ab = static_cast<AcademicBuilding*>(c);
+			if(ab->getBlock()==block &&
+				ab->getOwnerName()!= game->getCurrentPlayer()->getName()){
+				return;
+			}
+		}
+	}
+	monopolies.push_back(block);
+}
+
+void Player::removeMonopoly(string block){
+	int size = monopolies.size();
+	for (int i=0; i<size; i++){
+		if(monopolies.at(i) == block){
+			monopolies.erase(monopolies.begin()+i);
+			return;
+		}
+	}
+}
+
+
+bool Player::hasMonopoly(string block){
+	int size = monopolies.size();
+	for (int i=0; i<size; i++){
+		if(monopolies.at(i) == block){
+			return true;
+		}
+	}
+	return false;
+}
 
 bool Player::pay(int amt, Owner* creditor){
 	if (amt > cash) {
@@ -197,19 +250,19 @@ bool Player::acceptTrade(Player *pl, string give, string want){
 
 			if(prop->getName() == want && prop->getImpr() == 0){
 				cash -= amount;
-				this->properties.push_back(prop);
-				pl->erase(prop);
+				addProperty(prop);
+				pl->removeProperty(prop);
 				cout << "Trade completed." << endl;
 				return 1;
 			}else{
-				cout << "Trade Failed. Property has improvements" << endl;
+				cout << "Trade Failed. Property has improvements." << endl;
 				return 0;
 			}
 		}
 
 	}else if (istringstream(want) >> amount){ //trade property for money
 		if(amount > pl->getCash()) {
-			cout << "Not enough cash to process trade" << endl;
+			cout << "Not enough cash to process trade." << endl;
 			return 0;
 		}
 
@@ -219,12 +272,12 @@ bool Player::acceptTrade(Player *pl, string give, string want){
 
 			if(prop->getName() == give && prop->getImpr() == 0){
 				cash += amount;
-				pl->properties.push_back(prop);
-				erase(prop);
+				pl->addProperty(prop);
+				removeProperty(prop);
 				cout << "Trade completed." << endl;
 				return 1;
 			}else{
-				cout << "Trade Failed. Property has improvements" << endl;
+				cout << "Trade Failed. Property has improvements." << endl;
 				return 0;
 			}
 		}
@@ -238,11 +291,11 @@ bool Player::acceptTrade(Player *pl, string give, string want){
 
 			if(propWant->getName() == want && propWant->getImpr() == 0){
 				cash -= amount;
-				properties.push_back(propWant);
-				pl->erase(propWant);
+				addProperty(propWant);
+				pl->removeProperty(propWant);
 
 			}else{
-				cout << "Trade Failed. Property has improvements" << endl;
+				cout << "Trade Failed. Property has improvements." << endl;
 				return 0;
 			}
 		}
@@ -257,7 +310,7 @@ bool Player::acceptTrade(Player *pl, string give, string want){
 				erase(propGive);
 
 			}else{
-				cout << "Trade Failed. Property has improvements" << endl;
+				cout << "Trade Failed. Property has improvements." << endl;
 				return 0;
 			}
 		}
@@ -269,7 +322,7 @@ bool Player::acceptTrade(Player *pl, string give, string want){
 
 void Player::trade(Player* pl, string give, string want){
 
-	cout << getName() << " wants to trade " << pl->getName() << " " + give + " for " + want;
+	cout << getName() << " wants to trade " << pl->getName() << " " + give + " for " + want<<".";
 
 	while(true){
 		string response;

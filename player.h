@@ -20,7 +20,7 @@ class Player : public Owner{
 	string name;
 	char symbol;
 	int curPosition, timCups;
-
+	vector<string> monopolies;
 	vector<Property*> properties;
 
 	bool inJail;
@@ -43,9 +43,14 @@ public:
 	vector<Property*> getProperties();
 	int getNumRezOwned();
 	int getNetWorth();
+	int getCurPos();
 
 	void addCash(int x); //inherited
 	void addProperty(Property*);
+	void removeProperty(Property*);
+	void addMonopoly(string block);
+	void removeMonopoly(string block);
+	bool hasMonopoly(string block);
 	void useTimCup();
 	void setJailRolls(int roll1, int roll2);
 

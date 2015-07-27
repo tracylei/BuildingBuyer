@@ -35,8 +35,10 @@ public:
 	// ~Game();
 	//void save();
 	Player* getCurrentPlayer();
+	Player* getPlayer(int p);
 	Player* getPlayer(string s);
 	Property* getProperty(string name);
+	Cell* getTheGrid(int i);
 
 	bool getTestMode();
 	void play();
@@ -51,13 +53,17 @@ public:
 	// static int getRollUpCount();
 	// //notify the controller that improvements were built on this property
 	// // void notifyImprove(Property* p);
+	int getNumPlayers();
 	void addPlayer (Player* p);
 	// void removePlayer (Player* p);
 	bool isWon();
 
 	//Called by the player to notify the controller of its change in position
 	void notify(Player* p, int prevPos, int curPos);
+	//Notify a cell that a player has landed on it
 	void notifyCell(int);
+	//Called by a property to notify the game to notify the controller that an improvement was built/sold
+	void notifyImprove(int, int numImprov);
 	void init(Controller* controller);
 };
 

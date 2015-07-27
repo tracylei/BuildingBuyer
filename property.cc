@@ -3,11 +3,11 @@
 
 using namespace std;
 
-Property::Property(string name, string block, int cost): Cell(name, true), cost(cost), block(block){
+Property::Property(string name, string block, int cost, bool academic): Cell(name, true, academic), cost(cost), block(block){
 	mortgaged = false;
 }
 
-Property::Property(string name, int cost): Cell(name, true), cost(cost){
+Property::Property(string name, int cost, bool academic): Cell(name, true, academic), cost(cost){
 	mortgaged = false;
 }
 
@@ -19,6 +19,10 @@ int Property::getImpr(){
 Owner* Property::getOwner(){
 	//cout<<owner->getName()<<endl;
 	return owner;
+}
+
+string Property::getOwnerName(){
+	return owner->getName();
 }
 int Property::getCost(){
 	return cost;
@@ -58,7 +62,6 @@ void Property::buy(Player* buyer){
 
 		if (resp == "y"){
 			if(buyer->pay(cost, static_cast<Player*>(owner))){
-				owner = buyer;
 				buyer->addProperty(this);
 				break;
 			}

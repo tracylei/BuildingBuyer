@@ -32,6 +32,9 @@ int CellDisplay::getImpr(){
 void CellDisplay::addImpr(){
 	numImprov++;
 }
+void CellDisplay::sellImpr(){
+	numImprov--;
+}
 
 void CellDisplay::setPlayer(char p){
 	for(int i = 0; i < 8; ++i){

@@ -14,10 +14,10 @@ protected:
 	std::string block;
 	//From super class - string name;
 public:
-	Property(std::string name, std::string block, int cost);
-	Property(std::string name, int cost);
+	Property(std::string name, std::string block, int cost, bool academic);
+	Property(std::string name, int cost, bool academic);
 	int getImpr();
-	string getBlock();
+	std::string getBlock();
 	virtual int getValue()=0;
 	
 	int getCost();
@@ -27,6 +27,7 @@ public:
 	// //Returns false if purchase was unsuccessful
 	void setOwner(Owner* newOwner);
 	Owner* getOwner(); 
+	std::string getOwnerName();
 	// //void auction(input stream);
 	void buy(Player* buyer);
 	virtual void doAction(Player* p)=0;

@@ -26,6 +26,7 @@ public:
 	BoardDisplay *getBoard();
 	void refreshBoard ();
 	void notify(Player *, int prevPos, int curPos);
+	void notifyImprove (int, int numImprov);
 
 	void init();
 	void play(bool);

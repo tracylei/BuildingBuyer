@@ -1,4 +1,6 @@
 #include "controller.h"
+#include "academicbuilding.h"
+
 #include <fstream>
 using namespace std;
 
@@ -28,14 +30,12 @@ BoardDisplay* Controller::getBoard(){
 
 //notify board to add new player
 void Controller::notify(Player *p, int prevPos, int curPos){
-#if DEBUG
-	cout << "controller notify" << endl;
-	cout << p->getSymbol() <<prevPos <<curPos << endl;
-#endif
 	board->notify(p, prevPos, curPos); //why does this give segfault
 }
 
-
+void Controller::notifyImprove (int index, int numImprov){
+	board->notify(index, numImprov);
+}
 
 //Called by notify board to print
 void Controller::refreshBoard(){
@@ -74,8 +74,10 @@ void Controller::loadGame(const string fname){
 		Property *p = game->getProperty(property);
 		pl->addProperty(p);
 		// cout << "n: " << p->getName() << " "<< p->getID() << endl;
-		board->notify(p->getID(), improvements); // notify board of any improvements
-	
+		if (p->isAcademic()){
+			board->notify(p->getID(), improvements); // notify board of any improvements
+			static_cast<AcademicBuilding*>(p)->setImprove(improvements);
+		}
 	}
 
 	board->print();
@@ -91,11 +93,20 @@ void Controller::init(){
 	
 	//read in game details
 
-	cout << "How many players are playing? (players 2-8)" << endl;
+	cout << "How many players are playing? (Please enter a number between 2-8.)" << endl;
 	string strPlayers;
 	getline(cin,strPlayers);
 	istringstream iss(strPlayers);
 	iss >> numPlayers;
+
+	while (numPlayers<2 || numPlayers>8){
+		cout<<"Building Buyer is a 2 to 8 player game. Please enter a valid number of players."<<endl;
+		cout << "How many players are playing? (Please enter a number between 2-8.)" << endl;
+		getline(cin,strPlayers);
+		istringstream iss(strPlayers);
+		iss >> numPlayers;
+	}
+
 
 	game->init(this);
 
@@ -344,31 +355,59 @@ void Controller::play(bool rolled){
 			//find player.
 			p = game->getPlayer(player); 
 			game->getCurrentPlayer()->trade(p, give, want);
-		// }else if (cmd == "improve"){
-		// 	string propName, action;
-		// 	iss >> propName >> action;
+		}else if (cmd == "improve"){
+			string propName, action;
+			iss >> propName >> action;
 
-		// 	if (action == "buy"){
-		// 		// for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-		// 		// 	if (it->getName() == propName) it->buyImprove();
-		// 		// }
-		// 	}else if (action == "sell"){
-		// 		int numProp = game->getCurrentPlayer()->getProperties().size();
-		// 		bool owned = false;
-		// 		string block;
-		// 		for (unsigned int i = 0; i < numProp; i++){
-		// 			if (game->getCurrentPlayer()->getProperties()[i]->getName() == propName){
-		// 				owned=true;
-		// 				block=game->getCurrentPlayer()->getProperties()[i]->getBlock();
-		// 			}
-		// 		}
-		// 		if (!owned){
-		// 			cout<<"Sorry, you can only sell improvements on properties that you own."<<endl;
-		// 		}
-		// 		else{
-		// 			//Check if monopoly owned
-		// 		}
-		// 	}
+
+			//Check that the current player actually owns the property
+			int numProp = game->getCurrentPlayer()->getProperties().size();
+			bool owned = false;
+			string block;
+			//index of the property
+			int index;
+			for (unsigned int i = 0; i < numProp; i++){
+				if (game->getCurrentPlayer()->getProperties()[i]->getName() == propName){
+					owned=true;
+					index = game->getCurrentPlayer()->getProperties()[i]->getID();
+					block=game->getCurrentPlayer()->getProperties()[i]->getBlock();
+				}
+			}
+
+			if (!owned){
+				cout<<"Sorry, you can only buy/sell improvements on properties that you own."<<endl;
+			}
+			else if(static_cast<AcademicBuilding*>(game->getTheGrid(index))->isMortgaged()){
+				cout<<"Sorry, improvements can only be built on unmortgaged properties."<<endl;
+			}
+			else{
+					if (action == "buy"){
+						bool monopoly = game->getCurrentPlayer()->hasMonopoly(block);
+						if (!monopoly){
+							cout<<"Sorry, you can only purchase improvements on a property when you own all properties in its block."<<endl;
+						}else if (monopoly){
+								static_cast<AcademicBuilding*>(game->getTheGrid(index))->improve(1);
+								cout<<"You've successfully purchased an improvement for "<<propName<<" for $";
+								cout<<static_cast<AcademicBuilding*>(game->getTheGrid(index))->getImprCost()<<"."<<endl;
+						}
+						else if (static_cast<AcademicBuilding*>(game->getTheGrid(index))->getImpr()>5){
+								cout<<"Sorry, you can only have a maximum of 5 improvements on each improvable property."<<endl;
+						}
+					}
+					else if (action == "sell"){
+							
+							if (static_cast<AcademicBuilding*>(game->getTheGrid(index))->getImpr()<=0){
+								cout<<"Sorry, there are no improvements on "<<propName<<" for you to sell."<<endl;
+							}
+							else{
+								static_cast<AcademicBuilding*>(game->getTheGrid(index))->sellImprove(1);
+								cout<<"You've successfully sold an improvement for "<<propName<<" for $";
+								cout<<static_cast<AcademicBuilding*>(game->getTheGrid(index))->getImprCost()/2<<"."<<endl;
+							}
+							continue;
+					}
+			}
+
 
 		}else if (cmd == "mortgage"){
 			string propName;
@@ -397,7 +436,42 @@ void Controller::play(bool rolled){
 		}else if (cmd == "assets"){
 			game->getCurrentPlayer()->displayAssets();
 		}else if(cmd == "save"){
-			
+			string fileName;
+			iss >> fileName;
+			ofstream ofs (fileName, ofstream::out);
+			int numPlayers = game->getNumPlayers();
+			ofs<<numPlayers<<endl;
+			for (int i = 0; i<numPlayers; i++){
+				ofs<<game->getPlayer(i)->getName()<<" "<<game->getPlayer(i)->getSymbol()<<" ";
+				ofs<<game->getPlayer(i)->getTimCups()<<" "<<game->getPlayer(i)->getCash()<<" ";
+				ofs<<game->getPlayer(i)->getCurPos();
+				if (game->getPlayer(i)->isInJail()){
+					ofs<<" 1 "<<game->getPlayer(i)->getTurnsInJail();
+				}
+				else if (game->getPlayer(i)->getCurPos() == 10){
+					ofs<<" 0";
+				}
+				ofs<<endl;
+			}
+			for (int i = 0; i < 40; i++){
+				if (game->getTheGrid(i)->isBuyable()){
+					ofs<<game->getTheGrid(i)->getName()<<" ";
+					string ownerName = static_cast<Property*>(game->getTheGrid(i))->getOwnerName();
+
+					if (ownerName=="bank")
+						ofs<<"BANK ";
+					else 
+						ofs<<ownerName<<" ";
+
+					if (!static_cast<Property*>(game->getTheGrid(i))->isMortgaged())
+						ofs<<static_cast<Property*>(game->getTheGrid(i))->getImpr()<<endl;
+					else
+						ofs<<"-1"<<endl;
+
+				}
+			}
+			ofs.close();
+			cout<<"Your progress in this game has been saved to "<<fileName<<".";
 		}else{
 			cout<<"Your command could not be recognized. Please enter another command."<<endl;
 		}

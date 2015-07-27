@@ -10,7 +10,7 @@ using namespace std;
 
 
 
-NonProperty::NonProperty(std::string name): Cell(name, false){
+NonProperty::NonProperty(std::string name): Cell(name, false, false){
 }
 
 void NonProperty::doAction(Player* p){

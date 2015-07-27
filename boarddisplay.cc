@@ -30,8 +30,15 @@ void BoardDisplay::notify(Player *p, int oldPos, int newPos){//need old and new 
 }
 
 void BoardDisplay::notify(int id, int n){ //need property id
-	for (;n > 0; --n){
-		cells[id].addImpr(); 
+	if (n>0){
+		for (;n > 0; --n){
+			cells[id].addImpr(); 
+		}
+	}
+	else{
+		for (;n < 0; n++){
+			cells[id].sellImpr();
+		}
 	}
 }
 

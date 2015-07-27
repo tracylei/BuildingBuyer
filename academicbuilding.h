@@ -7,7 +7,7 @@
 
 class AcademicBuilding : public Property{
 	//From super class Property - string bldgName; int cost; Player* ownerk;
-	int rent, imprCost;
+	int imprCost;
 	int *tuition;
 	//voivvd loadBuildingInfo(istream f);
 public:
@@ -15,8 +15,11 @@ public:
 	void setTuition (int index, int tutCost);
 	//Build n improvements
 	void improve(int n);
+	void sellImprove(int);
+	void setImprove(int);
 	void doAction(Player* p);
 	int getValue();
+	int getImprCost();
 };
 
 #endif

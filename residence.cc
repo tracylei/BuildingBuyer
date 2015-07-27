@@ -2,12 +2,12 @@
 
 using namespace std;
 
-Residence::Residence(string bldgName, int *rentFee): Property(bldgName, 200),rent(rentFee){
+Residence::Residence(string bldgName, int *rentFee): Property(bldgName, 200, false),rent(rentFee){
 	//Note index corresponds to number of residences owned
 }
 
 void Residence::doAction(Player* p){
-	if (owner->getName()!= "bank" && owner->getName()!=p->getName()){
+	if (owner->getName()!= "bank" && owner->getName()!=p->getName() && !mortgaged){
 		cout<<"You will be charged $"<<rent[p->getNumRezOwned()];
 		cout<<" in rent by "<<owner->getName()<<", the owner of "<<name<<"."<<endl;		
 		p->pay(rent[static_cast<Player*>(owner)->getNumRezOwned()], owner);
