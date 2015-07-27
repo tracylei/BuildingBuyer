@@ -15,6 +15,10 @@ Player::Player(Game* game, string name, char symbol, int curPosition, int cash, 
 #endif
 };
 
+Player::~Player(){
+	delete game;
+}
+
 string Player::getName(){
 	return name;
 }

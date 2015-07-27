@@ -30,7 +30,8 @@ class Player : public Owner{
 public:
 	Player();
 	Player(Game* game, string name, char symbol, int position, int cash, int timsCups); //for loading from file
-
+	~Player();
+	
 	string getName(); //returns name of player
 	char getSymbol();
 	int getCash();

@@ -29,7 +29,7 @@ void AcademicBuilding::setTuition(int index, int tutCost){
 
 
 void AcademicBuilding::doAction(Player* p){
-	if (owner->getName()!= "bank" && owner->getName()!=p->getName()){
+	if (owner->getName()!= "BANK" && owner->getName()!=p->getName()){
 		cout<<"You will be charged $"<<tuition[numImprov]<<" in tuition by "<<owner->getName()<<", the owner of "<<name<<"."<<endl;
 		cout<<"Please give "<<owner->getName()<<" a few seconds to collect the tuition.."<<endl;
 		usleep(3000000);

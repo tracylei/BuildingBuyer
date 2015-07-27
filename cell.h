@@ -15,6 +15,7 @@ protected:
 	bool buyable;
 public:
 	Cell(std::string, bool);
+	// virtual ~Cell();
 	void setGame(Game *game);
 	void setIndex(int);
 	std::string getName();

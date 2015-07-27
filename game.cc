@@ -28,16 +28,17 @@ Game::Game(){
 	die2 = new Dice;
 }
 
-// Game::~Game(){
-// 	for (int i = 0; i < GRID_SIZE; i++){
-// 		delete Cell[i];
-// 	}
-// 	for (int i = 0; i<numPlayers; i++){
-// 		delete players[i];
-// 	}
-// 	delete dice;
-//	delete bank;
-// }
+Game::~Game(){
+	for (int i = 0; i < GRID_SIZE; i++){
+		delete Cell[i];
+	}
+	for (int i = 0; i<numPlayers; i++){
+		delete players.at(i);
+	}
+	delete die1;
+	delete die2;
+	delete bank;
+}
 
 
 Bank* Game::getBank(){
@@ -176,7 +177,7 @@ void Game::notifyCell(int curPos){
 		prop->doAction(players[currPlayer]);
 		return;
 	}else{
-		if(prop->getOwner()->getName() == "bank" ){ //seg fault for non-property
+		if(prop->getOwner()->getName() == "BANK" ){ //seg fault for non-property
 			cout << "Would you like to buy " << prop->getName() << " for " << prop->getCost() << "?(y/n)" << endl;
 			while(true){
 				string resp;

@@ -5,7 +5,7 @@ Gym::Gym(std::string bldgName): Property(bldgName, 150){
 }
 
 void Gym::doAction(Player* p){
-	if (owner->getName()!= "bank" && owner->getName()!=p->getName()){
+	if (owner->getName()!= "BANK" && owner->getName()!=p->getName()){
 		cout<<"You've landed on a gym owned by "<<owner->getName()<<". Please roll the dice using the roll command to determine ";
 		cout<<"the fee you have to pay."<<endl;
 		string cmd;
