@@ -43,10 +43,15 @@ Game::Game(){
 Bank* Game::getBank(){
 	return bank;
 }
+
+
 Player* Game::getCurrentPlayer(){
 	return players[currPlayer];
 }
 
+int Game::getNumPlayers(){
+	return numPlayers;
+}
 // void Game::play(){
 // 	players[currPlayer]->play();
 // }
@@ -127,9 +132,6 @@ int Game::rollDie1(){
 int Game::rollDie2(){
 	return die2->roll();
 }
-
-
-
  
 // static void Game::incrRollUpCount(){
 // 	rollUpCount++;
@@ -175,7 +177,19 @@ void Game::notifyCell(int curPos){
 		return;
 	}else{
 		if(prop->getOwner()->getName() == "bank" ){ //seg fault for non-property
-			prop->buy(players[currPlayer]);
+			cout << "Would you like to buy " << prop->getName() << " for " << prop->getCost() << "?(y/n)" << endl;
+			while(true){
+				string resp;
+				getline(cin, resp);
+
+				if (resp == "y"){
+					prop->buy(players[currPlayer]);
+					break;
+				}else if(resp == "n"){
+					prop->auction(numPlayers, players, players[currPlayer]->getName()); //num players, not including current player
+					break;
+				}
+			}
 		}else{
 			prop->doAction(players[currPlayer]);
 			cout << "landing on " << prop->getOwner()->getName() <<" need to pay rent" <<endl;

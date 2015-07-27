@@ -28,8 +28,9 @@ public:
 	Owner* getOwner(); 
 	// //void auction(input stream);
 	void buy(Player* buyer);
+	void buy(Player* buyer, int bid); //for buying auctioned properties
 	virtual void doAction(Player* p)=0;
-
+	void auction(int numBidders, vector<Player*> bidder, string master);
 };
 
 #endif

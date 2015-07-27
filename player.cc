@@ -76,9 +76,6 @@ int Player::getNetWorth(){
 }
 
 
-
-
-
 void Player::addCash(int x){
 	cash += x;
 }
@@ -151,12 +148,10 @@ void Player::erase(Property *p){
 	for (vector<Property*>::iterator it = this->properties.begin(); it != this->properties.end(); it++){
 
 			if((**it).getName() == p->getName()) {
-				cout << p->getName() << "remove " << (**it).getName()<< endl;
 				it = properties.erase(it);
 				break;
 			}
 	}
-
 }
 
 bool Player::acceptTrade(Player *pl, string give, string want){
@@ -168,7 +163,7 @@ bool Player::acceptTrade(Player *pl, string give, string want){
 			cout << "Not enough cash to process trade" << endl;
 			return 0;
 		}
-		cout << "cur:" << this->getName() << " trading " << pl->getName() << pl->getPos()<< endl;
+		// cout << "cur:" << this->getName() << " trading " << pl->getName() << pl->getPos()<< endl;
 		//find property (want) from player p
 
 

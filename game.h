@@ -37,7 +37,7 @@ public:
 	Player* getCurrentPlayer();
 	Player* getPlayer(string s);
 	Property* getProperty(string name);
-
+	int getNumPlayers();
 	bool getTestMode();
 	void play();
 	void endTurn();
@@ -59,6 +59,8 @@ public:
 	void notify(Player* p, int prevPos, int curPos);
 	void notifyCell(int);
 	void init(Controller* controller);
+
+	void save();
 };
 
 
