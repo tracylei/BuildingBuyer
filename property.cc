@@ -13,12 +13,15 @@ Property::Property(string name, int cost, bool academic): Cell(name, true, acade
 	numImprov = 0;
 }
 
+Property::~Property(){
+	delete owner;
+}
+
 int Property::getImpr(){
 	return numImprov;
 }
 
 Owner* Property::getOwner(){
-	//cout<<owner->getName()<<endl;
 	return owner;
 }
 
@@ -32,7 +35,6 @@ int Property::getCost(){
 string Property::getBlock(){
 	return block;
 }
-
 
 bool Property::isMortgaged(){
 	return mortgaged;
@@ -63,14 +65,14 @@ void Property::auction(int numBidders, vector<Player*> bidders, string master){
 			cin >> action;
 
 			if(action == "bid"){
-				if (bid+20 > (**it).getCash()){
+				if (bid+25 > (**it).getCash()){
 					cout << "You don't have enough cash to bid." << endl;
 					bidders.erase(it);
 					--numBidders;
 					continue;
 				}
 				
-				bid+= 20;
+				bid+= 25;
 				cout << (**it).getName() << " has bid, the price is now $" << bid << endl;
 			}else if (action == "pass"){
 				it = bidders.erase(it);

@@ -17,6 +17,7 @@ class BoardDisplay {
 
 public:
 	BoardDisplay();
+	~BoardDisplay(){};
 	//map of property and if ownable
 	void notify(Player*, int, int); // updates players movements,
 	void notify(int, int); // updates improvements on building

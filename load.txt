@@ -1,7 +1,7 @@
 3
 Player1 B 0 1500 1
 Player2 D 1 1500 5
-Player3 P 3 1500 10
+Player3 P 3 1500 10 1
 AL Player1 0	
 ML Player1 0
 MKV Player3 1

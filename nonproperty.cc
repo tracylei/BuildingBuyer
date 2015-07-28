@@ -46,7 +46,7 @@ void NonProperty::doAction(Player* p){
 				cout<<"After paying, you have $"<<p->getCash()<<"."<<endl;
 		}
 		else{
-			cout<<"Since you chose to pay 10% of your net worth, $"<<worth<<" will be deducted from your bank account."<<endl;
+			cout<<"Since you chose to pay 10% of your net worth, $"<<worth*.1<<" will be deducted from your bank account."<<endl;
 			cout<<"You currently have $"<<p->getCash()<<"."<<endl;
 			if (p->pay(worth*.1, game->getBank()))
 				cout<<"After paying, you have $"<<p->getCash()<<"."<<endl;

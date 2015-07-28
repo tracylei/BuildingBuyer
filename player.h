@@ -30,7 +30,7 @@ class Player : public Owner{
 public:
 	Player();
 	Player(Game* game, string name, char symbol, int position, int cash, int timsCups); //for loading from file
-	~Player();
+	virtual ~Player();
 	
 	string getName(); //returns name of player
 	char getSymbol();
@@ -53,8 +53,8 @@ public:
 	void removeMonopoly(string block);
 	bool hasMonopoly(string block);
 	void useTimCup();
-	void setJailRolls(int roll1, int roll2);
-
+	void incrTurnsInJail();
+	void setJail(bool,int);
 
 	void play();
 	void roll();
@@ -81,6 +81,8 @@ public:
 	Property* owns(string);
 	void sellImprove(AcademicBuilding*);
 	void buyImprove(AcademicBuilding*);
+
+	void claimAssets(Owner*);
 
 
 };

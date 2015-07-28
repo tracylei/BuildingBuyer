@@ -13,7 +13,6 @@
 
 class Game;
 
-
 class Controller{
 	Game *game;
 

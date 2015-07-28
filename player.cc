@@ -16,6 +16,10 @@ Player::Player(Game* game, string name, char symbol, int curPosition, int cash, 
 };
 
 Player::~Player(){
+	for(vector<Property*>::iterator it = properties.begin(); it != properties.end(); ++it){
+		delete(*it);
+	}
+	properties.clear();
 	delete game;
 }
 
@@ -51,7 +55,7 @@ int Player::getTurnsInJail(){
 	return turnsInJail;
 }
 
-void Player::setJailRolls(int roll1, int roll2){
+void Player::incrTurnsInJail(){
 	turnsInJail++;
 }
 
@@ -82,6 +86,12 @@ int Player::getCurPos(){
 	return curPosition;
 }
 
+
+void Player::setJail(bool v, int turns){
+	inJail = v;
+	turnsInJail = turns;
+}
+
 void Player::addCash(int x){
 	cash += x;
 }
@@ -97,18 +107,17 @@ void Player::addProperty(Property *p){
 	cout << p->getName() << " added to player " << name <<"'s list of properties owned."<< endl;
 }
 
-
 void Player::removeProperty(Property* p){
-	int size = monopolies.size();
+	int size = properties.size();
 	int index=-1;
 	for (int i=0; i<size; i++){
-		if(monopolies.at(i) == p->getBlock()){
-			index = i;
+		if(properties.at(i)->getBlock() == p->getBlock()){
+			properties.erase(properties.begin()+index);
+			removeMonopoly(p->getBlock());
+			return;
 		}
 	}
-	if (index>=0)
-		monopolies.erase(monopolies.begin()+index);
-	removeMonopoly(p->getBlock());
+
 }
 void Player::addMonopoly(string block){
 	for (int i = 0; i<40; i++){
@@ -134,7 +143,6 @@ void Player::removeMonopoly(string block){
 	}
 }
 
-
 bool Player::hasMonopoly(string block){
 	int size = monopolies.size();
 	for (int i=0; i<size; i++){
@@ -149,6 +157,7 @@ bool Player::hasMonopoly(string block){
 
 bool Player::pay(int amt, Owner* creditor){
 	if (amt > cash) {
+		cout << "You do not have enough cash to do that!" << endl;
 		//INCOMPLETE add in bankruptcy
 		cout<<"You need to pay $"<<amt<<" but you only have $"<<cash<<". Would you like to attempt a trade,"; 
 		cout<<"mortgage buildings, sell improvements, or declare bankruptcy?"	<<endl;
@@ -193,7 +202,7 @@ bool Player::pay(int amt, Owner* creditor){
 
 		if (cmd=="bankrupt"){
 			cout<<"declare bankruptcy"<<endl;
-		//	declareBankruptcy(creditor);
+			declareBankruptcy(creditor);
 			return false;
 		}else if (cmd=="improve"){
 			sellImprove(static_cast<AcademicBuilding*>(p));
@@ -210,6 +219,34 @@ bool Player::pay(int amt, Owner* creditor){
 	}
 }
 
+
+void Player::declareBankruptcy(Owner* creditor){
+	cout<<"You've declared bankruptcy."<<endl;
+	cout<<"All of your assets will now be transferred to "<<creditor->getName<<"."<<endl;
+	creditor->claimAssets(this);
+	game->removePlayer(this); //Need to write, need to check if won in this fn
+}
+
+
+void Player::claimAssets(Player* debtor){
+	vector<Property*> properties = debtor->getProperties();
+	timCups+=debtor->getTimCups();
+	cash+=debtor->getCash();
+	for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
+		it->setOwner(this);
+		addProperty(it);
+		if(it->isMortgaged()){
+			cout<<name<<", you are receiving "<<it->getName()<<"from "<<debtor->getName()<<" because ";
+			cout<<debtor->getName()<<" has declared bankruptcy."<<endl;
+			cout<<"Since this is a mortgaged property, if you would like to unmortgage it, please use "
+		}
+	}
+}
+
+
+
+
+
 void Player::goToJail(){
 	game->notify(this, curPosition, 10); 
 	curPosition = 10;
@@ -218,7 +255,11 @@ void Player::goToJail(){
 }
 
 void Player::leaveJail(){
-	cout<<"Congratulations on leaving the Tim's line.";
+	// move(jailRoll1, jailRoll2);
+	// game->refreshBoard();
+	cout<<"Congratulations on leaving the Tim's line." << endl;
+	// cout<<"Congratulations on leaving the Tim's line. Based on the sum of your dice rolls from your last attempt to leave, you moved ";
+	// cout<<jailRoll1+jailRoll2<<" cells."<<endl;
 	inJail = false;
 	turnsInJail = 0;
 }
@@ -439,14 +480,15 @@ void Player::buyImprove(AcademicBuilding* p){
 	if (!monopoly){
 		cout<<"Sorry, you can only purchase improvements on a property when you own all properties in its block."<<endl;
 	}else if (monopoly){
-			if (pay(p->getImprCost(), game->getBank())){
-				p->improve(1);
-				cout<<"You've successfully purchased an improvement for "<<p->getName()<<" for $";
-				cout<<p->getImprCost()<<"."<<endl;
-			}
-	}
-	else if (p->getImpr()>5){
-			cout<<"Sorry, you can only have a maximum of 5 improvements on each improvable property."<<endl;
+		if (pay(p->getImprCost(), game->getBank())){
+			p->improve(1);
+			cout<<"You've successfully purchased an improvement for "<<p->getName()<<" for $";
+			cout<<p->getImprCost()<<"."<<endl;
+		}
+	
+		else if (p->getImpr()>5){
+				cout<<"Sorry, you can only have a maximum of 5 improvements on each improvable property."<<endl;
+		}
 	}
 }
 

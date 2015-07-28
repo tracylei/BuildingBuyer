@@ -28,17 +28,20 @@ Game::Game(){
 	die2 = new Dice;
 }
 
-// Game::~Game(){
-// 	for (int i = 0; i < GRID_SIZE; i++){
-// 		delete Cell[i];
-// 	}
-// 	for (int i = 0; i<numPlayers; i++){
-// 		delete players.at(i);
-// 	}
-// 	delete die1;
-// 	delete die2;
-// 	delete bank;
-// }
+Game::~Game(){
+	//delete the board
+	for (int i = 0; i < GRID_SIZE; i++){
+		delete theGrid[i];
+	}
+	//delete players
+	for (vector<Player*>::iterator it = players.begin(); it != players.end(); it++ ){
+		delete (*it);
+	}
+	players.clear();
+	delete die1;
+	delete die2;
+	delete bank;
+}
 
 
 Bank* Game::getBank(){
@@ -53,10 +56,6 @@ Player* Game::getCurrentPlayer(){
 int Game::getNumPlayers(){
 	return numPlayers;
 }
-// void Game::play(){
-// 	players[currPlayer]->play();
-// }
-
 
 Cell* Game::getTheGrid(int i){
 	return theGrid[i];
@@ -87,11 +86,6 @@ Property* Game::getProperty(string propName){
 }
 
 
-
-// void Game::play(){
-// 	players[currPlayer]->play();
-// }
-
 bool Game::getTestMode(){
 	return testMode;
 } 
@@ -99,7 +93,6 @@ bool Game::getTestMode(){
 int Game::getTimCupCount(){
 	return rollUpCount;
 }
-
 
 void Game::refreshBoard(){
 	controller->refreshBoard();
@@ -209,7 +202,6 @@ void Game::notifyImprove (int index, int numImprov){
 
 
 void Game::init(Controller* controller){
-	cout << "Game initializing.." << endl;
 	
 	theGrid = new Cell*[GRID_SIZE];	
 	this->controller = controller;
@@ -277,8 +269,10 @@ void Game::init(Controller* controller){
 	}	
 }
 
-void Game::save(string fileName){
-	ofstream file (fileName, ofstream::out);
+
+void Game::save(string fname){
+	ofstream file;
+	file.open(fname.c_str());
 	file << numPlayers << endl;
 
 	for(vector<Player*>::iterator it = players.begin(); it != players.end(); ++it){
@@ -304,10 +298,16 @@ void Game::save(string fileName){
 		if(theGrid[i]->isBuyable()){
 			file << theGrid[i]->getName() << " ";
 			file << static_cast<Property*>(theGrid[i])->getOwner()->getName() << " ";
-			file << static_cast<Property*>(theGrid[i])->getImpr() << endl;
+			
+			if(!static_cast<Property*>(theGrid[i])->isMortgaged()){
+				file << static_cast<Property*>(theGrid[i])->getImpr();
+			}else{
+				file << "-1";
+			}
+			file << endl;
 		}
 	}
-	cout << "Your progress during this game has been saved to " <<fileName<<"."<< endl;
+	cout << "Your progress during this game has been saved to " <<fname<<"."<< endl;
 }
 
 void Game::setTestingMode(bool mode){

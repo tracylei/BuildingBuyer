@@ -6,6 +6,11 @@ Residence::Residence(string bldgName): Property(bldgName, 200, false){
 	rent = new int [4];
 }
 
+Residence::~Residence(){
+	delete [] rent;
+}
+
+
 void Residence::doAction(Player* p){
 	if (owner->getName()!= "bank" && owner->getName()!=p->getName() && !mortgaged){
 		cout<<"You will be charged $"<<rent[p->getNumRezOwned()];

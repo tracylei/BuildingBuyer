@@ -7,7 +7,10 @@ extern const int RESIDENCE_COST;
 class Residence : public Property{
 	int* rent;
 public:
+
 	Residence(std::string bldgName);
+	virtual ~Residence();
+
 	void doAction(Player* p);
 	int getValue();
 	void setRent(int index, int rentFee);

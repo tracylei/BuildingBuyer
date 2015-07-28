@@ -8,6 +8,7 @@ extern const int GYM_COST;
 class Gym : public Property{
 public:
 	Gym(std::string);
+	virtual ~Gym(){};
 	void doAction(Player* p);
 	int getValue();
 };

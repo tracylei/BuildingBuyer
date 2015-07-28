@@ -2,12 +2,13 @@
 
 using namespace std; 
 
-CellDisplay::CellDisplay():numImprov(0){
+CellDisplay::CellDisplay(): numImprov(0){
 	for (int i = 0; i < 8; i++){
 		players[i] = ' ';
 	}
 }
-CellDisplay::CellDisplay(string name, int id, int isProperty=1, int numImprov=0):name(name), id(id), isProperty(isProperty),numImprov(numImprov){
+
+CellDisplay::CellDisplay(string name, int id, int isProperty, int numImprov):name(name), isProperty(isProperty), id(id),numImprov(numImprov){
 	for (int i = 0; i < 8; i++){
 		players[i] = ' ';
 	}

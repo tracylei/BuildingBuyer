@@ -32,8 +32,8 @@ public:
 	Dice* die1;
 	Dice* die2;
 	Game();
-	// ~Game();
-	//void save();
+	~Game();
+
 	Player* getCurrentPlayer();
 	Player* getPlayer(int p);
 	Player* getPlayer(string s);
@@ -49,11 +49,12 @@ public:
 	void refreshBoard();
 	static void reclaimTimCups(int n);
 	static int getTimCupCount();
-	// static void incrRollUpCount();
-	// static int getRollUpCount();
+	static void incrRollUpCount();
+	static int getRollUpCount();
 	// //notify the controller that improvements were built on this property
-	// // void notifyImprove(Property* p);
+	void notifyImprove(Property* p);
 	int getNumPlayers();
+
 	void addPlayer (Player* p);
 	// void removePlayer (Player* p);
 	bool isWon();
@@ -68,6 +69,7 @@ public:
 
 	void save(string);
 	void setTestingMode(bool mode);
+
 };
 
 

@@ -63,18 +63,17 @@ void Controller::loadGame(const string fname){
 		
 		Player *p = new Player(game, pName, symbol, position, cash, timCups);
 
-		
 		game->addPlayer(p);
 		notify(p,0,position);
-
 		//play is on DC Tim's line
 		if(position == 10){
 			int inJail, jailTurn;
-			cin >> inJail;
+			data >> inJail;
 
 			if(inJail){
-				cin >> jailTurn; //TODO, update turns in jail
-				p->goToJail();
+				data >> jailTurn; //TODO, update turns in jail
+				notify(p,0,10);
+				p->setJail(true, jailTurn);
 			}
 		}
 	}
@@ -85,23 +84,23 @@ void Controller::loadGame(const string fname){
 		data >> owner >> improvements;
 		// cout << property << " " <<owner << " " << improvements << endl;
 		
-
 		//find property and set player as owner
-		Player *pl = game->getPlayer(owner);
-		Property *p = game->getProperty(property);
+		if(owner != "BANK"){
+			Player *pl = game->getPlayer(owner);
+			Property *p = game->getProperty(property);
+			
+			if(improvements == -1){ //property is mortgaged
+				p->setMortgaged(true);
+			}
 
-		if(improvements == -1){ //property is mortgaged
-			p->setMortgaged(true);
+
+			pl->addProperty(p);
+			// cout << "n: " << p->getName() << " "<< p->getID() << endl;
+			if (p->isAcademic()){
+				board->notify(p->getID(), improvements); // notify board of any improvements
+				static_cast<AcademicBuilding*>(p)->setImprove(improvements);
+			}
 		}
-
-		pl->addProperty(p);
-		// cout << "n: " << p->getName() << " "<< p->getID() << endl;
-
-		if (p->isAcademic()){
-			board->notify(p->getID(), improvements); // notify board of any improvements
-			static_cast<AcademicBuilding*>(p)->setImprove(improvements);
-		}
-
 	}
 
 	board->print();
@@ -170,10 +169,10 @@ void Controller::init(bool testingMode){
 }
 
 void Controller::rollInJail(int roll1, int roll2){
-		game->getCurrentPlayer()->setJailRolls(roll1, roll2);
 		if (roll1 == roll2){
 			cout<<"You rolled two "<<roll1<<"'s!"<<endl;
 			game->getCurrentPlayer()->leaveJail();
+			game->getCurrentPlayer()->move(roll1,roll2);
 			play(true);
 		} 
 		else if (game->getCurrentPlayer()->getTurnsInJail() != 3){
@@ -223,6 +222,7 @@ void Controller::rollInJail(int roll1, int roll2){
 
 
 void Controller::playInJail(){
+	game->getCurrentPlayer()->incrTurnsInJail();
 	cout << game->getCurrentPlayer()->getName() << "'s turn."<<endl;
 	cout << "You are currently stuck in the DC Tim's Line."<<endl;
 	cout << "The only way out is rolling doubles, using a Roll Up the Rim Cup, or paying $50 (for some gourmet coffee)."<<endl;
@@ -269,7 +269,7 @@ void Controller::playInJail(){
 			game->getCurrentPlayer()->useTimCup();
 			game->getCurrentPlayer()->leaveJail();
 			//play(); //need to set rolled to true
-			cout<<"You now have one less Roll Up the Rim Cup."<<endl;
+			cout<<"You've used 1 of your "<<game->getCurrentPlayer()->getTimCups()+1<<" Roll Up the Rim Cups."<<endl;
 		}
 	}
 	else if(cmd == "pay"){
@@ -333,8 +333,8 @@ void Controller::play(bool rolled){
 							string cmd;
 							getline(cin,input);
 
-							cout<<"input is:"<<input<<endl;
 							istringstream iss(input);
+
 							iss >> cmd;
 							while (cmd!="roll"){
 								cout<<"You need to roll again before using another command. Please issue the roll command again."<<endl;
@@ -349,6 +349,7 @@ void Controller::play(bool rolled){
 								roll2 = r2;
 								// cout <<"r1 is: "<<r1<<endl;
 								// cout <<"r2 is: "<<r2<<endl;
+
 							}else{
 								roll1 = game->rollDie1();
 								roll2 = game->rollDie2();
@@ -423,6 +424,8 @@ void Controller::play(bool rolled){
 
 			game->save(fileName);
 			// 
+			// ofstream ofs (fileName, ofstream::out);
+
 			// int numPlayers = game->getNumPlayers();
 			// ofs<<numPlayers<<endl;
 			// for (int i = 0; i<numPlayers; i++){

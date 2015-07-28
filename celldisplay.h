@@ -12,14 +12,13 @@ class CellDisplay{
 	char players[8]; //max number of players
 public:
 	CellDisplay();
-	CellDisplay(std::string, int, int, int); // name, id, isProperty, numImpr
-
+	CellDisplay(std::string name, int id, int isProperty, int numImpr); // name, id, isProperty, numImpr
+	
 	std::string getName();
 	bool getIsProperty();
 	char* getPlayers();
 	int getImpr();
 
-	void displayCell();
 	void setPlayer(char);
 	void removePlayer(char);
 	void addImpr();
