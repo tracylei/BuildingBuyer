@@ -8,9 +8,8 @@ using namespace std;
 // Player(char symbol, string name, int cash=1500, Properties* properties):symbol(symbol), name(name), cash(cash), properties(properties){}
 Player::Player(Game* game, string name, char symbol, int curPosition, int cash, int timCups): Owner(cash), game(game), name(name), symbol(symbol), curPosition(curPosition)
 , timCups(timCups){
+	inJail = false;
 	turnsInJail = 0;
-	jailRoll1 = 0;
-	jailRoll2 = 0;
 #if DEBUG
 	cout << symbol << curPosition << " " <<cash << endl;
 #endif
@@ -53,8 +52,6 @@ int Player::getTurnsInJail(){
 }
 
 void Player::setJailRolls(int roll1, int roll2){
-	jailRoll1 = roll1;
-	jailRoll2 = roll2;
 	turnsInJail++;
 }
 
@@ -148,15 +145,63 @@ bool Player::hasMonopoly(string block){
 	return false;
 }
 
+
+
 bool Player::pay(int amt, Owner* creditor){
 	if (amt > cash) {
 		//INCOMPLETE add in bankruptcy
-		// cout<<"You are short $"<<amt-cash<<". Would you like to attempt a trade, 
-		// mortgage buildings, sell ipmrovements, or declare bankruptcy?"	<<endl;
-		// string cmd;
-		// cin>>cmd;
-		// if (cmd=="bankrupt")
-		return false;
+		cout<<"You need to pay $"<<amt<<" but you only have $"<<cash<<". Would you like to attempt a trade,"; 
+		cout<<"mortgage buildings, sell improvements, or declare bankruptcy?"	<<endl;
+		string cmd, input;
+		getline(cin, input);
+		istringstream iss(input);
+		iss>>cmd;
+		string propName, cmd2;
+		Property* p;
+		while(cmd!="bankrupt"){
+			iss>>propName;
+			p = owns(propName);
+			if (cmd=="improve"){
+				iss>>cmd2;
+				if (cmd2!="buy"){
+					cout<<"You must deal with your debt (ex. by selling improvements, not buying) before issuing any other commands."<<endl;
+					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
+				}else if(!p){
+					cout<<"You can only buy/sell improvements on properties that you own."<<endl;
+					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
+				}else if(!p->isAcademic()){
+					cout<<"Improvements can only found on Academic Buildings."<<endl;
+					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
+				}else if(static_cast<AcademicBuilding*>(p)->getImpr()<0){
+					cout<<"There are no improvements on "<<propName<<"for you to sell."<<endl;
+					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
+				}
+					else break;
+			}else if (cmd=="mortgage"){
+				iss>>propName;
+				if(!p){
+					cout<<"You can only mortgage properties that you own."<<endl;
+					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
+				}
+				else break;
+			}else if (cmd!="improve"&&cmd!="mortgage"){
+				cout<<"You must deal with your debt before issuing any other commands."<<endl;
+				cout<<"Please only use the \"improve\", \"mortgage\", and \"bankrupt\" commands."<<endl;
+			}
+			getline(cin, input);
+		}
+
+		if (cmd=="bankrupt"){
+			cout<<"declare bankruptcy"<<endl;
+		//	declareBankruptcy(creditor);
+			return false;
+		}else if (cmd=="improve"){
+			sellImprove(static_cast<AcademicBuilding*>(p));
+			return pay (amt, creditor);
+		}else if(cmd=="mortgage"){
+			mortgage(p);
+			return pay (amt, creditor);
+		}
 	}
 	else {
 		cash-=amt;
@@ -173,11 +218,9 @@ void Player::goToJail(){
 }
 
 void Player::leaveJail(){
-	move(jailRoll1, jailRoll2);
-	game->refreshBoard();
-	cout<<"Congratulations on leaving the Tim's line. Based on the sum of your dice rolls from your last attempt to leave, you moved ";
-	cout<<jailRoll1+jailRoll2<<" cells."<<endl;
+	cout<<"Congratulations on leaving the Tim's line.";
 	inJail = false;
+	turnsInJail = 0;
 }
 
 bool Player::isInJail(){
@@ -329,7 +372,8 @@ void Player::trade(Player* pl, string give, string want){
 		string response;
 
 		cout << "Accept the trade? (y/n)" << endl;
-		cin >> response;
+		getline(cin,response);
+
 
 		if (response == "y"){
 			acceptTrade(pl, give, want);
@@ -337,24 +381,35 @@ void Player::trade(Player* pl, string give, string want){
 		}else if (response == "n"){
 			cout << pl->getName() + " has rejected your trade." << endl;
 			break;
-		}else{
-			cout << "Answer only y or n" << endl;
-		}
+		}else
+			cout<<"Please only answer with \"y\" or \"n\"."<<endl;
 	}
 }
 
+//Already know that the player owns p
 void Player::mortgage(Property *p){
-	if (!p->isMortgaged() && p->getImpr() == 0 && p->getOwner()->getName() == name){
+	if (!p){
+		cout<<"Sorry, you can only mortgage properties that you own."<<endl;
+	}
+	else if (p->isMortgaged()){
+		cout<<"Sorry, "<<p->getName()<<"has already been mortgaged."<<endl;
+	} else if(p->getImpr() != 0){
+		cout<<"Sorry, you can only mortgage properties with no improvements."<<endl;
+	}
+	else{	
 		p->setMortgaged(true);
 		cash += p->getCost() / 2;
 		cout << p->getName() << " has been mortgaged!" << endl;
-	}else{
-		cout << "This property cannot be mortgaged!" << endl;
 	}
 }
 
+//Already know that the player owns p
 void Player::unmortgage(Property *p){
-	if (p->isMortgaged() && p->getOwner()->getName() == name){//&& p->owner.name? == player.name
+	if (!p){
+		cout<<"Sorry, you can only unmortgage properties that you own."<<endl;
+	}else if (!p->isMortgaged()){
+		cout<<p->getName()<<" hasn't been mortgaged yet."<<endl;
+	}else{
 		int amt = p->getCost() * 1.1;
 		if(amt > cash){
 			cout << "Not enough fund to unmortgage this property!" << endl;
@@ -367,7 +422,45 @@ void Player::unmortgage(Property *p){
 }
 
 
+Property* Player::owns(string propName){
+	//Check that the current player actually owns the property
+			int numProp = properties.size();
+			
+			for (unsigned int i = 0; i < numProp; i++){
+				if (properties[i]->getName() == propName){
+					return properties[i];
+				}
+			}
+			return NULL;
+}
+
+void Player::buyImprove(AcademicBuilding* p){
+	bool monopoly = hasMonopoly(p->getBlock());
+	if (!monopoly){
+		cout<<"Sorry, you can only purchase improvements on a property when you own all properties in its block."<<endl;
+	}else if (monopoly){
+			if (pay(p->getImprCost(), game->getBank())){
+				p->improve(1);
+				cout<<"You've successfully purchased an improvement for "<<p->getName()<<" for $";
+				cout<<p->getImprCost()<<"."<<endl;
+			}
+	}
+	else if (p->getImpr()>5){
+			cout<<"Sorry, you can only have a maximum of 5 improvements on each improvable property."<<endl;
+	}
+}
 
 
-
+void Player::sellImprove(AcademicBuilding* p){
+	if (p->getImpr()<=0){
+		cout<<"Sorry, there are no improvements on "<<p->getName()<<" for you to sell."<<endl;
+	}
+	else{
+		p->sellImprove(1);
+		int price = p->getImprCost()/2;
+		cash+=price;
+		cout<<"You've successfully sold an improvement for "<<p->getName()<<" for $";
+		cout<<price<<"."<<endl;
+	}
+}
 

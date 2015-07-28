@@ -5,10 +5,12 @@ using namespace std;
 
 Property::Property(string name, string block, int cost, bool academic): Cell(name, true, academic), cost(cost), block(block){
 	mortgaged = false;
+	numImprov = 0;
 }
 
 Property::Property(string name, int cost, bool academic): Cell(name, true, academic), cost(cost){
 	mortgaged = false;
+	numImprov = 0;
 }
 
 int Property::getImpr(){
@@ -46,7 +48,7 @@ void Property::setMortgaged(bool v){
 
 void Property::auction(int numBidders, vector<Player*> bidders, string master){
 	int bid = cost / 4; //starting bid is 25% of cost of property
-	cout <<"Starting Auction for " << getName() << " at initial price of " << bid << endl;
+	cout <<"Starting Auction for " << getName() << " at initial price of " << bid<<"." << endl;
 
 	while(numBidders > 1){
 		for(vector<Player*>::iterator it = bidders.begin(); it != bidders.end(); it++){
@@ -73,7 +75,7 @@ void Property::auction(int numBidders, vector<Player*> bidders, string master){
 			}else if (action == "pass"){
 				it = bidders.erase(it);
 				--numBidders;
-				cout << (**it).getName() << " has passed" << bid << endl;
+				cout << (**it).getName() << " has passed" << bid<<"." << endl;
 			}else{
 				cout << "Invalid input. Either use bid or pass." << endl;
 			}

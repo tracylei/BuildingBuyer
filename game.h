@@ -40,7 +40,6 @@ public:
 	Property* getProperty(string name);
 	Cell* getTheGrid(int i);
 
-	int getNumPlayers();
 	bool getTestMode();
 	void play();
 	void endTurn();
@@ -67,7 +66,8 @@ public:
 	void notifyImprove(int, int numImprov);
 	void init(Controller* controller);
 
-	void save();
+	void save(string);
+	void setTestingMode(bool mode);
 };
 
 

@@ -28,7 +28,7 @@ public:
 	void notify(Player *, int prevPos, int curPos);
 	void notifyImprove (int, int numImprov);
 
-	void init();
+	void init(bool testingMode = false);
 	void play(bool);
 	void playInJail();
 	void rollInJail(int, int);	

@@ -5,6 +5,7 @@
 #include "owner.h"
 #include "property.h"
 
+
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -14,6 +15,7 @@ using namespace std;
 
 // class Game;
 // class Property;
+class AcademicBuilding;
 
 class Player : public Owner{
 	Game *game;
@@ -25,8 +27,6 @@ class Player : public Owner{
 
 	bool inJail;
 	int turnsInJail;
-	int jailRoll1;
-	int jailRoll2;
 public:
 	Player();
 	Player(Game* game, string name, char symbol, int position, int cash, int timsCups); //for loading from file
@@ -76,6 +76,11 @@ public:
 
 	void mortgage(Property*);
 	void unmortgage(Property*);
+	// void checkMortgage(string);
+	// void checkUnmortgage(string);
+	Property* owns(string);
+	void sellImprove(AcademicBuilding*);
+	void buyImprove(AcademicBuilding*);
 
 
 };

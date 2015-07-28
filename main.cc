@@ -21,7 +21,7 @@ int main(int argc, char const *argv[]){
 	}else if(string(argv[1]) == "-load"){
 		c.loadGame(argv[2]);
 	}else if(string(argv[1]) == "-testing"){
-		//do something
+		c.init(true);
 	}
 	
 		

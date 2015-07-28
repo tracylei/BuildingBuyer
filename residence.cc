@@ -2,8 +2,8 @@
 
 using namespace std;
 
-Residence::Residence(string bldgName, int *rentFee): Property(bldgName, 200, false),rent(rentFee){
-	//Note index corresponds to number of residences owned
+Residence::Residence(string bldgName): Property(bldgName, 200, false){
+	rent = new int [4];
 }
 
 void Residence::doAction(Player* p){
@@ -19,4 +19,7 @@ int Residence::getValue(){
 	return cost;
 }
 
+void Residence::setRent(int index, int rentFee){
+	rent[index] = rentFee;
 
+}

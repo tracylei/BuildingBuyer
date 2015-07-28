@@ -20,7 +20,7 @@ Game::Game(){
 	theGrid = NULL;
 	numPlayers = 0;
 	currPlayer = 0;
-	testMode = true;
+	testMode = false;
 	controller = NULL;
 	rollUpCount = 0;
 	bank = new Bank;
@@ -28,17 +28,17 @@ Game::Game(){
 	die2 = new Dice;
 }
 
-Game::~Game(){
-	for (int i = 0; i < GRID_SIZE; i++){
-		delete Cell[i];
-	}
-	for (int i = 0; i<numPlayers; i++){
-		delete players.at(i);
-	}
-	delete die1;
-	delete die2;
-	delete bank;
-}
+// Game::~Game(){
+// 	for (int i = 0; i < GRID_SIZE; i++){
+// 		delete Cell[i];
+// 	}
+// 	for (int i = 0; i<numPlayers; i++){
+// 		delete players.at(i);
+// 	}
+// 	delete die1;
+// 	delete die2;
+// 	delete bank;
+// }
 
 
 Bank* Game::getBank(){
@@ -87,9 +87,6 @@ Property* Game::getProperty(string propName){
 }
 
 
-int Game::getNumPlayers(){
-	return numPlayers;
-}
 
 // void Game::play(){
 // 	players[currPlayer]->play();
@@ -109,20 +106,13 @@ void Game::refreshBoard(){
 }
 
 void Game::endTurn(){
-//#if DEBUG
-	cout<<"Turn Ended Successfully"<<endl;
-//#endif
-
-
 	currPlayer++;
-	cout<<"number of players: "<<numPlayers<<endl;
 	currPlayer %= numPlayers;
 
 
 #if DEBUG
 	cout<<"Player "<<currPlayer+1<<"'s turn is next."<<endl;
 #endif
-
 
 	controller->refreshBoard();
 	if (!isWon()){
@@ -191,7 +181,7 @@ void Game::notifyCell(int curPos){
 		return;
 	}else{
 		if(prop->getOwner()->getName() == "BANK" ){ //seg fault for non-property
-			cout << "Would you like to buy " << prop->getName() << " for " << prop->getCost() << "?(y/n)" << endl;
+			cout << "Would you like to buy " << prop->getName() << " for $" << prop->getCost() << "?(y/n)" << endl;
 			while(true){
 				string resp;
 				getline(cin, resp);
@@ -262,19 +252,19 @@ void Game::init(Controller* controller){
 				AcademicBuilding* ab = new AcademicBuilding(cellName, purchaseCost, block, improvCost);
 				theGrid[i] = ab;
 				for (int j = 0; j <= MAX_IMPROVEMENTS; j++){
-					string tut;
 					int tuitionCost;
 					file>>tuitionCost;
 					ab->setTuition(j, tuitionCost);
 				}
 
-			}else if (s=="2"){ // Residence
-				int rentFees [4];
-				for (int j = 0; j < 4; j++){
-						file>>rentFees[j];
-					}
-				Residence* r = new Residence (cellName, rentFees);
+			}else if (s == "2"){ // Residence
+				Residence* r = new Residence (cellName);
 				theGrid[i] = r;
+				for (int j = 0; j < 4; j++){
+					int rentFee;
+					file>>rentFee;
+					r->setRent(j, rentFee);
+				}
 			}else{ //Gym
 				Gym* g = new Gym (cellName);
 				theGrid[i] = g;
@@ -287,9 +277,8 @@ void Game::init(Controller* controller){
 	}	
 }
 
-void Game::save(){
-	ofstream file;
-	file.open("save.txt");
+void Game::save(string fileName){
+	ofstream file (fileName, ofstream::out);
 	file << numPlayers << endl;
 
 	for(vector<Player*>::iterator it = players.begin(); it != players.end(); ++it){
@@ -318,6 +307,13 @@ void Game::save(){
 			file << static_cast<Property*>(theGrid[i])->getImpr() << endl;
 		}
 	}
-	cout << "file saved." << endl;
+	cout << "Your progress during this game has been saved to " <<fileName<<"."<< endl;
+}
 
+void Game::setTestingMode(bool mode){
+	testMode=mode;
+	if (mode){
+		cout<<endl;
+		cout<<"Testing mode has been turned on."<<endl;
+	}
 }

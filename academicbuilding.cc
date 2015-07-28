@@ -5,24 +5,25 @@
 AcademicBuilding::AcademicBuilding(std::string name, int cost, std::string block, int improvCost):
 								Property(name, block, cost, true),imprCost(improvCost){
 	tuition = new int [MAX_IMPROVEMENTS+1];
-	// for (int i = 0; i <= MAX_IMPROVEMENTS; i++){
-	// 		cout << tuition[i] << " ";
-	// }
+
 
 }
 
 void AcademicBuilding::setTuition(int index, int tutCost){
 	tuition[index] = tutCost;
+	// for (int i = 0; i <= index; i++){
+	// 		cout << tuition[i] << " ";
+	// }
 }
 // Build n improvements
 void AcademicBuilding::improve(int n){
 	//Check to make sure the owner has a monopoly
 	//If the owner can sucessfully pay for the improvements
-	if (static_cast<Player*>(owner)->pay(n*imprCost, game->getBank())){
-		numImprov++;
-		game->notifyImprove(index,n);
-		game->refreshBoard();
-	}
+	//Assume owner has enough to pay for improvement
+	numImprov++;
+	game->notifyImprove(index,n);
+	game->refreshBoard();
+
 }
 
 
