@@ -61,18 +61,17 @@ void Controller::loadGame(const string fname){
 		
 		Player *p = new Player(game, pName, symbol, position, cash, timCups);
 
-		
 		game->addPlayer(p);
 		notify(p,0,position);
-
 		//play is on DC Tim's line
 		if(position == 10){
 			int inJail, jailTurn;
-			cin >> inJail;
+			data >> inJail;
 
 			if(inJail){
-				cin >> jailTurn; //TODO, update turns in jail
-				p->goToJail();
+				data >> jailTurn; //TODO, update turns in jail
+				notify(p,0,10);
+				p->setJail(true, jailTurn);
 			}
 		}
 	}
@@ -82,22 +81,22 @@ void Controller::loadGame(const string fname){
 		data >> owner >> improvements;
 		// cout << property << " " <<owner << " " << improvements << endl;
 		
-
 		//find property and set player as owner
-		Player *pl = game->getPlayer(owner);
-		Property *p = game->getProperty(property);
+		if(owner != "BANK"){
+			Player *pl = game->getPlayer(owner);
+			Property *p = game->getProperty(property);
+			
+			if(improvements == -1){ //property is mortgaged
+				p->setMortgaged(true);
+			}
 
-		if(improvements == -1){ //property is mortgaged
-			p->setMortgaged(true);
+			pl->addProperty(p);
+			// cout << "n: " << p->getName() << " "<< p->getID() << endl;
+			if (p->isAcademic()){
+				board->notify(p->getID(), improvements); // notify board of any improvements
+				static_cast<AcademicBuilding*>(p)->setImprove(improvements);
+			}
 		}
-
-		pl->addProperty(p);
-		// cout << "n: " << p->getName() << " "<< p->getID() << endl;
-		if (p->isAcademic()){
-			board->notify(p->getID(), improvements); // notify board of any improvements
-			static_cast<AcademicBuilding*>(p)->setImprove(improvements);
-		}
-
 	}
 
 	board->print();
@@ -169,6 +168,7 @@ void Controller::rollInJail(int roll1, int roll2){
 		if (roll1 == roll2){
 			cout<<"You rolled two "<<roll1<<"'s!"<<endl;
 			game->getCurrentPlayer()->leaveJail();
+			game->getCurrentPlayer()->move(roll1,roll2);
 			play(true);
 		} 
 		else if (game->getCurrentPlayer()->getTurnsInJail() != 3){
@@ -328,6 +328,7 @@ void Controller::play(bool rolled){
 
 							cout<<"input is:"<<input<<endl;
 							istringstream iss(input);
+
 							iss >> cmd;
 							while (cmd!="roll"){
 								cout<<"You need to roll again before using another command. Please issue the roll command again."<<endl;
@@ -340,8 +341,7 @@ void Controller::play(bool rolled){
 								iss >> r1 >> r2;
 								roll1 = r1;
 								roll2 = r2;
-								cout <<"r1 is: "<<r1<<endl;
-								cout <<"r2 is: "<<r2<<endl;
+								cout <<"r1 is: "<<r1 << " r2 is: "<<r2<<endl;
 							}else{
 								roll1 = game->rollDie1();
 								roll2 = game->rollDie2();
@@ -458,40 +458,41 @@ void Controller::play(bool rolled){
 		}else if(cmd == "save"){
 			string fileName;
 			iss >> fileName;
-			ofstream ofs (fileName, ofstream::out);
-			int numPlayers = game->getNumPlayers();
-			ofs<<numPlayers<<endl;
-			for (int i = 0; i<numPlayers; i++){
-				ofs<<game->getPlayer(i)->getName()<<" "<<game->getPlayer(i)->getSymbol()<<" ";
-				ofs<<game->getPlayer(i)->getTimCups()<<" "<<game->getPlayer(i)->getCash()<<" ";
-				ofs<<game->getPlayer(i)->getCurPos();
-				if (game->getPlayer(i)->isInJail()){
-					ofs<<" 1 "<<game->getPlayer(i)->getTurnsInJail();
-				}
-				else if (game->getPlayer(i)->getCurPos() == 10){
-					ofs<<" 0";
-				}
-				ofs<<endl;
-			}
-			for (int i = 0; i < 40; i++){
-				if (game->getTheGrid(i)->isBuyable()){
-					ofs<<game->getTheGrid(i)->getName()<<" ";
-					string ownerName = static_cast<Property*>(game->getTheGrid(i))->getOwnerName();
+			// ofstream ofs (fileName, ofstream::out);
+			// int numPlayers = game->getNumPlayers();
+			// ofs<<numPlayers<<endl;
+			// for (int i = 0; i<numPlayers; i++){
+			// 	ofs<<game->getPlayer(i)->getName()<<" "<<game->getPlayer(i)->getSymbol()<<" ";
+			// 	ofs<<game->getPlayer(i)->getTimCups()<<" "<<game->getPlayer(i)->getCash()<<" ";
+			// 	ofs<<game->getPlayer(i)->getCurPos();
+			// 	if (game->getPlayer(i)->isInJail()){
+			// 		ofs<<" 1 "<<game->getPlayer(i)->getTurnsInJail();
+			// 	}
+			// 	else if (game->getPlayer(i)->getCurPos() == 10){
+			// 		ofs<<" 0";
+			// 	}
+			// 	ofs<<endl;
+			// }
+			// for (int i = 0; i < 40; i++){
+			// 	if (game->getTheGrid(i)->isBuyable()){
+			// 		ofs<<game->getTheGrid(i)->getName()<<" ";
+			// 		string ownerName = static_cast<Property*>(game->getTheGrid(i))->getOwnerName();
 
-					if (ownerName=="bank")
-						ofs<<"BANK ";
-					else 
-						ofs<<ownerName<<" ";
+			// 		if (ownerName=="bank")
+			// 			ofs<<"BANK ";
+			// 		else 
+			// 			ofs<<ownerName<<" ";
 
-					if (!static_cast<Property*>(game->getTheGrid(i))->isMortgaged())
-						ofs<<static_cast<Property*>(game->getTheGrid(i))->getImpr()<<endl;
-					else
-						ofs<<"-1"<<endl;
+			// 		if (!static_cast<Property*>(game->getTheGrid(i))->isMortgaged())
+			// 			ofs<<static_cast<Property*>(game->getTheGrid(i))->getImpr()<<endl;
+			// 		else
+			// 			ofs<<"-1"<<endl;
 
-				}
-			}
-			ofs.close();
-			cout<<"Your progress in this game has been saved to "<<fileName<<".";
+			// 	}
+			// }
+			// ofs.close();
+			// cout<<"Your progress in this game has been saved to "<<fileName<<".";
+			game->save(fileName);
 
 		}else{
 			cout<<"Your command could not be recognized. Please enter another command."<<endl;

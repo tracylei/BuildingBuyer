@@ -7,6 +7,7 @@ protected:
 	int cash;
 public:
 	Owner(int);
+	virtual ~Owner(){};
 	void addCash(int x);
 	//TESTING
 	virtual std::string getName()=0;

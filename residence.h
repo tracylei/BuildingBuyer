@@ -8,6 +8,7 @@ class Residence : public Property{
 	int* rent;
 public:
 	Residence(std::string bldgName, int* rent);
+	virtual ~Residence();
 	void doAction(Player* p);
 	int getValue();
 };

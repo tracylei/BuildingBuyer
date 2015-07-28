@@ -8,6 +8,7 @@ using namespace std;
 // Player(char symbol, string name, int cash=1500, Properties* properties):symbol(symbol), name(name), cash(cash), properties(properties){}
 Player::Player(Game* game, string name, char symbol, int curPosition, int cash, int timCups): Owner(cash), game(game), name(name), symbol(symbol), curPosition(curPosition)
 , timCups(timCups){
+	inJail = false;
 	turnsInJail = 0;
 	jailRoll1 = 0;
 	jailRoll2 = 0;
@@ -17,6 +18,10 @@ Player::Player(Game* game, string name, char symbol, int curPosition, int cash, 
 };
 
 Player::~Player(){
+	for(vector<Property*>::iterator it = properties.begin(); it != properties.end(); ++it){
+		delete(*it);
+	}
+	properties.clear();
 	delete game;
 }
 
@@ -52,12 +57,6 @@ int Player::getTurnsInJail(){
 	return turnsInJail;
 }
 
-void Player::setJailRolls(int roll1, int roll2){
-	jailRoll1 = roll1;
-	jailRoll2 = roll2;
-	turnsInJail++;
-}
-
 vector<Property*> Player::getProperties(){
 	return properties;
 }
@@ -85,6 +84,17 @@ int Player::getCurPos(){
 	return curPosition;
 }
 
+void Player::setJailRolls(int roll1, int roll2){
+	jailRoll1 = roll1;
+	jailRoll2 = roll2;
+	turnsInJail++;
+}
+
+void Player::setJail(bool v, int turns){
+	inJail = v;
+	turnsInJail = turns;
+}
+
 void Player::addCash(int x){
 	cash += x;
 }
@@ -99,7 +109,6 @@ void Player::addProperty(Property *p){
 	addMonopoly(p->getBlock());
 	cout << p->getName() << " added to player " << name <<"'s list of properties owned."<< endl;
 }
-
 
 void Player::removeProperty(Property* p){
 	int size = monopolies.size();
@@ -137,7 +146,6 @@ void Player::removeMonopoly(string block){
 	}
 }
 
-
 bool Player::hasMonopoly(string block){
 	int size = monopolies.size();
 	for (int i=0; i<size; i++){
@@ -150,6 +158,7 @@ bool Player::hasMonopoly(string block){
 
 bool Player::pay(int amt, Owner* creditor){
 	if (amt > cash) {
+		cout << "You do not have enough cash to do that!" << endl;
 		//INCOMPLETE add in bankruptcy
 		// cout<<"You are short $"<<amt-cash<<". Would you like to attempt a trade, 
 		// mortgage buildings, sell ipmrovements, or declare bankruptcy?"	<<endl;
@@ -173,10 +182,11 @@ void Player::goToJail(){
 }
 
 void Player::leaveJail(){
-	move(jailRoll1, jailRoll2);
-	game->refreshBoard();
-	cout<<"Congratulations on leaving the Tim's line. Based on the sum of your dice rolls from your last attempt to leave, you moved ";
-	cout<<jailRoll1+jailRoll2<<" cells."<<endl;
+	// move(jailRoll1, jailRoll2);
+	// game->refreshBoard();
+	cout<<"Congratulations on leaving the Tim's line." << endl;
+	// cout<<"Congratulations on leaving the Tim's line. Based on the sum of your dice rolls from your last attempt to leave, you moved ";
+	// cout<<jailRoll1+jailRoll2<<" cells."<<endl;
 	inJail = false;
 }
 

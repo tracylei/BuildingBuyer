@@ -11,6 +11,10 @@ AcademicBuilding::AcademicBuilding(std::string name, int cost, std::string block
 
 }
 
+AcademicBuilding::~AcademicBuilding(){
+	delete [] tuition;
+}
+
 void AcademicBuilding::setTuition(int index, int tutCost){
 	tuition[index] = tutCost;
 }

@@ -13,7 +13,6 @@ BoardDisplay::BoardDisplay(){
 		cells[i] = CellDisplay(name, i, isProperty, numImpr);
 		++i;
 	}
-	cout << "board initialized.." << endl;
 }
 
 void BoardDisplay::notify(Player *p, int oldPos, int newPos){//need old and new cells

@@ -29,12 +29,15 @@ Game::Game(){
 }
 
 Game::~Game(){
+	//delete the board
 	for (int i = 0; i < GRID_SIZE; i++){
-		delete Cell[i];
+		delete theGrid[i];
 	}
-	for (int i = 0; i<numPlayers; i++){
-		delete players.at(i);
+	//delete players
+	for (vector<Player*>::iterator it = players.begin(); it != players.end(); it++ ){
+		delete (*it);
 	}
+	players.clear();
 	delete die1;
 	delete die2;
 	delete bank;
@@ -53,10 +56,6 @@ Player* Game::getCurrentPlayer(){
 int Game::getNumPlayers(){
 	return numPlayers;
 }
-// void Game::play(){
-// 	players[currPlayer]->play();
-// }
-
 
 Cell* Game::getTheGrid(int i){
 	return theGrid[i];
@@ -86,15 +85,6 @@ Property* Game::getProperty(string propName){
 	return NULL;
 }
 
-
-int Game::getNumPlayers(){
-	return numPlayers;
-}
-
-// void Game::play(){
-// 	players[currPlayer]->play();
-// }
-
 bool Game::getTestMode(){
 	return testMode;
 } 
@@ -102,7 +92,6 @@ bool Game::getTestMode(){
 int Game::getTimCupCount(){
 	return rollUpCount;
 }
-
 
 void Game::refreshBoard(){
 	controller->refreshBoard();
@@ -219,7 +208,6 @@ void Game::notifyImprove (int index, int numImprov){
 
 
 void Game::init(Controller* controller){
-	cout << "Game initializing.." << endl;
 	
 	theGrid = new Cell*[GRID_SIZE];	
 	this->controller = controller;
@@ -287,9 +275,9 @@ void Game::init(Controller* controller){
 	}	
 }
 
-void Game::save(){
+void Game::save(string fname){
 	ofstream file;
-	file.open("save.txt");
+	file.open(fname.c_str());
 	file << numPlayers << endl;
 
 	for(vector<Player*>::iterator it = players.begin(); it != players.end(); ++it){
@@ -315,9 +303,15 @@ void Game::save(){
 		if(theGrid[i]->isBuyable()){
 			file << theGrid[i]->getName() << " ";
 			file << static_cast<Property*>(theGrid[i])->getOwner()->getName() << " ";
-			file << static_cast<Property*>(theGrid[i])->getImpr() << endl;
+			
+			if(!static_cast<Property*>(theGrid[i])->isMortgaged()){
+				file << static_cast<Property*>(theGrid[i])->getImpr();
+			}else{
+				file << "-1";
+			}
+			file << endl;
 		}
 	}
-	cout << "file saved." << endl;
-
+	file.close();
+	cout<<"Your game has been saved.";
 }
