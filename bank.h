@@ -11,6 +11,7 @@ class Bank: public Owner{
 public:
 	Bank(Game* game);
 	virtual ~Bank(){};
+
 	void addCash(int x);
 	//for testing
 	std::string getName();

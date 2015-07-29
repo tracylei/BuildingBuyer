@@ -85,8 +85,10 @@ void Controller::loadGame(const string fname, bool testingMode){
 	// add property to player
 	while (data >> property){
 		data >> owner >> improvements;
+		//cout << property << " " <<owner << " " << improvements << endl;
 		
 		//find property and set player as owner
+		cerr << owner << endl;
 		if(owner != "BANK"){
 			Player *pl = game->getPlayer(owner);
 			Property *p = game->getProperty(property);
@@ -429,47 +431,10 @@ void Controller::play(bool rolled){
 			iss >> fileName;
 
 			game->save(fileName);
-			// 
-			// ofstream ofs (fileName, ofstream::out);
-
-			// int numPlayers = game->getNumPlayers();
-			// ofs<<numPlayers<<endl;
-			// for (int i = 0; i<numPlayers; i++){
-			// 	ofs<<game->getPlayer(i)->getName()<<" "<<game->getPlayer(i)->getSymbol()<<" ";
-			// 	ofs<<game->getPlayer(i)->getTimCups()<<" "<<game->getPlayer(i)->getCash()<<" ";
-			// 	ofs<<game->getPlayer(i)->getCurPos();
-			// 	if (game->getPlayer(i)->isInJail()){
-			// 		ofs<<" 1 "<<game->getPlayer(i)->getTurnsInJail();
-			// 	}
-			// 	else if (game->getPlayer(i)->getCurPos() == 10){
-			// 		ofs<<" 0";
-			// 	}
-			// 	ofs<<endl;
-			// }
-			// for (int i = 0; i < 40; i++){
-			// 	if (game->getTheGrid(i)->isBuyable()){
-			// 		ofs<<game->getTheGrid(i)->getName()<<" ";
-			// 		string ownerName = static_cast<Property*>(game->getTheGrid(i))->getOwnerName();
-
-			// 		if (ownerName=="bank")
-			// 			ofs<<"BANK ";
-			// 		else 
-			// 			ofs<<ownerName<<" ";
-
-			// 		if (!static_cast<Property*>(game->getTheGrid(i))->isMortgaged())
-			// 			ofs<<static_cast<Property*>(game->getTheGrid(i))->getImpr()<<endl;
-			// 		else
-			// 			ofs<<"-1"<<endl;
-
-			// 	}
-			// }
-			// ofs.close();
-			// cout<<"Your progress in this game has been saved to "<<fileName<<".";
-
+			
 		}else{
 			cout<<"Your command could not be recognized. Please enter another command."<<endl;
 		}
 	}
-//}
 
 }

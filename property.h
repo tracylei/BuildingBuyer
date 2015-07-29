@@ -12,6 +12,7 @@ protected:
 	int cost, numImprov;
 	bool mortgaged;
 	std::string block;
+	double feeRate;
 	//From super class - string name;
 public:
 
@@ -31,7 +32,8 @@ public:
 	void setOwner(Owner* newOwner);
 	Owner* getOwner(); 
 	std::string getOwnerName();
-	// //void auction(input stream);
+	void setFeeRate(double);
+	double getFeeRate();
 
 	void buy(Player* buyer);
 	void buy(Player* buyer, int bid); //for buying auctioned properties

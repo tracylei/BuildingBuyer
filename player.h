@@ -75,9 +75,9 @@ public:
 	void erase(Property*);
 
 	void mortgage(Property*);
-	void unmortgage(Property* p, double feeRate = 1.1);
-	// void checkMortgage(string);
-	// void checkUnmortgage(string);
+	void unmortgage(Property* p);
+	void getMortgagedProp (Property* p, double yFee, double nFee);
+
 	Property* owns(string);
 	void sellImprove(AcademicBuilding*);
 	void buyImprove(AcademicBuilding*);

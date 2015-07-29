@@ -4,6 +4,7 @@ using namespace std;
 
 Bank::Bank(Game* game): Owner(0), game(game){}
 
+
 string Bank::getName(){
 	return "BANK";
 }
