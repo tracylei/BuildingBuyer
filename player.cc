@@ -173,11 +173,12 @@ bool Player::pay(int amt, Owner* creditor){
 		string propName, cmd2;
 		Property* p;
 		while(cmd!="bankrupt"&&cmd!="trade"){
+			p = NULL;
 			istringstream iss2(input);
 			iss2>>cmd;
-			iss2>>propName;
-			p = owns(propName);
 			if (cmd=="improve"){
+				iss2>>propName;
+				p = owns(propName);
 				iss2>>cmd2;
 				if (cmd2=="buy"){
 					cout<<"You must deal with your debt (ex. by selling improvements, not buying) before issuing any other commands."<<endl;
@@ -195,12 +196,14 @@ bool Player::pay(int amt, Owner* creditor){
 					else break;
 			}else if (cmd=="mortgage"){
 				iss2>>propName;
+				p = owns(propName);
 				if(!p){
 					cout<<"You can only mortgage properties that you own."<<endl;
 					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
 				}
 				else break;
-			}else if (cmd!="improve"&&cmd!="mortgage"){
+			}
+			else if (cmd!="improve"&&cmd!="mortgage"){
 				cout<<"You must deal with your debt before issuing any other commands."<<endl;
 				cout<<"Please only use the \"improve\", \"mortgage\", and \"bankrupt\" commands."<<endl;
 			}
