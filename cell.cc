@@ -1,6 +1,8 @@
 #include "cell.h"
 #include "game.h"
 
+using namespace std;
+
 Cell::Cell(string name, bool buyable, bool academic):name(name), buyable(buyable), academic(academic){
 	game = NULL;
 };

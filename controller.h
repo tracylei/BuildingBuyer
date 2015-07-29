@@ -37,5 +37,6 @@ public:
 	void play();	
 	void loadGame(const std::string);
 	// void init(); //calls game init 
+	bool bankrupt(Player* p, Owner* creditor, int amt);
 };
 #endif

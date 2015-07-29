@@ -110,10 +110,9 @@ void Player::addProperty(Property *p){
 
 void Player::removeProperty(Property* p){
 	int size = properties.size();
-	int index=-1;
 	for (int i=0; i<size; i++){
-		if(properties.at(i)->getBlock() == p->getBlock()){
-			properties.erase(properties.begin()+index);
+		if(properties.at(i)->getName() == p->getName()){
+			properties.erase(properties.begin()+i);
 			removeMonopoly(p->getBlock());
 			return;
 		}
@@ -166,68 +165,7 @@ bool Player::pay(int amt, Owner* creditor){
 		cout<<endl;
 		cout<<"Your assets consists of:"<<endl;
 		displayAssets();
-		string cmd, input;
-		getline(cin, input);
-		istringstream iss(input);
-		iss>>cmd;
-		string propName, cmd2;
-		Property* p;
-		while(cmd!="bankrupt"&&cmd!="trade"){
-			p = NULL;
-			istringstream iss2(input);
-			iss2>>cmd;
-			if (cmd=="improve"){
-				iss2>>propName;
-				p = owns(propName);
-				iss2>>cmd2;
-				if (cmd2=="buy"){
-					cout<<"You must deal with your debt (ex. by selling improvements, not buying) before issuing any other commands."<<endl;
-					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
-				}else if(!p){
-					cout<<"You can only buy/sell improvements on properties that you own."<<endl;
-					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
-				}else if(!p->isAcademic()){
-					cout<<"Improvements can only be found on Academic Buildings."<<endl;
-					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
-				}else if(static_cast<AcademicBuilding*>(p)->getImpr()<0){
-					cout<<"There are no improvements on "<<propName<<"for you to sell."<<endl;
-					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
-				}
-					else break;
-			}else if (cmd=="mortgage"){
-				iss2>>propName;
-				p = owns(propName);
-				if(!p){
-					cout<<"You can only mortgage properties that you own."<<endl;
-					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
-				}
-				else break;
-			}
-			else if (cmd!="improve"&&cmd!="mortgage"){
-				cout<<"You must deal with your debt before issuing any other commands."<<endl;
-				cout<<"Please only use the \"improve\", \"mortgage\", and \"bankrupt\" commands."<<endl;
-			}
-			getline(cin, input);
-			istringstream iss(input);
-			iss>>cmd;
-		}
-
-		if (cmd=="bankrupt"){
-			declareBankruptcy(creditor);
-			return false;
-		}else if (cmd=="improve"){
-			sellImprove(static_cast<AcademicBuilding*>(p));
-			return pay (amt, creditor);
-		}else if(cmd=="mortgage"){
-			mortgage(p);
-			return pay (amt, creditor);
-		}else if(cmd=="trade"){
-			string player, give, want;
-			iss >> player >> give >> want;
-			Player *p=game->getPlayer(player);
-			trade(p, give, want);
-			return pay (amt, creditor);
-		}
+		game->notifyControllerBankrupt(this, creditor, amt);
 	}
 	else {
 		cash-=amt;
@@ -285,7 +223,7 @@ void Player::claimAssets(Player* debtor){
 
 //this player is getting a mortgaged property
 void Player::getMortgagedProp(Property* p, double yFee, double nFee){
-		cout<<name<<", the ownership of "<<p->getName()<<" has been transferred to you from ";
+		cout<<name<<", the ownership of "<<p->getName()<<" has been transferred to you.";
 		cout<<"Since this is a mortgaged property, you must immediately pay 10% of the cost to the Bank."<<endl;
 		cout<<"Please allow the bank some time to collect the $"<<.1*p->getCost()<<" in fees."<<endl;
 		usleep(1000000);
@@ -366,6 +304,7 @@ void Player::slcMove (int move){
 
 void Player::displayAssets(){
 	cout << "Cash: " << cash << endl;
+	cout <<"Roll Up the Rim Cups: "<<timCups<<endl;
 	cout << "Properties: "; 
 
 	for(vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
@@ -390,97 +329,75 @@ bool Player::acceptTrade(Player *pl, string give, string want){
 
 	if (istringstream(give) >> amount){ //trade money for property
 		if(amount > cash) {
-			cout << "Not enough cash to process trade" << endl;
+			cout << name<<", you do not have enough cash to process the trade." << endl;
 			return 0;
 		}
 		// cout << "cur:" << this->getName() << " trading " << pl->getName() << pl->getPos()<< endl;
 		//find property (want) from player p
 
+		prop = pl->owns(want);
 
-		for (unsigned int n = 0; n < pl->getProperties().size(); ++n){
-
-			prop = pl->getProperties().at(n);
-
-			if(prop->getName() == want && prop->getImpr() == 0){
-				cash -= amount;
-				addProperty(prop);
-				if (prop->isMortgaged()){
-					getMortgagedProp(prop,0.5,0.6);
-				}
-				pl->removeProperty(prop);
-				cout << "Trade completed." << endl;
-				return 1;
-			}else{
-				cout << "Trade Failed. Property has improvements." << endl;
-				return 0;
+		if(prop && prop->getImpr() == 0){
+			cash -= amount;
+			addProperty(prop);
+			if (prop->isMortgaged()){
+				getMortgagedProp(prop,0.5,0.6);
 			}
+			pl->removeProperty(prop);
+			cout << "Trade completed." << endl;
+			return 1;
+		}else{
+			cout << "Trade failed. Property has improvements." << endl;
+			return 0;
 		}
+
 
 	}else if (istringstream(want) >> amount){ //trade property for money
 		if(amount > pl->getCash()) {
 			cout << "Not enough cash to process trade." << endl;
 			return 0;
 		}
+			prop = owns(give);
 
-		for (unsigned int n = 0; n < getProperties().size(); ++n){
-
-			prop = getProperties().at(n);
-
-			if(prop->getName() == give && prop->getImpr() == 0){
+			if(prop && prop->getImpr() == 0){
 				cash += amount;
 				pl->addProperty(prop);
 				if (prop->isMortgaged()){
+					cout<<"mortgaged"<<endl;
 					pl->getMortgagedProp(prop,0.5,0.6);
 				}
 				removeProperty(prop);
 				cout << "Trade completed." << endl;
 				return 1;
 			}else{
-				cout << "Trade Failed. Property has improvements." << endl;
+				cout << "Trade failed. Property has improvements." << endl;
 				return 0;
 			}
-		}
+
 	}else{ //trade property for property
-		Property* propGive;
-		Property* propWant;
 
-		for (unsigned int n = 0; n < pl->getProperties().size(); ++n){
+		Property* propWant = pl->owns(want);
+		Property* propGive = owns(give);
+			if(propWant && propWant->getImpr() == 0 &&
+				propGive && propGive->getImpr() == 0){
 
-			propWant = pl->getProperties().at(n);
-
-			if(propWant->getName() == want && propWant->getImpr() == 0){
-				cash -= amount;
-				addProperty(propWant);
 				if (propWant->isMortgaged()){
 					getMortgagedProp(propWant,0.5,0.6);
 				}
+				addProperty(propWant);
 				pl->removeProperty(propWant);
-
-			}else{
-				cout << "Trade Failed. Property has improvements." << endl;
-				return 0;
-			}
-		}
-
-		for (unsigned int n = 0; n < getProperties().size(); ++n){
-
-			propGive = getProperties().at(n);
-
-			if(propGive->getName() == give && propGive->getImpr() == 0){
-				cash += amount;
-				pl->addProperty(propGive);
 				if (propGive->isMortgaged()){
 					pl->getMortgagedProp(propGive,0.5,0.6);
 				}
+				pl->addProperty(propGive);
 				removeProperty(propGive);
 
 			}else{
 				cout << "Trade Failed. Property has improvements." << endl;
 				return 0;
 			}
-		}
-				cout << "Trade completed." << endl;
-				return 1;
+			cout << "Trade completed." << endl;
+			return 1;
 	}
 	return 0;
 }
@@ -537,7 +454,7 @@ void Player::unmortgage(Property *p){
 		}else{
 			p->setMortgaged(false);
 			cash -= amt;
-			cout << p->getName() << " has been unmortgaged!" << endl;
+			cout << p->getName() << " has been unmortgaged for $" << amt<<"!"<< endl;
 		}
 	}
 }

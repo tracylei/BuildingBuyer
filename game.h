@@ -8,12 +8,13 @@
 
 #include <vector>
 
-using namespace std;
+
 
 const int MAX_IMPROVEMENTS = 5;
 const int GRID_SIZE = 40;
 
 class Player;
+class Owner;
 class Controller;
 class Property;
 class Bank;
@@ -21,7 +22,7 @@ class Bank;
 class Game{
 	Cell** theGrid;
 	static Game* game;
-	vector<Player*> players;
+	std::vector<Player*> players;
 	int numPlayers;
 	int currPlayer;
 	Controller* controller;
@@ -37,9 +38,9 @@ public:
 
 	Player* getCurrentPlayer();
 	Player* getPlayer(int p);
-	Player* getPlayer(string s);
-	vector<Player*> getPlayers();
-	Property* getProperty(string name);
+	Player* getPlayer(std::string s);
+	std::vector<Player*> getPlayers();
+	Property* getProperty(std::string name);
 	Cell* getTheGrid(int i);
 
 	bool getTestMode();
@@ -61,6 +62,9 @@ public:
 	bool isWon();
 	void endGame();
 
+
+	void notifyControllerBankrupt(Player* p, Owner* creditor, int amt);
+
 	//Called by the player to notify the controller of its change in position
 	void notify(Player* p, int prevPos, int curPos);
 	//Notify a cell that a player has landed on it
@@ -69,7 +73,7 @@ public:
 	void notifyImprove(int, int numImprov);
 	void init(Controller* controller);
 
-	void save(string);
+	void save(std::string);
 	void setTestingMode(bool mode);
 
 };

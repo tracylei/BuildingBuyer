@@ -64,6 +64,7 @@ void NonProperty::doAction(Player* p){
 		bool giveTimCup = false;
 		if (game->getTimCupCount()<4){
 			giveTimCup = game->die1->giveTimCup();
+			game->incrRollUpCount();
 		}
 		if (giveTimCup){
 			cout<<"Congratulations! You found a Roll Up the Rim Cup in SLC!"<<endl;
@@ -78,6 +79,7 @@ void NonProperty::doAction(Player* p){
 		bool giveTimCup = false;
 		if (game->getTimCupCount()<4){
 			giveTimCup = game->die1->giveTimCup();
+			game->incrRollUpCount();
 		}
 		if (giveTimCup){
 			cout<<"Congratulations! You found a Roll Up the Rim Cup in Needl's Hall!"<<endl;

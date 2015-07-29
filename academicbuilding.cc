@@ -56,7 +56,7 @@ void AcademicBuilding::doAction(Player* p){
 		}else{
 
 			if (static_cast<Player*>(owner)->hasMonopoly(block) && numImprov == 0)
-				tuit *=2;
+				tuit =2*tuit;
 			cout<<"You will be charged $"<<tuit<<" in tuition by "<<owner->getName()<<", the owner of "<<name<<"."<<endl;
 			cout<<"Please give "<<owner->getName()<<" a few seconds to collect the tuition..";
 			cout.flush();
@@ -65,12 +65,9 @@ void AcademicBuilding::doAction(Player* p){
 			cout.flush();
 			usleep(1000000);
 			cout<<"."<<endl;
-			cout.flush();
-			usleep(1000000);
 
 			if (p->pay(tuit, owner)){
-				cout<<"You had $"<<p->getCash()<<" before paying, ";
-				cout<<"now you have $" <<p->getCash()<<"."<<endl;
+				cout<<"Now you have $" <<p->getCash()<<" in cash."<<endl;
 			}
 		}
 	}
