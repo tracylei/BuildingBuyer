@@ -4,6 +4,7 @@
 #include "boarddisplay.h"
 #include "game.h"
 #include "player.h"
+#include "bank.h"
 // #include "property.h"
 
 #include <iostream>
@@ -27,14 +28,14 @@ public:
 	void notify(Player *, int prevPos, int curPos);
 	void notifyImprove (int, int numImprov);
 
-	void init(bool testingMode = false);
+	void init(bool testingMode = false, string fname = "property.txt");
 	void play(bool);
 	void playInJail();
 	void rollInJail(int, int);	
 	// void loadGame(const std::string);
 
 	void play();	
-	void loadGame(const std::string);
+	void loadGame(const std::string, bool testingMode = false);
 	// void init(); //calls game init 
 };
 #endif

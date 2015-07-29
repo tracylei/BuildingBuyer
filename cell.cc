@@ -5,10 +5,6 @@ Cell::Cell(string name, bool buyable, bool academic):name(name), buyable(buyable
 	game = NULL;
 };
 
-Cell::~Cell(){
-	delete game;
-}
-
 void Cell::setGame(Game* game){
 	this->game = game;
 }

@@ -16,7 +16,7 @@ class BoardDisplay {
 	CellDisplay cells[40];
 
 public:
-	BoardDisplay();
+	BoardDisplay(string fname="celldisplay.txt");
 	~BoardDisplay(){};
 	//map of property and if ownable
 	void notify(Player*, int, int); // updates players movements,
@@ -24,6 +24,7 @@ public:
 	std::string printPlayers(int);
 	std::string printImpr(int);
 	void print();
+	void printAirport();
 
 };
 

@@ -2,8 +2,8 @@
 
 using namespace std;
 
-BoardDisplay::BoardDisplay(){
-	ifstream data("celldisplay.txt");
+BoardDisplay::BoardDisplay(string fname){
+	ifstream data(fname.c_str());
 	string name;
 	int i = 0;
 	int isProperty, numImpr;
@@ -225,6 +225,180 @@ void BoardDisplay::print(){
 		if (!cells[i].getIsProperty()){
 			cout << "|" <<setw(8) << " " ;
 			if(cells[i].getName() == "COLLECT_OSAP") cout << "|";
+		}else{
+			cout << "|" << setw(8) << left << cells[i].getName();
+		}
+	}
+	cout << endl;
+
+	//line 5
+	for (int i = 10; i >= 0; --i){
+		cout <<"|" << printPlayers(i); //set players here
+	}
+	cout << "|" <<endl;
+	//line 6
+	for (int i = 10; i >= 0; --i){
+		cout <<"|" << "        "; 
+	}
+	cout << "|" <<endl;
+
+	//line 7
+	cout << "----------------------------------------------------------------------------------------------------" << endl;
+
+
+}
+
+void BoardDisplay::printAirport(){
+	cout << "----------------------------------------------------------------------------------------------------" << endl;
+	//line 2
+	for (int i = 20; i <= 30; ++i){
+		if (cells[i].getName() == "GOTOSCAN"){
+			cout << "|" <<setw(8)<<left<< "GO TO" << "|";
+		}else if(!cells[i].getIsProperty()){
+			cout <<"|" << setw(8) << left << cells[i].getName();
+		}else{
+			cout << "|" << setw(8) << printImpr(cells[i].getImpr()); //if building has improvemnts add it here...
+		}
+	}
+	cout << endl;
+
+	//line 3
+	for (int i = 20; i <= 30; ++i){
+		if(cells[i].getName() == "GOTOSCAN"){
+			cout <<"|" << setw(8) << left << "SCAN"<< "|";
+		}else if(!cells[i].getIsProperty()){
+			cout <<"|        ";
+		}else{
+			cout << "|--------";
+		}
+	}
+	cout << endl;
+
+	//line 4
+	for (int i = 20; i <= 30; ++i){
+		if (!cells[i].getIsProperty()){
+			cout << "|" <<setw(8) << " " ;
+			if(cells[i].getName() == "GOTOSCAN") cout << "|";
+		}else{
+			cout << "|" << setw(8) << left << cells[i].getName();
+		}
+	}
+	cout << endl;
+	//line 5
+	
+	for (int i = 20; i <= 30; ++i){
+		cout <<"|" << printPlayers(i); //set players here
+	}
+	cout << "|" <<endl;
+
+	for (int i = 20; i <= 30; ++i){
+		cout <<"|" << "        "; 
+	}
+	cout << "|" <<endl;
+	
+	//line 7
+	cout << "|--------------------------------------------------------------------------------------------------|" << endl;
+
+
+	//8 properties on vertical edges
+	cout << "|" << setw(8) << printImpr(cells[19].getImpr()) << "|" << setw(80) << " " << "|" << setw(8) << printImpr(cells[31].getImpr()) << "|" << endl;
+	cout << "|--------|" << setw(80) << " " << "|--------|" << endl;
+	cout << "|" << setw(8) << left << cells[19].getName() << "|" << setw(80) << " " << "|" << setw(8) << left << cells[31].getName() << "|" << endl;	
+	cout << "|" << printPlayers(19) << "|" << setw(80) << " " << "|" << printPlayers(31) <<"|" << endl;
+	cout << "|        |" << setw(80) << " " << "|        |" << endl;
+	cout << "|--------|" << setw(80) << " " << "|--------|" << endl;
+
+	cout << "|" << setw(8) << printImpr(cells[18].getImpr()) << "|" << setw(80) << " " << "|" << setw(8) << printImpr(cells[32].getImpr()) << "|" << endl;
+	cout << "|--------|" << setw(80) << " " << "|--------|" << endl;
+	cout << "|" << setw(8) << left << cells[18].getName() << "|" << setw(80) << " " << "|" << setw(8) << left << cells[32].getName() << "|" << endl;	
+	cout << "|" << printPlayers(18) << "|" << setw(80) << " " << "|" << printPlayers(32) <<"|" << endl;
+	cout << "|        |" << setw(80) << " " << "|        |" << endl;
+	cout << "|--------|" << setw(80) << " " << "|--------|" << endl;
+
+	cout << "|" << setw(8) << left << cells[17].getName() << "|" << setw(80) << " " << "|" << setw(8) << left << cells[33].getName() << "|" << endl;	
+	cout << "|        |" << setw(80) << " " << "|        |" << endl;
+	cout << "|        |" << setw(80) << " " << "|        |" << endl;
+	cout << "|" << printPlayers(17) << "|" << setw(80) << " " << "|" << printPlayers(33) <<"|" << endl;
+	cout << "|        |" << setw(80) << " " << "|        |" << endl;
+	cout << "|--------|" << setw(80) << " " << "|--------|" << endl;
+
+	cout << "|" << setw(8) << printImpr(cells[16].getImpr()) << "|" << setw(80) << " " << "|" << setw(8) << printImpr(cells[34].getImpr()) << "|" << endl;
+	cout << "|--------|" << setw(80) << " " << "|--------|" << endl;
+	cout << "|" << setw(8) << left << cells[16].getName() << "|" << setw(80) << " " << "|" << setw(8) << left << cells[34].getName() << "|" << endl;	
+	cout << "|" << printPlayers(16) << "|" << setw(80) << " " << "|" << printPlayers(34) <<"|" << endl;
+	cout << "|        |" << setw(80) << " " << "|        |" << endl;
+	cout << "|--------|" << setw(80) << " " << "|--------|" << endl;
+
+	cout << "|" << setw(8) << left << cells[15].getName() << "|" << setw(80) << " " << "|" << setw(8) << left << cells[35].getName() << "|" << endl;	
+	cout << "|        |" << setw(80) << " " << "|        |" << endl;
+	cout << "|        |" << setw(80) << " " << "|        |" << endl;
+	cout << "|" << printPlayers(15) << "|" << setw(80) << " " << "|" << printPlayers(35) <<"|" << endl;
+	cout << "|        |" << setw(80) << " " << "|        |" << endl;
+	cout << "|--------|" << setw(80) << " " << "|--------|" << endl;
+
+
+	cout << "|" << setw(8) << printImpr(cells[14].getImpr()) << "|" << setw(80) << " " << "|" << setw(8) << left << cells[17].getName() << "|" << endl; //for building improvement
+	cout << "|--------|" << setw(80) << " " << "|HALL    |" << endl;
+	cout << "|" << setw(8) << left << cells[14].getName() << "|" << setw(80) << " " << "|        |" << endl;	
+	cout << "|" << printPlayers(14) << "|" << setw(80) << " " << "|" << printPlayers(36) <<"|" << endl;
+	cout << "|        |" << setw(80) << " " << "|        |" << endl;
+	cout << "|--------|" << setw(80) << " " << "|--------|" <<endl;
+
+	cout << "|" << setw(8) << printImpr(cells[13].getImpr()) << "|" << setw(80) << " " << "|" << setw(8) << printImpr(cells[37].getImpr()) << "|" << endl;
+	cout << "|--------|" << setw(80) << " " << "|--------|" << endl;
+	cout << "|" << setw(8) << left << cells[13].getName() << "|" << setw(80) << " " << "|" << setw(8) << left << cells[37].getName() << "|" << endl;	
+	cout << "|" << printPlayers(13) << "|" << setw(80) << " " << "|" << printPlayers(37) <<"|" << endl;
+	cout << "|        |" << setw(80) << " " << "|        |" << endl;
+	cout << "|--------|" << setw(80) << " " << "|--------|" << endl;
+
+	cout << "|" << setw(8) << printImpr(cells[12].getImpr()) << "|" << setw(80) << " " << "|" << setw(8) << printImpr(cells[38].getImpr()) << "|" << endl;
+	cout << "|--------|" << setw(80) << " " << "|--------|" << endl;
+	cout << "|" << setw(8) << left << cells[12].getName() << "|" << setw(80) << " " << "|" << setw(8) << left << cells[38].getName() << "|" << endl;	
+	cout << "|" << printPlayers(11) << "|" << setw(80) << " " << "|" << printPlayers(39) <<"|" << endl;
+	cout << "|        |" << setw(80) << " " << "|        |" << endl;
+	cout << "|--------|" << setw(80) << " " << "|--------|" << endl;
+
+	//9th property on vertical edge, counting from top
+	cout << "|" << setw(8) << printImpr(cells[11].getImpr()) << "|" << setw(80) << " " << "|" << setw(8) << printImpr(cells[39].getImpr()) << "|" << endl;
+	cout << "|--------|" << setw(80) << " " << "|--------|" << endl;
+	cout << "|" << setw(8) << left << cells[11].getName() << "|" << setw(80) << " " << "|" << setw(8) << left << cells[39].getName() << "|" << endl;	
+	cout << "|" << printPlayers(11) << "|" << setw(80) << " " << "|" << printPlayers(39) <<"|" << endl;
+	cout << "|        |" << setw(80) << " " << "|        |" << endl;
+	cout << "|--------|--------------------------------------------------------------------------------|--------|" <<endl;
+
+	//line 2
+	for (int i = 10; i >= 0; --i){
+		if (cells[i].getName() == "CHECKIN"){
+			cout << "|" <<setw(8)<<left<< "CHECK" << "|";
+		}else if (cells[i].getName() == "BODYSEARCH"){
+			cout << "|" <<setw(8)<<left<< "BODY";
+		}else if(!cells[i].getIsProperty()){
+			cout <<"|" << setw(8) << left << cells[i].getName();
+		}else{
+			cout << "|" << setw(8) << printImpr(cells[i].getImpr()); //if building has improvemnts add it here...
+		}
+	}
+	cout << endl;
+
+	//line 3
+	for (int i = 10; i >= 0; --i){
+		if(cells[i].getName() == "CHECKIN"){
+			cout <<"|" << setw(8) << left << "IN"<< "|";
+		}else if(cells[i].getName() == "BODYSEARCH"){
+			cout <<"|" << setw(8) << left << "SEARCH";
+		}else if(!cells[i].getIsProperty()){
+			cout <<"|        ";
+		}else{
+			cout << "|--------";
+		}
+	}
+	cout << endl;
+
+	//line 4
+	for (int i = 10; i >= 0; --i){
+		if (!cells[i].getIsProperty()){
+			cout << "|" <<setw(8) << " " ;
+			if(cells[i].getName() == "CHECKIN") cout << "|";
 		}else{
 			cout << "|" << setw(8) << left << cells[i].getName();
 		}

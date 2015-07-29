@@ -12,7 +12,10 @@ class AcademicBuilding : public Property{
 	//voivvd loadBuildingInfo(istream f);
 public:
 	AcademicBuilding(std::string Name, int cost, std::string block, int improvCost);
-	virtual ~AcademicBuilding();
+	virtual ~AcademicBuilding(){
+		cout << "delete AcademicBuilding" << endl;
+	};
+
 	void setTuition (int index, int tutCost);
 	//Build n improvements
 	void improve(int n);

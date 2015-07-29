@@ -43,17 +43,22 @@ void Controller::refreshBoard(){
 	board->print();
 }
 
-void Controller::loadGame(const string fname){
+void Controller::loadGame(const string fname, bool testingMode){
 	string pName, property, owner;
 	int numPlayers, timCups, cash, position, improvements;
 	char symbol;
 	
+	ifstream data(fname.c_str(), ifstream::in);
+	if(!data.is_open()){
+		cerr << "The file is invalid!" << endl;
+		return;
+	}
+
+	game->setTestingMode(testingMode);
 	board = new BoardDisplay();
 	game->init(this);
 	
 	//open and read game data
-	ifstream data(fname.c_str(), ifstream::in);
-
 	//initialize players
 	data >> numPlayers;
 
@@ -71,18 +76,15 @@ void Controller::loadGame(const string fname){
 			data >> inJail;
 
 			if(inJail){
-				data >> jailTurn; //TODO, update turns in jail
-				notify(p,0,10);
+				data >> jailTurn; 
 				p->setJail(true, jailTurn);
 			}
 		}
 	}
-	data>>property;
-	cout<<property<<endl; 
+
 	// add property to player
 	while (data >> property){
 		data >> owner >> improvements;
-		// cout << property << " " <<owner << " " << improvements << endl;
 		
 		//find property and set player as owner
 		if(owner != "BANK"){
@@ -92,7 +94,6 @@ void Controller::loadGame(const string fname){
 			if(improvements == -1){ //property is mortgaged
 				p->setMortgaged(true);
 			}
-
 
 			pl->addProperty(p);
 			// cout << "n: " << p->getName() << " "<< p->getID() << endl;
@@ -108,16 +109,16 @@ void Controller::loadGame(const string fname){
 }
 
 
-void Controller::init(bool testingMode){
+void Controller::init(bool testingMode, string fname){
 	game->setTestingMode(testingMode);
 
 	int numPlayers;
-	board = new BoardDisplay();
+	board =	(fname == "airport.txt")?  new BoardDisplay("airdisplay.txt") : new BoardDisplay();
 	//need map of players name to symbol
 	
 	//read in game details
 
-	cout << "How many players are playing? (Please enter a number between 2-8.)" << endl;
+	cout << "How many players are playing? (Please enter a number between 2-8)" << endl;
 	string strPlayers;
 	getline(cin,strPlayers);
 	istringstream iss(strPlayers);
@@ -132,7 +133,7 @@ void Controller::init(bool testingMode){
 	}
 
 
-	game->init(this);
+	game->init(this, fname);
 
 	int i = 1;
 	while(i <= numPlayers){
@@ -163,7 +164,7 @@ void Controller::init(bool testingMode){
 		}
 	} 
 
-	board->print();
+	(fname == "airport.txt")? board->printAirport() : board->print();
 
 	play(false);
 }
@@ -213,7 +214,7 @@ void Controller::rollInJail(int roll1, int roll2){
 				}
 			}
 			if (cmd=="pay"){
-				// if (game->getCurrentPlayer()->pay(50, game->getBank()))
+				if (game->getCurrentPlayer()->pay(50, game->getBank()))
 					game->getCurrentPlayer()->leaveJail();
 				play(true);
 			}
@@ -260,7 +261,7 @@ void Controller::playInJail(){
 			if (cmd == "roll")
 				rollInJail(game->rollDie1(), game->rollDie2());
 			else if (cmd == "pay"){
-				// if (game->getCurrentPlayer()->pay(50, bank))
+				if (game->getCurrentPlayer()->pay(50, game->getBank()))
 					game->getCurrentPlayer()->leaveJail();
 			}
 		}
@@ -273,8 +274,8 @@ void Controller::playInJail(){
 		}
 	}
 	else if(cmd == "pay"){
-			// if (game->getCurrentPlayer()->pay(50, bank))
-			game->getCurrentPlayer()->leaveJail();
+			if (game->getCurrentPlayer()->pay(50, game->getBank()))
+				game->getCurrentPlayer()->leaveJail();
 	}
 }
 
@@ -305,12 +306,17 @@ void Controller::play(bool rolled){
 				rolled=true;
 				if(game->getTestMode()){
 					int r1, r2;
-					iss >> r1 >> r2;
-						// cout <<"r1 is: "<<r1<<endl;
-								// cout <<"r2 is: "<<r2<<endl;
-					roll1 = r1;
-					roll2 = r2;
-					numRolls = 1;
+					if (iss.str().size() > 5){
+						iss >> r1 >> r2;
+							
+						roll1 = r1;
+						roll2 = r2;
+					}else{
+						cout << "here"<<endl;
+						roll1 = game->rollDie1();
+						roll2 = game->rollDie2();
+					}
+						numRolls = 1;
 				}else{
 					roll1 = game->rollDie1();
 					roll2 = game->rollDie2();
@@ -326,8 +332,8 @@ void Controller::play(bool rolled){
 						}
 						else{
 							game->getCurrentPlayer()->move(roll1, roll2);
-							cout<<"Yay, a double!"<<endl;
-							cout<<"You rolled a "<<roll1<<" and a "<<roll2<<". Please roll again."<<endl;
+
+							cout<<"Yay, a double!"<<" Please roll again."<<endl;
 
 							string input;
 							string cmd;

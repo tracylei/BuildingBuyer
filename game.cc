@@ -1,5 +1,6 @@
 #include "controller.h"
 #include "player.h"
+#include "bank.h"
 
 #include "cell.h"
 #include "property.h"
@@ -23,24 +24,33 @@ Game::Game(){
 	testMode = false;
 	controller = NULL;
 	rollUpCount = 0;
-	bank = new Bank;
+	bank = new Bank (this);
 	die1 = new Dice;
 	die2 = new Dice;
 }
 
 Game::~Game(){
-	//delete the board
+
+	clearGame();
+	delete die1;
+	delete die2;
+	delete bank;
+}
+
+void Game::clearGame(){
+		//delete the board
 	for (int i = 0; i < GRID_SIZE; i++){
+		cout << "deleteing cell..." << endl;
 		delete theGrid[i];
 	}
+	delete [] theGrid;
+	cout << "delete grid";
 	//delete players
 	for (vector<Player*>::iterator it = players.begin(); it != players.end(); it++ ){
 		delete (*it);
 	}
 	players.clear();
-	delete die1;
-	delete die2;
-	delete bank;
+	cout << "deleted players" << endl;
 }
 
 
@@ -130,13 +140,13 @@ int Game::rollDie2(){
 	return die2->roll();
 }
  
-// static void Game::incrRollUpCount(){
-// 	rollUpCount++;
-// }
+void Game::incrRollUpCount(){
+	rollUpCount++;
+}
 
-// static int Game::getRollUpCount(){
-// 	return rollUpCount;
-// }
+int Game::getRollUpCount(){
+	return rollUpCount;
+}
 
 void Game::addPlayer(Player* p){
 	numPlayers++;
@@ -148,13 +158,16 @@ void Game::addPlayer(Player* p){
 	controller->notify(p, 0 ,0);
 }
 
-// void Game::removePlayer (Player* p){
-// 	numPlayers--;
-// 	for (vector<int>::iterator i = players.begin(); i!= players.end(); i++){
-// 		if (vec[i]->getName() == p->getName())
-// 			vec.erase(i);
-// 	}
-// }
+void Game::removePlayer (Player* p){
+	numPlayers--;
+	for (vector<Player*>::iterator i = players.begin(); i!= players.end(); i++){
+		if ((**i).getName() == p->getName())
+			players.erase(i);
+	}
+	delete p;
+	//Need to check iswon somewhere
+
+}
 
 bool Game::isWon(){
 	return (numPlayers == 1);
@@ -175,6 +188,7 @@ void Game::notifyCell(int curPos){
 	}else{
 		if(prop->getOwner()->getName() == "BANK" ){ //seg fault for non-property
 			cout << "Would you like to buy " << prop->getName() << " for $" << prop->getCost() << "?(y/n)" << endl;
+			cout<<"You currently have $"<<getCurrentPlayer()->getCash()<<"."<<endl;
 			while(true){
 				string resp;
 				getline(cin, resp);
@@ -201,12 +215,12 @@ void Game::notifyImprove (int index, int numImprov){
 }
 
 
-void Game::init(Controller* controller){
+void Game::init(Controller* controller, string fname){
 	
 	theGrid = new Cell*[GRID_SIZE];	
 	this->controller = controller;
 	
-	ifstream file ("property.txt");
+	ifstream file (fname.c_str());
 
 
 	string s;
@@ -218,18 +232,15 @@ void Game::init(Controller* controller){
 		//3 is gym
 		string cellName;
 		file >> cellName;
-
 		if (s == "0"){
 			NonProperty* np = new NonProperty(cellName);
 			theGrid[i] = np;
-
 		}else {	//Ownable Property
 			
 			//Read in purchase cost
 
 			int purchaseCost;
 			file>>purchaseCost;
-
 			//Academic Building
 			if(s == "1"){
 				string block;
@@ -238,7 +249,6 @@ void Game::init(Controller* controller){
 				int improvCost;
 				file>>improvCost;
 
-				 //cout << cellName << " " << purchaseCost << " " << block << " " << improvCost << " "<<endl;
 
 				//Read in tuition
 				AcademicBuilding* ab = new AcademicBuilding(cellName, purchaseCost, block, improvCost);

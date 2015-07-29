@@ -5,12 +5,6 @@
 AcademicBuilding::AcademicBuilding(std::string name, int cost, std::string block, int improvCost):
 								Property(name, block, cost, true),imprCost(improvCost){
 	tuition = new int [MAX_IMPROVEMENTS+1];
-
-
-}
-
-AcademicBuilding::~AcademicBuilding(){
-	delete [] tuition;
 }
 
 void AcademicBuilding::setTuition(int index, int tutCost){

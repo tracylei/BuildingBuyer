@@ -16,8 +16,8 @@ protected:
 	bool academic;
 public:
 	Cell(std::string, bool, bool);
-	 virtual ~Cell();
-
+	 virtual ~Cell(){};
+	 
 	void setGame(Game *game);
 	void setIndex(int);
 	

@@ -23,6 +23,7 @@ public:
 	std::string getBlock();
 	virtual int getValue()=0;
 
+
 	int getCost();
 	bool isMortgaged();
 

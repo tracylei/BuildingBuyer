@@ -2,6 +2,8 @@
 #define __OWNER_H__
 #include <string>
 
+class Player;
+
 class Owner{
 protected:
 	int cash;
@@ -11,6 +13,6 @@ public:
 	void addCash(int x);
 	//TESTING
 	virtual std::string getName()=0;
-	virtual claimAssets(Owner*)=0;
+	virtual void claimAssets(Player*)=0;
 };
 #endif

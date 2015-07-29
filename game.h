@@ -2,7 +2,7 @@
 #define _GAME_H_
 
 
-#include "bank.h"
+
 #include "dice.h"
 #include "cell.h"
 
@@ -16,6 +16,7 @@ const int GRID_SIZE = 40;
 class Player;
 class Controller;
 class Property;
+class Bank;
 
 class Game{
 	Cell** theGrid;
@@ -33,6 +34,8 @@ public:
 	Dice* die2;
 	Game();
 	~Game();
+
+	void clearGame();
 
 	Player* getCurrentPlayer();
 	Player* getPlayer(int p);
@@ -52,11 +55,10 @@ public:
 	static void incrRollUpCount();
 	static int getRollUpCount();
 	// //notify the controller that improvements were built on this property
-	void notifyImprove(Property* p);
 	int getNumPlayers();
 
 	void addPlayer (Player* p);
-	// void removePlayer (Player* p);
+	void removePlayer (Player* p);
 	bool isWon();
 
 	//Called by the player to notify the controller of its change in position
@@ -65,7 +67,7 @@ public:
 	void notifyCell(int);
 	//Called by a property to notify the game to notify the controller that an improvement was built/sold
 	void notifyImprove(int, int numImprov);
-	void init(Controller* controller);
+	void init(Controller* controller, string fname="property.txt");
 
 	void save(string);
 	void setTestingMode(bool mode);

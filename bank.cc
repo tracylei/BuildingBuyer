@@ -2,7 +2,7 @@
 #include <vector>
 using namespace std;
 
-Bank::Bank(): Owner(0){}
+Bank::Bank(Game* game): Owner(0), game(game){}
 
 string Bank::getName(){
 	return "BANK";
@@ -11,8 +11,8 @@ string Bank::getName(){
 void Bank::claimAssets(Player* debtor){
 	vector<Property*> properties = debtor->getProperties();
 	for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-		it->setOwner(this);
-		it->setMortgaged(false);
+		(**it).setOwner(this);
+		(**it).setMortgaged(false);
 	}
 	game->reclaimTimCups(debtor->getTimCups());
 }
