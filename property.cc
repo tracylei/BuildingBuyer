@@ -6,11 +6,13 @@ using namespace std;
 Property::Property(string name, string block, int cost, bool academic): Cell(name, true, academic), cost(cost), block(block){
 	mortgaged = false;
 	numImprov = 0;
+	feeRate = 0.6;
 }
 
 Property::Property(string name, int cost, bool academic): Cell(name, true, academic), cost(cost){
 	mortgaged = false;
 	numImprov = 0;
+	feeRate = 0.6;
 }
 
 Property::~Property(){
@@ -49,45 +51,80 @@ void Property::setMortgaged(bool v){
 	mortgaged = v;
 }
 
+
+void Property::setFeeRate(double rate){
+	feeRate = rate;
+}
+
+double Property::getFeeRate(){
+	return feeRate;
+}
+
 void Property::auction(int numBidders, vector<Player*> bidders, string master){
-	int bid = cost / 4; //starting bid is 25% of cost of property
-	cout <<"Starting Auction for " << getName() << " at initial price of " << bid<<"." << endl;
+	//int bid = cost / 4; //starting bid is 25% of cost of property
+	cout <<"Starting the Auction for " << getName() << " at $1." << endl;
+	int bid = 1;
+	bool bidOccurred = false;
 
-	while(numBidders > 1){
-		for(vector<Player*>::iterator it = bidders.begin(); it != bidders.end(); it++){
-
-			if((**it).getName() == master) {bidders.erase(it);}
-			if(bidders.size() == 1) {
-				numBidders = 1;
-			break;
-			}
+	vector<Player*>::iterator it = bidders.begin();
+	while(numBidders > 1 || (numBidders==1&&!bidOccurred)){
+			//if((**it).getName() == master) {bidders.erase(it);}
 			string action;
-			cout << (**it).getName() << " do you want to bid or pass?" << endl;
-			cin >> action;
+			cout << "The ask price for the property is currently at $"<<bid<<"."<<endl;
+			cout << (**it).getName() << ", would you like to bid or pass?";
+			cout <<" You currently have $"<<(**it).getCash()<<" in cash."<<endl;
+			cout <<"Please only use the \"bid\" or \"pass\" command where \"bid\" should be followed by your bid (ex. bid 25)." << endl;
+			string input;
+			getline(cin, input);
+			istringstream iss(input);
+			iss>>action;
+			while(action!="pass"){
+				if (action == "bid"){
+					int tempBid;
+					iss>>tempBid;	
+					if (tempBid > bid || (!bidOccurred&&tempBid==1)){
+						bid = tempBid;
+						break;
+					}else{
+						cout<<"You must bid a highed price than the current price of $"<<bid<<"."<<endl;
+					}
+				}else{
+					cout << "Invalid input. Please only use the \"bid\" or \"pass\" command." << endl;
+				}
+				getline(cin, input);
+				istringstream iss(input);
+				iss>>action;
+			}
+			
 
 			if(action == "bid"){
-				if (bid+25 > (**it).getCash()){
-					cout << "You don't have enough cash to bid." << endl;
-					bidders.erase(it);
-					--numBidders;
-					continue;
-				}
+				// if (bid+25 > (**it).getCash()){
+				// 	cout << "You do not have enough cash to bid." << endl;
+				// 	bidders.erase(it);
+				// 	--numBidders;
+				// 	continue;
+				// }
 				
-				bid+= 25;
-				cout << (**it).getName() << " has bid, the price is now $" << bid << endl;
+				//bid+= 25;
+				bidOccurred=true;
+				cout << (**it).getName() << " has bid, the price is now $" << bid <<"."<< endl;
+				it++;
 			}else if (action == "pass"){
-				it = bidders.erase(it);
 				--numBidders;
-				cout << (**it).getName() << " has passed" << bid<<"." << endl;
-			}else{
-				cout << "Invalid input. Either use bid or pass." << endl;
+				cout << (**it).getName() << " has withdrawn from the auction." << endl;
+				it = bidders.erase(it);
 			}
-		}
+			if (it == bidders.end())
+				it=bidders.begin();
 	}
 
-	Player *winner = bidders.at(0);
-	cout << winner->getName() << " has won the property for $" << bid << endl;
-	this->buy(winner, bid);
+	if (bidOccurred){
+		Player *winner = bidders.at(0);
+		cout << winner->getName() << " has won the property for $" << bid << "."<<endl;
+		this->buy(winner, bid);
+	}else{
+		cout<<"No one bid for the property so it will remain unowned."<<endl;
+	}
 
 }
 

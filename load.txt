@@ -3,5 +3,6 @@ Player1 B 0 0 1
 Player2 D 1 1500 5
 AL Player1 0	
 ML Player1 0
-HH Player1 1
-PAS Player2 5
+HH Player1 -1
+PAS Player1 0
+ECH Player1 0

@@ -33,6 +33,7 @@ void NonProperty::doAction(Player* p){
 		cout<<" or pay 10% of your net worth (using the \"worth\" command)?"<<endl; 
 		int worth = p->getNetWorth();
 		cout<<"Your net worth is $"<<worth<<"."<<endl;
+		cout<<"You have $"<<p->getCash()<<" in cash."<<endl;
 
 		string input;
 		getline (cin, input);

@@ -70,6 +70,11 @@ Player* Game::getPlayer(int p){
 	return players[p];
 }
 
+vector<Player*> Game::getPlayers(){
+	return players;
+}
+
+
 Player* Game::getPlayer(string s){
 
 	for(vector<Player*>::iterator it=players.begin(); it != players.end(); ++it){
@@ -149,20 +154,25 @@ void Game::addPlayer(Player* p){
 	controller->notify(p, 0 ,0);
 }
 
-void Game::removePlayer (Player* p){
+void Game::removePlayer (int symbol){
 	numPlayers--;
 	for (vector<Player*>::iterator i = players.begin(); i!= players.end(); i++){
-		if ((**i).getName() == p->getName())
+		if ((**i).getSymbol() == symbol)
 			players.erase(i);
 	}
-	delete p;
-	//Need to check iswon somewhere
-
 }
+
 
 bool Game::isWon(){
 	return (numPlayers == 1);
 }
+
+
+void Game::endGame(){
+	cout<<"Congratulations, "<<players.at(0)->getName()<<", you've won the game!"<<endl;
+	delete this;
+}
+
 
 //A Player calls this to notify the controller of its move
 void Game::notify(Player* p, int prevPos, int curPos){
@@ -276,8 +286,7 @@ void Game::init(Controller* controller){
 
 
 void Game::save(string fname){
-	ofstream file;
-	file.open(fname.c_str());
+	ofstream file (fname.c_str(), ofstream::out);
 	file << numPlayers << endl;
 
 	for(vector<Player*>::iterator it = players.begin(); it != players.end(); ++it){

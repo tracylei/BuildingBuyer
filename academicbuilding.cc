@@ -48,23 +48,31 @@ void AcademicBuilding::setImprove(int improv){
 
 void AcademicBuilding::doAction(Player* p){
 	int tuit = tuition[numImprov];
-	if (static_cast<Player*>(owner)->hasMonopoly(block) && numImprov == 0)
-		tuit *=2;
-	if (owner->getName()!= "bank" && owner->getName()!=p->getName() && !mortgaged){
-		cout<<"You will be charged $"<<tuit<<" in tuition by "<<owner->getName()<<", the owner of "<<name<<"."<<endl;
-		cout<<"Please give "<<owner->getName()<<" a few seconds to collect the tuition..";
-		cout.flush();
-		usleep(1000000);
-		cout<<".";
-		cout.flush();
-		usleep(1000000);
-		cout<<"."<<endl;
-		cout.flush();
-		usleep(1000000);
 
-		cout<<"You had $"<<p->getCash()<<" before paying, ";
-		if (p->pay(tuit, owner))
-			cout<<"now you have $" <<p->getCash()<<"."<<endl;
+	if (owner->getName()!= "BANK" && static_cast<Player*>(owner)->getSymbol()!=p->getSymbol()){
+		if (mortgaged){
+			cout<<"You were not charged for landing on "<<name<<" because it is currently mortgaged."<<endl;
+
+		}else{
+
+			if (static_cast<Player*>(owner)->hasMonopoly(block) && numImprov == 0)
+				tuit *=2;
+			cout<<"You will be charged $"<<tuit<<" in tuition by "<<owner->getName()<<", the owner of "<<name<<"."<<endl;
+			cout<<"Please give "<<owner->getName()<<" a few seconds to collect the tuition..";
+			cout.flush();
+			usleep(1000000);
+			cout<<".";
+			cout.flush();
+			usleep(1000000);
+			cout<<"."<<endl;
+			cout.flush();
+			usleep(1000000);
+
+			if (p->pay(tuit, owner)){
+				cout<<"You had $"<<p->getCash()<<" before paying, ";
+				cout<<"now you have $" <<p->getCash()<<"."<<endl;
+			}
+		}
 	}
 }
 

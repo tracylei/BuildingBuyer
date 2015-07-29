@@ -77,12 +77,12 @@ void Controller::loadGame(const string fname){
 			}
 		}
 	}
-	data>>property;
-	cout<<property<<endl; 
+	// data>>property;
+	// cout<<property<<endl; 
 	// add property to player
 	while (data >> property){
 		data >> owner >> improvements;
-		// cout << property << " " <<owner << " " << improvements << endl;
+		//cout << property << " " <<owner << " " << improvements << endl;
 		
 		//find property and set player as owner
 		cerr << owner << endl;
@@ -94,8 +94,6 @@ void Controller::loadGame(const string fname){
 				p->setMortgaged(true);
 			}
 
-
-			cerr << "asdsa";
 			pl->addProperty(p);
 			// cout << "n: " << p->getName() << " "<< p->getID() << endl;
 			if (p->isAcademic()){
@@ -447,9 +445,7 @@ void Controller::play(bool rolled){
 			// 		ofs<<game->getTheGrid(i)->getName()<<" ";
 			// 		string ownerName = static_cast<Property*>(game->getTheGrid(i))->getOwnerName();
 
-			// 		if (ownerName=="bank")
-			// 			ofs<<"BANK ";
-			// 		else 
+
 			// 			ofs<<ownerName<<" ";
 
 			// 		if (!static_cast<Property*>(game->getTheGrid(i))->isMortgaged())

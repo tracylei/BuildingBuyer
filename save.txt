@@ -1,33 +1,31 @@
-4
-Alice G 1 2678 39
-Bob P 1 250 10 0 
-Charlie D 1 683 10 1 0
-Danielle T 0 1789 20
-AL Alice 0
-ML Alice 3
-MKV Bob 0
-ECH Charlie 0
-PAS Charlie 0
-HH Bob 0
-RCH Danielle -1
-PAC Alice 0
+2
+Player1 B 0 0 1
+Player2 D 1 1500 5
+AL Player1 0
+ML Player1 0
+MKV BANK 0
+ECH BANK 0
+PAS Player2 5
+HH Player1 1
+RCH BANK 0
+PAC BANK 0
 DWE BANK 0
-CPH Charlie 0
-UWP Bob 0
-LHI Danielle 0
-BMH Charlie 0
-OPT Bob 0
-EV1 Danielle -1
+CPH BANK 0
+UWP BANK 0
+LHI BANK 0
+BMH BANK 0
+OPT BANK 0
+EV1 BANK 0
 EV2 BANK 0
-EV3 Bob 0
-V1 Bob -1
-PHYS Danielle 0
-B1 Danielle 0
-CIF Charlie 0
-B2 Danielle -1
-EIT Charlie 0
-ESC Charlie 0
-C2 Charlie -1
-REV Bob 0
-MC Alice 4
-DC Alice 4
+EV3 BANK 0
+V1 BANK 0
+PHYS BANK 0
+B1 BANK 0
+CIF BANK 0
+B2 BANK 0
+EIT BANK 0
+ESC BANK 0
+C2 BANK 0
+REV BANK 0
+MC BANK 0
+DC BANK 0

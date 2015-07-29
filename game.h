@@ -38,6 +38,7 @@ public:
 	Player* getCurrentPlayer();
 	Player* getPlayer(int p);
 	Player* getPlayer(string s);
+	vector<Player*> getPlayers();
 	Property* getProperty(string name);
 	Cell* getTheGrid(int i);
 
@@ -56,8 +57,9 @@ public:
 	int getNumPlayers();
 
 	void addPlayer (Player* p);
-	void removePlayer (Player* p);
+	void removePlayer (int symbol);
 	bool isWon();
+	void endGame();
 
 	//Called by the player to notify the controller of its change in position
 	void notify(Player* p, int prevPos, int curPos);
