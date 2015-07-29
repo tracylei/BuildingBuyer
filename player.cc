@@ -1,6 +1,8 @@
 #include "player.h"
+#include "bank.h"
 #include "academicbuilding.h"
 #include "controller.h"
+#include <unistd.h>
 
 using namespace std;
 
@@ -97,14 +99,13 @@ void Player::addCash(int x){
 }
 
 void Player::addProperty(Property *p){
-
 	for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
 		if ((**it).getName() == p->getName()) return;
 	}
 	p->setOwner(this);
 	properties.push_back(p);
 	addMonopoly(p->getBlock());
-	cout << p->getName() << " added to player " << name <<"'s list of properties owned."<< endl;
+	cout << p->getName() << " added to " << name <<"'s list of properties owned."<< endl;
 }
 
 void Player::removeProperty(Property* p){
@@ -157,10 +158,15 @@ bool Player::hasMonopoly(string block){
 
 bool Player::pay(int amt, Owner* creditor){
 	if (amt > cash) {
+		cout<<endl;
 		cout << "You do not have enough cash to do that!" << endl;
 		//INCOMPLETE add in bankruptcy
 		cout<<"You need to pay $"<<amt<<" but you only have $"<<cash<<". Would you like to attempt a trade,"; 
-		cout<<"mortgage buildings, sell improvements, or declare bankruptcy?"	<<endl;
+		cout<<" mortgage buildings, sell improvements, or declare bankruptcy?"	<<endl;
+		cout<<endl;
+		cout<<"Your assets consists of:"<<endl;
+		displayAssets();
+		cout<<endl;
 		string cmd, input;
 		getline(cin, input);
 		istringstream iss(input);
@@ -168,18 +174,23 @@ bool Player::pay(int amt, Owner* creditor){
 		string propName, cmd2;
 		Property* p;
 		while(cmd!="bankrupt"){
-			iss>>propName;
+			istringstream iss2(input);
+			iss2>>cmd;
+			cout<<"cmd: "<<cmd<<endl;
+			iss2>>propName;
+			cout<<"prop: "<<propName<<endl;
 			p = owns(propName);
 			if (cmd=="improve"){
-				iss>>cmd2;
-				if (cmd2!="buy"){
+				iss2>>cmd2;
+				cout<<"cmd2: "<<cmd2<<endl;
+				if (cmd2=="buy"){
 					cout<<"You must deal with your debt (ex. by selling improvements, not buying) before issuing any other commands."<<endl;
 					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
 				}else if(!p){
 					cout<<"You can only buy/sell improvements on properties that you own."<<endl;
 					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
 				}else if(!p->isAcademic()){
-					cout<<"Improvements can only found on Academic Buildings."<<endl;
+					cout<<"Improvements can only be found on Academic Buildings."<<endl;
 					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
 				}else if(static_cast<AcademicBuilding*>(p)->getImpr()<0){
 					cout<<"There are no improvements on "<<propName<<"for you to sell."<<endl;
@@ -187,7 +198,7 @@ bool Player::pay(int amt, Owner* creditor){
 				}
 					else break;
 			}else if (cmd=="mortgage"){
-				iss>>propName;
+				iss2>>propName;
 				if(!p){
 					cout<<"You can only mortgage properties that you own."<<endl;
 					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
@@ -198,10 +209,11 @@ bool Player::pay(int amt, Owner* creditor){
 				cout<<"Please only use the \"improve\", \"mortgage\", and \"bankrupt\" commands."<<endl;
 			}
 			getline(cin, input);
+			istringstream iss(input);
+			iss>>cmd;
 		}
 
 		if (cmd=="bankrupt"){
-			cout<<"declare bankruptcy"<<endl;
 			declareBankruptcy(creditor);
 			return false;
 		}else if (cmd=="improve"){
@@ -222,29 +234,73 @@ bool Player::pay(int amt, Owner* creditor){
 
 void Player::declareBankruptcy(Owner* creditor){
 	cout<<"You've declared bankruptcy."<<endl;
-	cout<<"All of your assets will now be transferred to "<<creditor->getName<<"."<<endl;
+	cout<<"All of your assets will now be transferred to "<<creditor->getName()<<".";
+	cout.flush();
 	creditor->claimAssets(this);
-	game->removePlayer(this); //Need to write, need to check if won in this fn
-}
-
-
-void Player::claimAssets(Player* debtor){
-	vector<Property*> properties = debtor->getProperties();
-	timCups+=debtor->getTimCups();
-	cash+=debtor->getCash();
-	for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
-		it->setOwner(this);
-		addProperty(it);
-		if(it->isMortgaged()){
-			cout<<name<<", you are receiving "<<it->getName()<<"from "<<debtor->getName()<<" because ";
-			cout<<debtor->getName()<<" has declared bankruptcy."<<endl;
-			cout<<"Since this is a mortgaged property, if you would like to unmortgage it, please use "
-		}
+	cout<<".";
+	cout.flush();
+	usleep(300000);
+	cout<<".";
+	cout.flush();
+	usleep(300000);
+	cout<<".";
+	cout.flush();
+	usleep(300000);
+	cout<<".";
+	cout.flush();
+	usleep(400000);
+	cout<<".";
+	cout.flush();
+	usleep(500000);
+	cout<<"."<<endl;
+	usleep(700000);
+	game->endTurn();
+	game->removePlayer(this);
+	if (game->isWon()){
+		cout<<"Congratulations "<<creditor->getName()<<"! You've won the game."<<endl;
+		//CALL DESTRUCTORS??
 	}
 }
 
 
+void Player::claimAssets(Player* debtor){
+	vector<Property*> props = debtor->getProperties();
+	timCups+=debtor->getTimCups();
+	cash+=debtor->getCash();
+	for (vector<Property*>::iterator it = props.begin(); it != props.end(); it++){
+		(**it).setOwner(this);
+		addProperty(*it);
+		if((**it).isMortgaged()){
+			cout<<name<<", the ownership of "<<(**it).getName()<<" has been transferred to you from "<<debtor->getName();
+			cout<<" because "<<debtor->getName()<<" owes you money and has declared bankruptcy."<<endl;
+			cout<<"Since this is a mortgaged property, you must immediately pay 10% of the cost to the Bank."<<endl;
+			cout<<"Please allow the bank some time to collect the $"<<.1*(**it).getCost()<<" in fees."<<endl;
+			usleep(1000000);
+			cout<<"3..."<<endl;
+			usleep(1000000);
+			cout<<"2.."<<endl;
+			usleep(1000000);
+			cout<<"1."<<endl;
+			usleep(1000000);
+			if (pay(.1*(**it).getCost(),game->getBank())){
+				cout<<"You now have "<<cash<<" left in cash."<<endl;
+			
 
+				cout<<"Would you like to unmortgage "<<(**it).getName()<<" right now by paying the principle of "<<(**it).getCost()<<"? (y/n)"<<endl;
+				cout<<"Please note that if you do not unmortgage "<<(**it).getName()<<" now, you will be charged the additional 10% unmortgage fee later."<<endl; 
+				string cmd;
+				getline(cin,cmd);
+				while (cmd!="y" && cmd!="n"){
+					cout<<"Please only use \"y\" and \"n\" to indicate your decision."<<endl;
+					getline(cin, cmd);
+				}
+				if (cmd=="y"){
+					unmortgage(*it, 1);
+				}
+			}
+		}
+	}
+}
 
 
 void Player::goToJail(){
@@ -296,7 +352,6 @@ void Player::slcMove (int move){
 
 
 void Player::displayAssets(){
-	cout << "Player " << name << "'s assets." <<endl;
 	cout << "Cash: " << cash << endl;
 	cout << "Properties: "; 
 
@@ -445,13 +500,13 @@ void Player::mortgage(Property *p){
 }
 
 //Already know that the player owns p
-void Player::unmortgage(Property *p){
+void Player::unmortgage(Property *p, double feeRate){
 	if (!p){
 		cout<<"Sorry, you can only unmortgage properties that you own."<<endl;
 	}else if (!p->isMortgaged()){
 		cout<<p->getName()<<" hasn't been mortgaged yet."<<endl;
 	}else{
-		int amt = p->getCost() * 1.1;
+		int amt = p->getCost() * feeRate;
 		if(amt > cash){
 			cout << "Not enough fund to unmortgage this property!" << endl;
 		}else{

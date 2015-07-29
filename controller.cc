@@ -85,6 +85,7 @@ void Controller::loadGame(const string fname){
 		// cout << property << " " <<owner << " " << improvements << endl;
 		
 		//find property and set player as owner
+		cerr << owner << endl;
 		if(owner != "BANK"){
 			Player *pl = game->getPlayer(owner);
 			Property *p = game->getProperty(property);
@@ -94,6 +95,7 @@ void Controller::loadGame(const string fname){
 			}
 
 
+			cerr << "asdsa";
 			pl->addProperty(p);
 			// cout << "n: " << p->getName() << " "<< p->getID() << endl;
 			if (p->isAcademic()){
@@ -117,7 +119,7 @@ void Controller::init(bool testingMode){
 	
 	//read in game details
 
-	cout << "How many players are playing? (Please enter a number between 2-8.)" << endl;
+	cout << "How many players are playing? (Please enter a number between 2-8)" << endl;
 	string strPlayers;
 	getline(cin,strPlayers);
 	istringstream iss(strPlayers);
@@ -213,7 +215,7 @@ void Controller::rollInJail(int roll1, int roll2){
 				}
 			}
 			if (cmd=="pay"){
-				// if (game->getCurrentPlayer()->pay(50, game->getBank()))
+				if (game->getCurrentPlayer()->pay(50, game->getBank()))
 					game->getCurrentPlayer()->leaveJail();
 				play(true);
 			}
@@ -260,7 +262,7 @@ void Controller::playInJail(){
 			if (cmd == "roll")
 				rollInJail(game->rollDie1(), game->rollDie2());
 			else if (cmd == "pay"){
-				// if (game->getCurrentPlayer()->pay(50, bank))
+				if (game->getCurrentPlayer()->pay(50, game->getBank()))
 					game->getCurrentPlayer()->leaveJail();
 			}
 		}
@@ -273,8 +275,8 @@ void Controller::playInJail(){
 		}
 	}
 	else if(cmd == "pay"){
-			// if (game->getCurrentPlayer()->pay(50, bank))
-			game->getCurrentPlayer()->leaveJail();
+			if (game->getCurrentPlayer()->pay(50, game->getBank()))
+				game->getCurrentPlayer()->leaveJail();
 	}
 }
 
@@ -326,8 +328,8 @@ void Controller::play(bool rolled){
 						}
 						else{
 							game->getCurrentPlayer()->move(roll1, roll2);
-							cout<<"Yay, a double!"<<endl;
-							cout<<"You rolled a "<<roll1<<" and a "<<roll2<<". Please roll again."<<endl;
+
+							cout<<"Yay, a double!"<<" Please roll again."<<endl;
 
 							string input;
 							string cmd;

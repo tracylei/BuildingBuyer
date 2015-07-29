@@ -1,5 +1,6 @@
 #include "controller.h"
 #include "player.h"
+#include "bank.h"
 
 #include "cell.h"
 #include "property.h"
@@ -23,7 +24,7 @@ Game::Game(){
 	testMode = false;
 	controller = NULL;
 	rollUpCount = 0;
-	bank = new Bank;
+	bank = new Bank (this);
 	die1 = new Dice;
 	die2 = new Dice;
 }
@@ -130,13 +131,13 @@ int Game::rollDie2(){
 	return die2->roll();
 }
  
-// static void Game::incrRollUpCount(){
-// 	rollUpCount++;
-// }
+void Game::incrRollUpCount(){
+	rollUpCount++;
+}
 
-// static int Game::getRollUpCount(){
-// 	return rollUpCount;
-// }
+int Game::getRollUpCount(){
+	return rollUpCount;
+}
 
 void Game::addPlayer(Player* p){
 	numPlayers++;
@@ -148,13 +149,16 @@ void Game::addPlayer(Player* p){
 	controller->notify(p, 0 ,0);
 }
 
-// void Game::removePlayer (Player* p){
-// 	numPlayers--;
-// 	for (vector<int>::iterator i = players.begin(); i!= players.end(); i++){
-// 		if (vec[i]->getName() == p->getName())
-// 			vec.erase(i);
-// 	}
-// }
+void Game::removePlayer (Player* p){
+	numPlayers--;
+	for (vector<Player*>::iterator i = players.begin(); i!= players.end(); i++){
+		if ((**i).getName() == p->getName())
+			players.erase(i);
+	}
+	delete p;
+	//Need to check iswon somewhere
+
+}
 
 bool Game::isWon(){
 	return (numPlayers == 1);
@@ -175,6 +179,7 @@ void Game::notifyCell(int curPos){
 	}else{
 		if(prop->getOwner()->getName() == "BANK" ){ //seg fault for non-property
 			cout << "Would you like to buy " << prop->getName() << " for $" << prop->getCost() << "?(y/n)" << endl;
+			cout<<"You currently have $"<<getCurrentPlayer()->getCash()<<"."<<endl;
 			while(true){
 				string resp;
 				getline(cin, resp);

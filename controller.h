@@ -4,6 +4,7 @@
 #include "boarddisplay.h"
 #include "game.h"
 #include "player.h"
+#include "bank.h"
 // #include "property.h"
 
 #include <iostream>

@@ -67,7 +67,7 @@ public:
 	void leaveJail();
 	
 	bool pay(int, Owner*); //return true is payment successful, else false
-	void declareBankrupt();
+	void declareBankruptcy(Owner*);
 	void displayAssets();
 	
 	void trade(Player*, string, string);
@@ -75,14 +75,14 @@ public:
 	void erase(Property*);
 
 	void mortgage(Property*);
-	void unmortgage(Property*);
+	void unmortgage(Property* p, double feeRate = 1.1);
 	// void checkMortgage(string);
 	// void checkUnmortgage(string);
 	Property* owns(string);
 	void sellImprove(AcademicBuilding*);
 	void buyImprove(AcademicBuilding*);
 
-	void claimAssets(Owner*);
+	void claimAssets(Player*);
 
 
 };

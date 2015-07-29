@@ -1,5 +1,6 @@
 #include "nonproperty.h"
 #include "player.h"
+#include "bank.h"
 #include <iostream>
 #include <string>
 #include "game.h"

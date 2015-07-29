@@ -17,6 +17,7 @@ Property::~Property(){
 	delete owner;
 }
 
+
 int Property::getImpr(){
 	return numImprov;
 }
