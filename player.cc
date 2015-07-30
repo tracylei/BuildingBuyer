@@ -169,7 +169,9 @@ bool Player::pay(int amt, Owner* creditor){
 void Player::declareBankruptcy(Owner* creditor){
 	cout<<"You've declared bankruptcy."<<endl;
 	if (game->getNumPlayers()==2){
+		game->removePlayer(symbol);
 		game->endGame();
+		delete this;
 	}else{
 		game->removePlayer(symbol);
 		cout<<"All of your assets will now be transferred to "<<creditor->getName()<<".";

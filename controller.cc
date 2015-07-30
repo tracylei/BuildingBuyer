@@ -1,6 +1,6 @@
 #include "controller.h"
 #include "academicbuilding.h"
-
+#include <unistd.h>
 
 #include <fstream>
 using namespace std;
@@ -297,12 +297,15 @@ void Controller::playInJail(){
 }
 
 void Controller::play(bool rolled){
+	if(game->isWon()){
+		return;
+	}
 	cout << game->getCurrentPlayer()->getName() << "'s turn. Please enter your commands." << endl;
 	//player commands..
 
 	string input;
 	string cmd;
-	while(getline(cin,input)){
+	while(!game->isWon() && getline(cin,input)){
 		if (input.length()==0)
 			continue;
 #if DEBUG
@@ -329,7 +332,6 @@ void Controller::play(bool rolled){
 						roll1 = r1;
 						roll2 = r2;
 					}else{
-						cout << "here"<<endl;
 						roll1 = game->rollDie1();
 						roll2 = game->rollDie2();
 					}
@@ -340,7 +342,7 @@ void Controller::play(bool rolled){
 					numRolls = 1;
 				}
 					//Dealing with rolling doubles
-				while (roll1 == roll2){
+				while (roll1 == roll2 && !game->getCurrentPlayer()->isInJail()){
 						if (numRolls == 3){
 							game->getCurrentPlayer()->goToJail();
 							board->print();
@@ -349,7 +351,18 @@ void Controller::play(bool rolled){
 						}
 						else{
 							game->getCurrentPlayer()->move(roll1, roll2);
+							if (game->getCurrentPlayer()->isInJail()){
+								cout<<"Your turn will come to an end in 3 seconds."<<endl;
+								usleep(1000000);
+								cout<<"3..."<<endl;
+								usleep(1000000);
+								cout<<"2.."<<endl;
+								usleep(1000000);
+								cout<<"1."<<endl;
 
+								game->endTurn();
+								return;
+							}
 							cout<<"Yay, a double!"<<" Please roll again."<<endl;
 
 							string input;
@@ -360,6 +373,8 @@ void Controller::play(bool rolled){
 
 							iss >> cmd;
 							while (cmd!="roll"){
+								istringstream iss2(input);
+								iss2>>cmd;
 								cout<<"You need to roll again before using another command. Please issue the roll command again."<<endl;
 								getline(cin,input);
 								istringstream iss(input);
@@ -370,9 +385,15 @@ void Controller::play(bool rolled){
 								iss >> r1 >> r2;
 								roll1 = r1;
 								roll2 = r2;
-								// cout <<"r1 is: "<<r1<<endl;
-								// cout <<"r2 is: "<<r2<<endl;
-
+								if (iss.str().size() > 5){
+									iss >> r1 >> r2;
+										
+									roll1 = r1;
+									roll2 = r2;
+								}else{
+									roll1 = game->rollDie1();
+									roll2 = game->rollDie2();
+								}
 							}else{
 								roll1 = game->rollDie1();
 								roll2 = game->rollDie2();

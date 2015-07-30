@@ -180,7 +180,6 @@ bool Game::isWon(){
 
 void Game::endGame(){
 	cout<<"Congratulations, "<<players.at(0)->getName()<<", you've won the game!"<<endl;
-	delete this;
 }
 
 void Game::notifyControllerBankrupt(Player* p, Owner* creditor, int amt){
