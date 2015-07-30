@@ -53,7 +53,7 @@ void Controller::loadGame(const string fname, bool testingMode){
 	ifstream data(fname.c_str(), ifstream::in);
 	if(!data.is_open()){
 		cerr << "The file is invalid!" << endl;
-		return;
+		exit(0);
 	}
 
 	game->setTestingMode(testingMode);
@@ -87,14 +87,11 @@ void Controller::loadGame(const string fname, bool testingMode){
 		}
 	}
 
-	game->setTimCupCount(totalTimCups);
-	// data>>property;
-	// cout<<property<<endl; 
+	game->setTimCupCount(totalTimCups); 
 
 	// add property to player
 	while (data >> property){
 		data >> owner >> improvements;
-		//cout << property << " " <<owner << " " << improvements << endl;
 		
 		//find property and set player as owner
 		cerr << owner << endl;
@@ -107,7 +104,7 @@ void Controller::loadGame(const string fname, bool testingMode){
 			}
 
 			pl->addProperty(p);
-			// cout << "n: " << p->getName() << " "<< p->getID() << endl;
+
 			if (p->isAcademic()){
 				if (improvements == -1)
 					improvements =0;
@@ -121,17 +118,14 @@ void Controller::loadGame(const string fname, bool testingMode){
 	play(false);
 }
 
-
 void Controller::init(bool testingMode, string fname){
 	displayfile = fname;
 	game->setTestingMode(testingMode);
 
 	int numPlayers;
 	board =	(fname == "airport.txt")?  new BoardDisplay("airdisplay.txt") : new BoardDisplay();
-	//need map of players name to symbol
 	
 	//read in game details
-
 	cout << "How many players are playing? (Please enter a number between 2-8)" << endl;
 	string strPlayers;
 	getline(cin,strPlayers);
@@ -146,7 +140,6 @@ void Controller::init(bool testingMode, string fname){
 		iss >> numPlayers;
 	}
 
-
 	game->init(this, fname);
 
 	int i = 1;
@@ -155,9 +148,16 @@ void Controller::init(bool testingMode, string fname){
 		string symbol;
 		string name;
 
-		//create player
-		cout<< "Player "<< i << ", what is your first name?"<<endl;
-		getline(cin, name);
+		while(true){
+			//create player
+			cout<< "Player "<< i << ", what is your first name?"<<endl;
+			getline(cin, name);
+			
+			if(name == "BANK" || name =="bank")
+				cout << "Player name cannot be BANK" << endl;
+			else break;
+
+		}
 		
 		while (true){
 			cout << name<<", please select your game piece." << endl;
@@ -165,8 +165,10 @@ void Controller::init(bool testingMode, string fname){
 				cout << it->first << " ";
 			}
 			cout<<endl;
+			
 			getline(cin,symbol);
-		//check if symbol availablespot
+			
+			//check if symbol availablespot
 			if (symbol.length()==1&&symbols.count(symbol[0]) > 0){
 				game->addPlayer(new Player(game, name, symbol[0], 0, 1500, 0));
 				symbols.erase(symbol[0]);
@@ -243,11 +245,12 @@ void Controller::playInJail(){
 	cout << "The only way out is rolling doubles, using a Roll Up the Rim Cup, or paying $50 (for some gourmet coffee)."<<endl;
 	cout<< "Would you like to issue a \"roll\" command to row the dice, \"cup\" command to use a Roll Up the Rim cup, of \"pay\" command to buy coffee and leave?"<<endl;
 
-	string input;
-	string cmd;
+	string input, cmd;
+	
 	getline (cin, input);
 	istringstream iss (input);
 	iss>>cmd;
+
 	while (cmd!="roll" && cmd!="cup" && cmd != "pay"){
 		cout<<"Please only use the \"roll\", \"cup\", or \"pay\" commands."<<endl;
 		getline(cin, cmd);

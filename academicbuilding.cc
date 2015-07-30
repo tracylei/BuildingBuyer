@@ -13,10 +13,9 @@ AcademicBuilding::~AcademicBuilding(){
 
 void AcademicBuilding::setTuition(int index, int tutCost){
 	tuition[index] = tutCost;
-	// for (int i = 0; i <= index; i++){
-	// 		cout << tuition[i] << " ";
-	// }
+
 }
+
 // Build n improvements
 void AcademicBuilding::improve(int n){
 	//Check to make sure the owner has a monopoly

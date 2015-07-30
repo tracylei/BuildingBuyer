@@ -13,7 +13,6 @@ public:
 	virtual ~Bank(){};
 
 	void addCash(int x);
-	//for testing
 	std::string getName();
 	void claimAssets(Player*);
 };

@@ -10,7 +10,7 @@ string Bank::getName(){
 }
 
 void Bank::claimAssets(Player* debtor){
-	cout<<"bank is claiming assets..."<<endl;
+	cout<<"Bank is claiming assets..."<<endl;
 	vector<Property*> properties = debtor->getProperties();
 	for (vector<Property*>::iterator it = properties.begin(); it != properties.end(); it++){
 		(**it).setOwner(this);

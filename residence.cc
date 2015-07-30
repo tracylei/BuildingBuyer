@@ -14,7 +14,6 @@ Residence::~Residence(){
 	delete [] rent;
 }
 
-
 void Residence::doAction(Player* p){
 	if (owner->getName()!= "BANK" && static_cast<Player*>(owner)->getSymbol()!=p->getSymbol()){
 		if (mortgaged){

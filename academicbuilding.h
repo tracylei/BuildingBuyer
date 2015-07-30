@@ -9,7 +9,6 @@ class AcademicBuilding : public Property{
 	//From super class Property - string bldgName; int cost; Player* ownerk;
 	int imprCost;
 	int *tuition;
-	//voivvd loadBuildingInfo(istream f);
 public:
 	AcademicBuilding(std::string Name, int cost, std::string block, int improvCost);
 	virtual ~AcademicBuilding();

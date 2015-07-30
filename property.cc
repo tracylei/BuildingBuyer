@@ -15,8 +15,6 @@ Property::Property(string name, int cost, bool academic): Cell(name, true, acade
 	feeRate = 0.6;
 }
 
-
-
 int Property::getImpr(){
 	return numImprov;
 }
@@ -28,6 +26,7 @@ Owner* Property::getOwner(){
 string Property::getOwnerName(){
 	return owner->getName();
 }
+
 int Property::getCost(){
 	return cost;
 }
@@ -65,16 +64,17 @@ void Property::auction(int numBidders, vector<Player*> bidders, string master){
 
 	vector<Player*>::iterator it = bidders.begin();
 	while(numBidders > 1 || (numBidders==1&&!bidOccurred)){
-			//if((**it).getName() == master) {bidders.erase(it);}
-			string action;
+
+			string action, input;
 			cout << "The ask price for the property is currently at $"<<bid<<"."<<endl;
 			cout << (**it).getName() << ", would you like to bid or pass?";
 			cout <<" You currently have $"<<(**it).getCash()<<" in cash."<<endl;
 			cout <<"Please only use the \"bid\" or \"pass\" command where \"bid\" should be followed by your bid (ex. bid 25)." << endl;
-			string input;
+
 			getline(cin, input);
 			istringstream iss(input);
 			iss>>action;
+
 			while(action!="pass"){
 				if (action == "bid"){
 					int tempBid;
@@ -95,14 +95,6 @@ void Property::auction(int numBidders, vector<Player*> bidders, string master){
 			
 
 			if(action == "bid"){
-				// if (bid+25 > (**it).getCash()){
-				// 	cout << "You do not have enough cash to bid." << endl;
-				// 	bidders.erase(it);
-				// 	--numBidders;
-				// 	continue;
-				// }
-				
-				//bid+= 25;
 				bidOccurred=true;
 				cout << (**it).getName() << " has bid, the price is now $" << bid <<"."<< endl;
 				it++;
@@ -135,6 +127,7 @@ void Property::buy(Player* buyer){
 	}
 }
 
+//Buyer buys the property, for winning bid price
 void Property::buy(Player* buyer, int bid){
 
 	if(buyer->pay(bid, static_cast<Player*>(owner))){

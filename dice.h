@@ -8,7 +8,7 @@ class Dice{
 public:
 	Dice();
 	int roll();
-	int SLCAction();
+	int SLCAction(); //generates a random SLC event, returns the action
 	int NHAction(); //generates a random NH event, returns the action
 	bool giveTimCup();
 };
