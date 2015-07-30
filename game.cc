@@ -178,6 +178,10 @@ void Game::endGame(){
 	delete this;
 }
 
+void Game::notifyControllerBankrupt(Player* p, Owner* creditor, int amt){
+	controller->bankrupt(p, creditor, amt);
+}
+
 //A Player calls this to notify the controller of its move
 void Game::notify(Player* p, int prevPos, int curPos){
 	controller->notify(p, prevPos, curPos);

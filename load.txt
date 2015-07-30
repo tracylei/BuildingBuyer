@@ -1,6 +1,7 @@
 2
-Player1 B 0 0 1
+Player1 B 3 0 1
 Player2 D 1 1500 5
+<<<<<<< HEAD
 <<<<<<< HEAD
 AL Player1 0
 ML Player1 0
@@ -8,6 +9,9 @@ HH Player1 1
 PAS Player2 5
 =======
 AL Player1 0	
+=======
+AL Player2 0	
+>>>>>>> 3141675b8d1e29a73ed975df8c5002096a4e4fdc
 ML Player1 0
 HH Player1 -1
 PAS Player1 0

@@ -101,6 +101,8 @@ void Controller::loadGame(const string fname, bool testingMode){
 			pl->addProperty(p);
 			// cout << "n: " << p->getName() << " "<< p->getID() << endl;
 			if (p->isAcademic()){
+				if (improvements == -1)
+					improvements =0;
 				board->notify(p->getID(), improvements); // notify board of any improvements
 				static_cast<AcademicBuilding*>(p)->setImprove(improvements);
 			}
@@ -440,3 +442,72 @@ void Controller::play(bool rolled){
 	}
 
 }
+
+bool Controller::bankrupt(Player* p, Owner* creditor, int amt){
+		string cmd, input;
+		getline(cin, input);
+		istringstream iss(input);
+		iss>>cmd;
+		string propName, cmd2;
+		Property* prop;	
+		while(cmd!="bankrupt"&&cmd!="trade"){
+			prop = NULL;
+			istringstream iss2(input);
+			iss2>>cmd;
+			if (cmd=="improve"){
+				iss2>>propName;
+				prop = p->owns(propName);
+				iss2>>cmd2;
+				if (cmd2=="buy"){
+					cout<<"You must deal with your debt (ex. by selling improvements, not buying) before issuing any other commands."<<endl;
+					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
+				}else if(!prop){
+					cout<<"You can only buy/sell improvements on properties that you own."<<endl;
+					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
+				}else if(!prop->isAcademic()){
+					cout<<"Improvements can only be found on Academic Buildings."<<endl;
+					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
+				}else if(static_cast<AcademicBuilding*>(prop)->getImpr()<0){
+					cout<<"There are no improvements on "<<propName<<"for you to sell."<<endl;
+					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
+				}
+					else break;
+			}else if (cmd=="mortgage"){
+				iss2>>propName;
+				prop = p->owns(propName);
+				if(!prop){
+					cout<<"You can only mortgage properties that you own."<<endl;
+					cout<<"Please issue a valid \"improve\", \"mortgage\", and \"bankrupt\" command."<<endl;
+				}
+				else break;
+			}
+			else if (cmd!="improve"&&cmd!="mortgage"){
+				cout<<"You must deal with your debt before issuing any other commands."<<endl;
+				cout<<"Please only use the \"improve\", \"mortgage\", and \"bankrupt\" commands."<<endl;
+			}
+			getline(cin, input);
+			istringstream iss(input);
+			iss>>cmd;
+		}
+
+		if (cmd=="bankrupt"){
+			p->declareBankruptcy(creditor);
+			return false;
+		}else if (cmd=="improve"){
+			p->sellImprove(static_cast<AcademicBuilding*>(prop));
+			return p->pay (amt, creditor);
+		}else if(cmd=="mortgage"){
+			p->mortgage(prop);
+			return p->pay (amt, creditor);
+		}else if(cmd=="trade"){
+			string player, give, want;
+			iss >> player >> give >> want;
+			Player *pl=game->getPlayer(player);
+			p->trade(pl, give, want);
+			return p->pay (amt, creditor);
+		}
+		return 0;
+}
+
+
+
