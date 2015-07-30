@@ -29,15 +29,14 @@ public:
 	void notify(Player *, int prevPos, int curPos);
 	void notifyImprove (int, int numImprov);
 
-	void init(bool testingMode = false, string fname = "property.txt");
-	void play(bool);
+	void init(bool testingMode = false, string fname = "property.txt"); // Initialize players
+	void play(bool); 
 	void playInJail();
 	void rollInJail(int, int);	
 	// void loadGame(const std::string);
 
-	void play();	
 	void loadGame(const std::string, bool testingMode = false);
-	// void init(); //calls game init 
+	
 	bool bankrupt(Player* p, Owner* creditor, int amt);
 };
 #endif

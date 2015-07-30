@@ -57,7 +57,7 @@ double Property::getFeeRate(){
 }
 
 void Property::auction(int numBidders, vector<Player*> bidders, string master){
-	//int bid = cost / 4; //starting bid is 25% of cost of property
+
 	cout <<"Starting the Auction for " << getName() << " at $1." << endl;
 	int bid = 1;
 	bool bidOccurred = false;

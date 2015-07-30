@@ -22,14 +22,14 @@ class Bank;
 class Game{
 	Cell** theGrid;
 	static Game* game;
+	Controller* controller;
+	Bank* bank;
+	
 	std::vector<Player*> players;
 	int numPlayers;
 	int currPlayer;
-	Controller* controller;
-	// Dice* dice;
 	static int rollUpCount;
 	bool testMode;
-	Bank* bank;
 public:
 	Dice* die1;
 	Dice* die2;
@@ -46,12 +46,12 @@ public:
 	Cell* getTheGrid(int i);
 
 	bool getTestMode();
-	void play();
 	void endTurn();
 	int rollDie1();
 	int rollDie2();
 	Bank* getBank();
 	void refreshBoard();
+
 	static void reclaimTimCups(int n);
 	static int getTimCupCount();
 	static void setTimCupCount(int);
@@ -64,7 +64,6 @@ public:
 	bool isWon();
 	void endGame();
 
-
 	void notifyControllerBankrupt(Player* p, Owner* creditor, int amt);
 
 	//Called by the player to notify the controller of its change in position
@@ -73,7 +72,7 @@ public:
 	void notifyCell(int);
 	//Called by a property to notify the game to notify the controller that an improvement was built/sold
 	void notifyImprove(int, int numImprov);
-	void init(Controller* controller, std::string fname="property.txt");
+	void init(Controller* controller, std::string fname="property.txt"); //initializes game board and cells
 
 	void save(std::string);
 	void setTestingMode(bool mode);
