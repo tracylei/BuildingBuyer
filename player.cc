@@ -6,8 +6,6 @@
 
 using namespace std;
 
-// Player::Player(): Owner(1500),game(NULL){}
-// Player(char symbol, string name, int cash=1500, Properties* properties):symbol(symbol), name(name), cash(cash), properties(properties){}
 Player::Player(Game* game, string name, char symbol, int curPosition, int cash, int timCups): Owner(cash), game(game), name(name), symbol(symbol), curPosition(curPosition)
 , timCups(timCups){
 	inJail = false;
@@ -16,14 +14,6 @@ Player::Player(Game* game, string name, char symbol, int curPosition, int cash, 
 	cout << symbol << curPosition << " " <<cash << endl;
 #endif
 };
-
-Player::~Player(){
-	for(vector<Property*>::iterator it = properties.begin(); it != properties.end(); ++it){
-		delete(*it);
-	}
-	properties.clear();
-	delete game;
-}
 
 string Player::getName(){
 	return name;
@@ -324,11 +314,8 @@ void Player::goToJail(){
 }
 
 void Player::leaveJail(){
-	// move(jailRoll1, jailRoll2);
-	// game->refreshBoard();
+
 	cout<<"Congratulations on leaving the Tim's line." << endl;
-	// cout<<"Congratulations on leaving the Tim's line. Based on the sum of your dice rolls from your last attempt to leave, you moved ";
-	// cout<<jailRoll1+jailRoll2<<" cells."<<endl;
 	inJail = false;
 	turnsInJail = 0;
 }

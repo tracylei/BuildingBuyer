@@ -2,6 +2,7 @@
 #define __OWNER_H__
 #include <string>
 
+#include <iostream>
 class Player;
 
 class Owner{
@@ -11,7 +12,7 @@ public:
 	Owner(int);
 	virtual ~Owner(){};
 	void addCash(int x);
-	//TESTING
+
 	virtual std::string getName()=0;
 	virtual void claimAssets(Player*)=0;
 };

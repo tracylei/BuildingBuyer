@@ -7,6 +7,10 @@ AcademicBuilding::AcademicBuilding(std::string name, int cost, std::string block
 	tuition = new int [MAX_IMPROVEMENTS+1];
 }
 
+AcademicBuilding::~AcademicBuilding(){
+	delete [] tuition;
+}
+
 void AcademicBuilding::setTuition(int index, int tutCost){
 	tuition[index] = tutCost;
 	// for (int i = 0; i <= index; i++){

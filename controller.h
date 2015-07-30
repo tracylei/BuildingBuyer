@@ -19,6 +19,7 @@ class Controller{
 
 	BoardDisplay *board;
 	std::map<char, std::string> symbols;
+	string displayfile;
 	
 public:
 	Controller();

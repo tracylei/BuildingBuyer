@@ -8,6 +8,7 @@ using namespace std;
 Controller::Controller(){
 	game = new Game();
 	board = NULL;
+	displayfile = "celldisplay.txt";
 
 	symbols['G'] = "Goose";
 	symbols['B'] = "GRT BUS";
@@ -40,7 +41,7 @@ void Controller::notifyImprove (int index, int numImprov){
 
 //Called by notify board to print
 void Controller::refreshBoard(){
-	board->print();
+	(displayfile == "airport.txt")? board->printAirport() : board->print();
 }
 
 void Controller::loadGame(const string fname, bool testingMode){
@@ -112,6 +113,7 @@ void Controller::loadGame(const string fname, bool testingMode){
 
 
 void Controller::init(bool testingMode, string fname){
+	displayfile = fname;
 	game->setTestingMode(testingMode);
 
 	int numPlayers;
@@ -166,7 +168,7 @@ void Controller::init(bool testingMode, string fname){
 		}
 	} 
 
-	(fname == "airport.txt")? board->printAirport() : board->print();
+	(displayfile == "airport.txt")? board->printAirport() : board->print();
 
 	play(false);
 }

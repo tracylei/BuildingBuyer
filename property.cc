@@ -15,10 +15,6 @@ Property::Property(string name, int cost, bool academic): Cell(name, true, acade
 	feeRate = 0.6;
 }
 
-Property::~Property(){
-	// delete owner;
-	cout << "property destructor" << endl;
-}
 
 
 int Property::getImpr(){

@@ -38,19 +38,17 @@ Game::~Game(){
 }
 
 void Game::clearGame(){
-		//delete the board
-	for (int i = 0; i < GRID_SIZE; i++){
-		cout << "deleteing cell..." << endl;
-		delete theGrid[i];
-	}
-	delete [] theGrid;
-	cout << "delete grid";
 	//delete players
 	for (vector<Player*>::iterator it = players.begin(); it != players.end(); it++ ){
 		delete (*it);
 	}
 	players.clear();
-	cout << "deleted players" << endl;
+	
+	//delete the board
+	for (int i = 0; i < GRID_SIZE; i++){
+		delete theGrid[i];
+	}
+	delete [] theGrid;
 }
 
 
@@ -163,7 +161,6 @@ void Game::addPlayer(Player* p){
 	controller->notify(p, 0 ,0);
 }
 
-
 void Game::removePlayer (int symbol){
 	numPlayers--;
 	for (vector<Player*>::iterator i = players.begin(); i!= players.end(); i++){
@@ -176,12 +173,10 @@ bool Game::isWon(){
 	return (numPlayers == 1);
 }
 
-
 void Game::endGame(){
 	cout<<"Congratulations, "<<players.at(0)->getName()<<", you've won the game!"<<endl;
 	delete this;
 }
-
 
 //A Player calls this to notify the controller of its move
 void Game::notify(Player* p, int prevPos, int curPos){
@@ -219,11 +214,9 @@ void Game::notifyCell(int curPos){
 	}
 }
 
-
 void Game::notifyImprove (int index, int numImprov){
 	controller->notifyImprove(index,numImprov);
 }
-
 
 void Game::init(Controller* controller, string fname){
 	
@@ -288,7 +281,6 @@ void Game::init(Controller* controller, string fname){
 		i++;
 	}	
 }
-
 
 void Game::save(string fname){
 	ofstream file (fname.c_str(), ofstream::out);

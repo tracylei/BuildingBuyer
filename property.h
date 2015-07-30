@@ -18,7 +18,7 @@ public:
 
 	Property(std::string name, std::string block, int cost, bool academic);
 	Property(std::string name, int cost, bool academic);
-	virtual ~Property();
+	virtual ~Property(){};
 
 	int getImpr();
 	std::string getBlock();
