@@ -1,31 +1,32 @@
-2
-Player1 B 0 0 1
+3
+Player1 B 3 0 1
 Player2 D 1 1500 5
-AL Player1 0
-ML Player1 0
-MKV BANK 0
-ECH BANK 0
-PAS Player2 5
-HH Player1 1
-RCH BANK 0
-PAC BANK 0
-DWE BANK 0
-CPH BANK 0
-UWP BANK 0
-LHI BANK 0
-BMH BANK 0
-OPT BANK 0
-EV1 BANK 0
-EV2 BANK 0
-EV3 BANK 0
-V1 BANK 0
-PHYS BANK 0
-B1 BANK 0
-CIF BANK 0
-B2 BANK 0
-EIT BANK 0
-ESC BANK 0
-C2 BANK 0
-REV BANK 0
-MC BANK 0
-DC BANK 0
+Player3 $ 0 100000 2
+AL Player1 -1
+ML Player2 0
+MKV Player2 0
+ECH Player2 0
+PAS Player2 0
+HH Player2 -1
+RCH Player2 0
+PAC Player2 0
+DWE Player2 0
+CPH Player2 0
+UWP Player2 0
+LHI Player2 0
+BMH Player2 0
+OPT Player2 0
+EV1 Player2 0
+EV2 Player2 0
+EV3 Player2 0
+V1 Player2 0
+PHYS Player2 0
+B1 Player2 0
+CIF Player2 0
+B2 Player2 0
+EIT Player2 0
+ESC Player2 0
+C2 Player2 0
+REV Player2 0
+MC Player2 0
+DC Player2 0

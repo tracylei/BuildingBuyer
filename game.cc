@@ -49,6 +49,7 @@ void Game::clearGame(){
 		delete theGrid[i];
 	}
 	delete [] theGrid;
+
 }
 
 
@@ -105,6 +106,10 @@ bool Game::getTestMode(){
 
 int Game::getTimCupCount(){
 	return rollUpCount;
+}
+
+void Game::setTimCupCount(int n){
+	rollUpCount=n;
 }
 
 void Game::refreshBoard(){
@@ -267,13 +272,7 @@ void Game::init(Controller* controller, string fname){
 				}
 
 			}else if (s == "2"){ // Residence
-				Residence* r = new Residence (cellName);
-				theGrid[i] = r;
-				for (int j = 0; j < 4; j++){
-					int rentFee;
-					file>>rentFee;
-					r->setRent(j, rentFee);
-				}
+				theGrid[i] = new Residence (cellName);
 			}else{ //Gym
 				Gym* g = new Gym (cellName);
 				theGrid[i] = g;

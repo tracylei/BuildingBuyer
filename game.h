@@ -54,6 +54,7 @@ public:
 	void refreshBoard();
 	static void reclaimTimCups(int n);
 	static int getTimCupCount();
+	static void setTimCupCount(int);
 	static void incrRollUpCount();
 	static int getRollUpCount();
 

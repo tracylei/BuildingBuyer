@@ -58,11 +58,15 @@ void AcademicBuilding::doAction(Player* p){
 			cout<<"You will be charged $"<<tuit<<" in tuition by "<<owner->getName()<<", the owner of "<<name<<"."<<endl;
 			cout<<"Please give "<<owner->getName()<<" a few seconds to collect the tuition..";
 			cout.flush();
-			usleep(1000000);
+			usleep(500000);
 			cout<<".";
 			cout.flush();
-			usleep(1000000);
+			usleep(500000);
+			cout<<".";
+			cout.flush();
+			usleep(500000);
 			cout<<"."<<endl;
+
 
 			if (p->pay(tuit, owner)){
 				cout<<"Now you have $" <<p->getCash()<<" in cash."<<endl;

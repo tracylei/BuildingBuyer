@@ -48,6 +48,7 @@ void Controller::loadGame(const string fname, bool testingMode){
 	string pName, property, owner;
 	int numPlayers, timCups, cash, position, improvements;
 	char symbol;
+
 	
 	ifstream data(fname.c_str(), ifstream::in);
 	if(!data.is_open()){
@@ -56,6 +57,9 @@ void Controller::loadGame(const string fname, bool testingMode){
 	}
 
 	game->setTestingMode(testingMode);
+
+	int totalTimCups=0;
+
 	board = new BoardDisplay();
 	game->init(this);
 	
@@ -66,7 +70,7 @@ void Controller::loadGame(const string fname, bool testingMode){
 	for (int i = 0; i < numPlayers; ++i){
 
 		data >> pName >> symbol >> timCups >> cash >> position;
-		
+		totalTimCups+=timCups;
 		Player *p = new Player(game, pName, symbol, position, cash, timCups);
 
 		game->addPlayer(p);
@@ -82,6 +86,10 @@ void Controller::loadGame(const string fname, bool testingMode){
 			}
 		}
 	}
+
+	game->setTimCupCount(totalTimCups);
+	// data>>property;
+	// cout<<property<<endl; 
 
 	// add property to player
 	while (data >> property){

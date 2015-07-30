@@ -17,9 +17,10 @@ void Gym::doAction(Player* p){
 			istringstream iss(input);
 			iss>>cmd;
 			while (cmd != "roll"){
+				istringstream iss2(input);
+				iss2>>cmd;
 				cout<<"Please issue the roll command to determine the fee you need to pay."<<endl;
 				getline(cin, input);
-				iss>>cmd;
 			}
 			int roll1, roll2;
 			if (game->getTestMode()){

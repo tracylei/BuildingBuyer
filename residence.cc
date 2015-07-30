@@ -4,6 +4,10 @@ using namespace std;
 
 Residence::Residence(string bldgName): Property(bldgName, 200, false){
 	rent = new int [4];
+	rent [0] = 25;
+	rent [1] = 50;
+	rent [2] = 100;
+	rent [3] = 200;
 }
 
 Residence::~Residence(){
@@ -17,9 +21,10 @@ void Residence::doAction(Player* p){
 			cout<<"You were not charged for landing on "<<name<<" because it is currently mortgaged."<<endl;
 
 		}else {
-			cout<<"You will be charged $"<<rent[p->getNumRezOwned()];
+			int fee = rent[static_cast<Player*>(owner)->getNumRezOwned()-1];
+			cout<<"You will be charged $"<<fee;
 			cout<<" in rent by "<<owner->getName()<<", the owner of "<<name<<"."<<endl;		
-			p->pay(rent[static_cast<Player*>(owner)->getNumRezOwned()], owner);
+			p->pay(fee, owner);
 		}
 	}
 }
@@ -27,9 +32,4 @@ void Residence::doAction(Player* p){
 
 int Residence::getValue(){
 	return cost;
-}
-
-void Residence::setRent(int index, int rentFee){
-	rent[index] = rentFee;
-
 }

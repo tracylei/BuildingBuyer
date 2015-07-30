@@ -174,7 +174,6 @@ void Player::declareBankruptcy(Owner* creditor){
 		game->removePlayer(symbol);
 		cout<<"All of your assets will now be transferred to "<<creditor->getName()<<".";
 		cout.flush();
-		creditor->claimAssets(this);
 		cout<<".";
 		cout.flush();
 		usleep(300000);
@@ -190,8 +189,8 @@ void Player::declareBankruptcy(Owner* creditor){
 		cout<<".";
 		cout.flush();
 		usleep(500000);
-		cout<<"."<<endl;
-		usleep(700000);
+		creditor->claimAssets(this);
+
 		game->endTurn();
 		delete this;
 	}
@@ -224,7 +223,7 @@ void Player::getMortgagedProp(Property* p, double yFee, double nFee){
 		cout<<"1."<<endl;
 		usleep(1000000);
 		if (pay(.1*p->getCost(),game->getBank())){
-			cout<<"You now have "<<cash<<" left in cash."<<endl;
+			cout<<"You now have $"<<cash<<" left in cash."<<endl;
 		
 
 		cout<<"Would you like to unmortgage "<<p->getName()<<" right now by paying the principle of "<<p->getCost()<<"? (y/n)"<<endl;
@@ -280,6 +279,10 @@ void Player::move(int r1, int r2){
 
 	game->notify(this, prevPosition, curPosition); 
 	game->refreshBoard();
+	if (prevPosition>curPosition){
+		cout<<"Congratulations on passing COLLECT OSAP! You've been rewarded with $200."<<endl;
+		cash+=200;
+	}
 	cout<<"You rolled a "<<r1<<" and a "<<r2<<"."<<endl;
 	game->notifyCell(curPosition);
 }
@@ -294,6 +297,10 @@ void Player::slcMove (int move){
 	}
 	game->notify(this, prevPosition, curPosition); 
 	game->refreshBoard();
+	if (prevPosition>curPosition){
+		cout<<"Congratulations on passing COLLECT OSAP! You've been rewarded with $200."<<endl;
+		cash+=200;
+	}
 	game->notifyCell(curPosition);
 }
 
@@ -450,7 +457,7 @@ void Player::unmortgage(Property *p){
 		}else{
 			p->setMortgaged(false);
 			cash -= amt;
-			cout << p->getName() << " has been unmortgaged for $" << amt<<"!"<< endl;
+			cout << p->getName() << " has been unmortgaged for $" << amt<<" at a rate of "<<p->getFeeRate()<<" times the purchase price!"<< endl;
 		}
 	}
 }

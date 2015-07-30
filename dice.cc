@@ -65,11 +65,10 @@ int Dice::NHAction(){
 
 
 bool Dice::giveTimCup(){
-	// int roll = rand () % 100 + 1;
-	// if (roll == 1)
-	// 	return true;
-	// return false;
-	return true;
+	int roll = rand () % 100 + 1;
+	if (roll == 1)
+		return true;
+	return false;
 }
 
 

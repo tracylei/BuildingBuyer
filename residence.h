@@ -13,7 +13,6 @@ public:
 
 	void doAction(Player* p);
 	int getValue();
-	void setRent(int index, int rentFee);
 };
 
 #endif
